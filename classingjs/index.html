@@ -35,60 +35,21 @@
 
 					<div class="row-fluid">
 						<div class="span6">
-							<h4>What you can write in ...</h4>
-							<ul id = "tabs" class = "nav nav-tabs">
-								<li class = "actives"><a href="#cpp" data-toggle="tab" data-bindedTo = "#cppInJs">C++</a></li>
-								<li><a href="#java" data-toggle="tab" data-bindedTo ="#javaInJs">Java</a></li>
-								<li><a href="#csharp" data-toggle="tab" data-bindedTo = "#csharpInJs">C#</a></li>
-							</ul>
-
-							<div class = "tab-content">
-								<div class = "tab-pane active" id = "cpp">
-									<pre id = "cppcode">
-class Person {
-private:
-	static int counter = 0;
-	string name;
-public:
-	Person() {Person::counter++;}
-	string getName() {return this.name;}
-	void setName(string newName) {this.name = newName;}
-};
-									</pre>
-								</div>
-								<div class = "tab-pane" id="java">
-									<pre id = "javacode">
-abstract class Shape {
-	protected float edge;
-	public abstract float area();
-}
-final class Square extends Shape {
-	public float area() {
-		return this.edge*this.edge;
-	}
-}
-									</pre>
-								</div>
-								<div class = "tab-pane" id="csharp">
-									<pre id = "csharpcode">
-class Car {
-	private string model;
-	public string Model {
-		get {return this.model;}
-		set {
-			this.model = value;
-		}
-	}
-}
-									</pre>
-								</div>
-							</div>
+							<h4>&nbsp</h4>
+							<h2>No Compilation.</h2>
+							<h2>No Pre-processing.</h2>
+							<h2>Write your classes directly into your javascript code, and it's ready to run.</h2>
+							<br/>
+							<a href="#" class="btn btn-large btn-success">Download</a>
+							<span class="gap" data-length="1"></span>
+							<a href="https://github.com/Mostafa-Samir/Classing-js" target = "_blank" class="btn btn-large">Github</a>
+							<a href="https://twitter.com/classing_js" target="_blank" class="btn btn-large">Twitter</a>
 						</div>
 
 						<div class="span6">
-							<h4>You can now write in javascript.</h4>
-							<div class = 'tab-content'>
-								<div id = "cppInJs" class = 'tab-pane' style = "display:none;">
+							<h4>&nbsp</h4>
+							<div class = 'tab-content' id="examples">
+								<div id = "cppInJs" class = 'tab-pane' style = "/*display:none;*/">
 									<pre id="js-cpp">
 var Person = Class({
 	private : {
@@ -218,6 +179,20 @@ var Car = Class({
 		<script src="js/bootstrap-popover.js"></script>
 		<script src="js/jquery.snippet.min.js"></script>
 		<script type="text/javascript">
+			//Examples Spinner
+				function changeVisibleExample() {
+					var $currentVisible = $(".visible-example");
+					var $newVisible = $currentVisible.next();
+					if($newVisible.length === 0){
+						$newVisible = $("#examples").children().first();
+					}
+
+					$currentVisible.removeClass("visible-example");
+					$newVisible.addClass("visible-example");
+					$currentVisible.fadeOut(500)
+					$newVisible.delay(500).fadeIn(500);
+				}
+
 			$(document).ready(function(){
 
 				var opts = {
@@ -247,17 +222,23 @@ var Car = Class({
 				$("#inclusion").snippet("html" , opts);
 				$("#inclusion ul li:last").remove();
 
-				$("a[data-toggle='tab']").on('shown' , function(e) {
-					if(e.relatedTarget) {
-						var prevId = $(e.relatedTarget).attr('data-bindedTo');
-						$(prevId).css('display' , 'none');
+				$(".gap").each(function(){
+					var length = parseInt($(this).attr("data-length"));
+					var content = "";
+					for(var i = 0 ; i < length ; i++) {
+						content += "&nbsp";
 					}
-
-					var newId = $(e.target).attr('data-bindedTo');
-					$(newId).css('display' , 'block');
+					$(this).html(content);
 				});
 
-				$('#tabs a:first').tab("show");
+				$("#examples").css({
+					height : "385px",
+					overflow: "hidden"
+				});
+				$("#examples").children().first().addClass("visible-example").css({
+					display : "block",
+				});
+				setInterval("changeVisibleExample()" , 5000);
 
 				$("#compitability").popover({
 					title : "Compitability",
