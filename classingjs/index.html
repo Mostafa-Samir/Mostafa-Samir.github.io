@@ -94,6 +94,22 @@ var Car = Class({
 });
 									</pre>
 								</div>
+								<div id="singleton" class="tab-pane" style = 'display:none'>
+									<pre id="sing">
+var Singleton = Class({
+	private:{
+		_instance: Static(null),
+		Construct: function(){}
+	},
+	public:{
+		getInstance : Static(function() {
+			if(Singleton._instance === null)
+				Singleton._instance = new Singleton(); 
+			return Singleton._instnace;})
+	}
+});
+									</pre>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -218,6 +234,9 @@ var Car = Class({
 
 				$('#js-csharp').snippet("javascript" , opts);
 				$('#js-csharp ul li:last').remove();
+
+				$("#sing").snippet("javascript" , opts);
+				$('#sing ul li:last').remove();
 
 				$("#inclusion").snippet("html" , opts);
 				$("#inclusion ul li:last").remove();
