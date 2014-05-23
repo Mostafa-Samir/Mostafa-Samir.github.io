@@ -20,6 +20,7 @@
 							<ul class="nav pull-right">
 								<li class="active"><a href="#">Home</a></li>
 								<li><a href="tutorial/overload.html">Tutorial</a></li>
+								<li><a href="api.html">API Summery</a></li>
 								<li><a href="news.html">News</a></li>
 								<li><a href="about.html">About</a></li>
 							</ul>
@@ -40,7 +41,7 @@
 							<h2>No Pre-processing.</h2>
 							<h2>Write your classes directly into your javascript code, and it's ready to run.</h2>
 							<br/>
-							<a href="https://github.com/Mostafa-Samir/Classing-js/archive/v1.0.2.zip" class="btn btn-large btn-success">Download</a>
+							<a href="https://github.com/Mostafa-Samir/Classing-js/archive/v1.0.3.zip" class="btn btn-large btn-success">Download</a>
 							<span class="gap" data-length="1"></span>
 							<a href="https://github.com/Mostafa-Samir/Classing-js" target = "_blank" class="btn btn-large">Github</a>
 							<a href="https://twitter.com/classing_js" target="_blank" class="btn btn-large">Twitter</a>
@@ -51,7 +52,7 @@
 							<div class = 'tab-content' id="examples">
 								<div id = "cppInJs" class = 'tab-pane' style = "/*display:none;*/">
 									<pre id="js-cpp">
-var Person = Class({
+var Person = classing.Class({
 	private : {
 		counter : Static(0),
 		name : null
@@ -66,13 +67,13 @@ var Person = Class({
 								</div>
 								<div id = "javaInJs" class = 'tab-pane' style = 'display:none;'>
 									<pre id="js-java">
-var Shape = Abstract.Class({
+var Shape = classing.Abstract.Class({
 	protected : { edge : null },
 	public : {
 		area : Abstract(function(){})
 	}
 });
-var Square = Final.Class.Extends(Shape)({
+var Square = classing.Final.Class.Extends(Shape)({
 	public : {
 		area : function() {return this.edge*this.edge;}
 	}
@@ -81,7 +82,7 @@ var Square = Final.Class.Extends(Shape)({
 								</div>
 								<div id = "csharpInJs" class = 'tab-pane' style = 'display:none'>
 									<pre id = "js-csharp">
-var Car = Class({
+var Car = classing.Class({
 	private :{
 		model : null
 	},
@@ -96,7 +97,7 @@ var Car = Class({
 								</div>
 								<div id="singleton" class="tab-pane" style = 'display:none'>
 									<pre id="sing">
-var Singleton = Class({
+var Singleton = classing.Class({
 	private:{
 		_instance: Static(null),
 		Construct: function(){}
@@ -155,14 +156,14 @@ var Singleton = Class({
 						<h1>Get Started</h1>
 						<ol style = "padding-left:40px;">
 							<h3><li>Download</li></h3>
-							<a href="https://raw.github.com/Mostafa-Samir/Classing-js/master/dist/classing.1.0.2.min.js" class="btn btn-large btn-inverse" target="_blank">Download The Minified Version<br/>Without Comments<br/>(~ 18KB)</a>
-							<a href="https://raw.github.com/Mostafa-Samir/Classing-js/master/dist/classing.1.0.2.js" class="btn btn-large btn-inverse" target="_blank">Download The Unminified Version<br/>With Comments<br/>(~ 48KB)</a>
+							<a href="https://raw.github.com/Mostafa-Samir/Classing-js/master/dist/classing.1.0.3.min.js" class="btn btn-large btn-inverse" target="_blank">Download The Minified Version<br/>Without Comments<br/>(~ 19KB)</a>
+							<a href="https://raw.github.com/Mostafa-Samir/Classing-js/master/dist/classing.1.0.3.js" class="btn btn-large btn-inverse" target="_blank">Download The Unminified Version<br/>With Comments<br/>(~ 48KB)</a>
 							<p>&nbsp</p>
 							<h3><li>Include the library in your application</li></h3>
 							<p>just put a <code>script</code> tag in your HTML file with its <code>src</code> pointing to the library's file.</p>
 							<div style = "width:520px;">
 							<pre id="inclusion">
-&#60;script type="text/javascript" src = "classing.1.0.1.js"&#62;&#60;/script&#62;
+&#60;script type="text/javascript" src = "classing.1.0.3.js"&#62;&#60;/script&#62;
 							</pre>
 							</div>
 							<p>&nbsp</p>
@@ -183,7 +184,7 @@ var Singleton = Class({
 			<div class = "footer" style="background:black;font-family:monospace;">
 				<p align="center" style = "padding-top:10.5px;">Developed By : <span id = "reach" style = "color:white;">Mostafa Samir</span></p>
 				<p align="center">Code licensed under <a href="https://github.com/Mostafa-Samir/Classing-js/blob/master/LICENSE" target="_blank">MIT License</a></p>
-				<p align="center">Current Version : <a href="news.html#v102"> v1.0.2</a></p>
+				<p align="center">Current Version : <a href="news.html#v103"> v1.0.3</a></p>
 				<p align="center" style = "margin-bottom:0px;padding-bottom:10.5px">Follow on: <a href="https://github.com/Mostafa-Samir/Classing-js" target="_blank">Github</a> , <a href="https://twitter.com/classing_js" target="_blank">Twitter</a></p>
 			</div>
 		

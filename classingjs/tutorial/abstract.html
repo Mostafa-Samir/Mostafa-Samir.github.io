@@ -21,6 +21,8 @@
 						<ul class="nav pull-right">
 							<li><a href="../index.html">Home</a></li>
 							<li class = "active"><a href="#">Tutorial</a></li>
+<li><a href="../api.html">API Summery</a></li>
+
 							
 							<li><a href="../news.html">News</a></li>
 							<li><a href="../about.html">About</a></li>
@@ -38,6 +40,7 @@
 		<div class="row-fluid">
 			<div class = "span2">
 				<ul class="nav nav-list">
+				<li><a href = "structure.html">Library's Structure</a></li>
 					<li><a href="overload.html">Function Overloading</a></li>
 					<li><a href="classes.html">Creating Classes</a></li>
 					<li><a href="inheritance.html">Inheritance</a></li>
@@ -51,16 +54,16 @@
 				<p>an <b>abstract class</b> is a class that cannot be instantiated but can be inherited. Abstract classes are used to define a characterization that some group of classes will share but each of these classes will have a different implementation of one or more aspects of this characterization.</p>
 				<p>Take, for example, the <b>Quadrilaterals</b> which are polygons with four sides. All quadrilaterals have four sides , a circumference and an area. but each quadrilateral has a different method of claculating its area (like sqaures and rectangles).So, a <b>Quadrilateral</b> is represented with an abstract class and the <b>Square</b> and the <b>Rectangle</b> are childs of it.</p> 
 				<h3>How to Define an Abstract Class?</h3>
-				<p>Defining an abstract class is done using <code>Abstract.Class</code> in the following mannar</p>
+				<p>Defining an abstract class is done using <code>classing.Abstract.Class</code> in the following mannar</p>
 				<pre class="code">
-var ClassName = Abstract.Class({
+var ClassName = classing.Abstract.Class({
 	/* Your defintion goes here */
 });
 
 				</pre>
-				<p>Note that an abstract class must contain at least one abstract method. These abstract methods are those aspects of the characterization that differ among the group of the classes that share it. To mark a method as abstract its body must be empty and its wrapped with the <code>Abstract</code> function just like what we did with final and static. (If your abstract function is overloaded , each of the instances must have an empty body). Here's an example using the <b>Quadrilateral</b> case:</p>
+				<p>Note that an abstract class must contain at least one abstract method. These abstract methods are those aspects of the characterization that differ among the group of the classes that share it. To mark a method as abstract its body must be empty and its wrapped with the <code>classing.Abstract</code> function (or the <code>Abstract</code> global shortcut) just like what we did with final and static. (If your abstract function is overloaded , each of the instances must have an empty body). Here's an example using the <b>Quadrilateral</b> case:</p>
 				<pre class="code">
-var Quadrilateral = Abstract.Class({
+var Quadrilateral = classing.Abstract.Class({
 	protected : {
 		side1 : null,
 		side2 : null,
@@ -82,7 +85,7 @@ var Quadrilateral = Abstract.Class({
 	}
 });
 
-var Rectangle = Class.Extends(Quadrilateral)({
+var Rectangle = classing.Class.Extends(Quadrilateral)({
 	public : {
 		Construct : Function.create(xTyped , [
 			types(Number,Number),
@@ -94,7 +97,7 @@ var Rectangle = Class.Extends(Quadrilateral)({
 	}
 });
 
-var Square = Class.Extends(Quadrilateral)({
+var Square = classing.Class.Extends(Quadrilateral)({
 	public : {
 		Construct : Function.create(xTyped , [
 			types(Number),
@@ -123,7 +126,7 @@ var Square = Class.Extends(Quadrilateral)({
 		<div class = "footer" style="background:black;font-family:monospace;">
 			<p align="center" style = "padding-top:10.5px;">Developed By : <span id = "reach" style = "color:white;">Mostafa Samir</span></p>
 			<p align="center">Code licensed under <a href="https://github.com/Mostafa-Samir/Classing-js/blob/master/LICENSE" target="_blank">MIT License</a></p>
-			<p align="center">Current Version : <a href="../news.html#v102"> v1.0.2</a></p>
+			<p align="center">Current Version : <a href="../news.html#v103"> v1.0.3</a></p>
 			<p align="center" style = "margin-bottom:0px;padding-bottom:10.5px">Follow on: <a href="https://github.com/Mostafa-Samir/Classing-js" target="_blank">Github</a> , <a href="https://twitter.com/classing_js" target="_blank">Twitter</a></p>
 		</div>
 
