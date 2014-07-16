@@ -37,3 +37,17 @@
 .footer{
 	border-top-style:double;
 }
+
+.env-mode {
+	font-family: Consolas;
+	font-size: 20px;
+}
+
+.env-mode a:hover {
+	text-decoration: none;
+	border-bottom: dotted 1px white;
+}
+
+.env-mode-selected a {
+	border-bottom: dotted 1px white;
+}

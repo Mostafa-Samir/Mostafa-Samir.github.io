@@ -41,7 +41,7 @@
 							<h2>No Pre-processing.</h2>
 							<h2>Write your classes directly into your javascript code, and it's ready to run.</h2>
 							<br/>
-							<a href="https://github.com/Mostafa-Samir/Classing-js/archive/v1.0.3.zip" class="btn btn-large btn-success">Download</a>
+							<a href="https://github.com/Mostafa-Samir/Classing-js/archive/v1.1.0.zip" class="btn btn-large btn-success">Download</a>
 							<span class="gap" data-length="1"></span>
 							<a href="https://github.com/Mostafa-Samir/Classing-js" target = "_blank" class="btn btn-large">Github</a>
 							<a href="https://twitter.com/classing_js" target="_blank" class="btn btn-large">Twitter</a>
@@ -141,7 +141,7 @@ var Singleton = classing.Class({
 						<br/>
 						<br/>
 						<br/>
-						<h3 align="center">Works on all modern browsers</h3>
+						<h3 align="center">Works on all modern browsers and on Node.js</h3>
 						<!--
 							The browsers icons in the following image are from :
 							http://fredhq.com/projects/browser-icons 
@@ -153,22 +153,45 @@ var Singleton = classing.Class({
 
 				<div class = "row-fluid">
 					<div class = "span8">
-						<h1>Get Started</h1>
+						<h1 style="margin-bottom:0px;">Get Started</h1>
+						<span id = "_browser_wrap" style = "padding-left: 200px;" class = "env-mode env-mode-selected"><a id = "_browser" href="#">Browser</a></span>
+						<span id = "_node_wrap"style = "padding-left:20px;"class = "env-mode"><a id = "_node" href= "#">Node.js</a></span>
+						<div id="env-browser" style="height:331px;">
 						<ol style = "padding-left:40px;">
 							<h3><li>Download</li></h3>
-							<a href="https://raw.github.com/Mostafa-Samir/Classing-js/master/dist/classing.1.0.3.min.js" class="btn btn-large btn-inverse" target="_blank">Download The Minified Version<br/>Without Comments<br/>(~ 19KB)</a>
-							<a href="https://raw.github.com/Mostafa-Samir/Classing-js/master/dist/classing.1.0.3.js" class="btn btn-large btn-inverse" target="_blank">Download The Unminified Version<br/>With Comments<br/>(~ 48KB)</a>
+							<a href="https://raw.github.com/Mostafa-Samir/Classing-js/master/dist/classing.1.1.0.min.js" class="btn btn-large btn-inverse" target="_blank">Download The Minified Version<br/>Without Comments<br/>(~ 20KB)</a>
+							<a href="https://raw.github.com/Mostafa-Samir/Classing-js/master/dist/classing.1.1.0.js" class="btn btn-large btn-inverse" target="_blank">Download The Unminified Version<br/>With Comments<br/>(~ 49KB)</a>
 							<p>&nbsp</p>
 							<h3><li>Include the library in your application</li></h3>
 							<p>just put a <code>script</code> tag in your HTML file with its <code>src</code> pointing to the library's file.</p>
 							<div style = "width:520px;">
 							<pre id="inclusion">
-&#60;script type="text/javascript" src = "classing.1.0.3.js"&#62;&#60;/script&#62;
+&#60;script type="text/javascript" src = "classing.1.1.0.js"&#62;&#60;/script&#62;
 							</pre>
 							</div>
 							<p>&nbsp</p>
 							<h3><li>Get ready for coding ...</li></h3>
 						</ol>
+						</div>
+
+						<div id="env-node" style="display:none;height:331px;">
+						<ol style = "padding-left:40px;">
+							<h3><li>Download</li></h3>
+							Install the modulee via npm:
+							<pre id="install">
+npm install classing-js
+							</pre>
+							<h3><li>Include the module in your application</li></h3>
+							<p>simply use <code>require</code> in your node application
+							<div style = "width:520px;">
+							<pre id="node-inclusion">
+var classing = require('classing-js');
+							</pre>
+							</div>
+							<p>&nbsp</p>
+							<h3><li>Get ready for coding ...</li></h3>
+						</ol>
+						</div>
 					</div>
 					<div class = "span4 well">
 						<h3>Get Familiar <img src = "img/getfamiliar.png"/></h3>
@@ -184,7 +207,7 @@ var Singleton = classing.Class({
 			<div class = "footer" style="background:black;font-family:monospace;">
 				<p align="center" style = "padding-top:10.5px;">Developed By : <span id = "reach" style = "color:white;">Mostafa Samir</span></p>
 				<p align="center">Code licensed under <a href="https://github.com/Mostafa-Samir/Classing-js/blob/master/LICENSE" target="_blank">MIT License</a></p>
-				<p align="center">Current Version : <a href="news.html#v103"> v1.0.3</a></p>
+				<p align="center">Current Version : <a href="news.html#v110"> v1.1.0</a></p>
 				<p align="center" style = "margin-bottom:0px;padding-bottom:10.5px">Follow on: <a href="https://github.com/Mostafa-Samir/Classing-js" target="_blank">Github</a> , <a href="https://twitter.com/classing_js" target="_blank">Twitter</a></p>
 			</div>
 		
@@ -242,6 +265,12 @@ var Singleton = classing.Class({
 				$("#inclusion").snippet("html" , opts);
 				$("#inclusion ul li:last").remove();
 
+				$("#node-inclusion").snippet("html" , opts);
+				$("#node-inclusion ul li:last").remove();
+
+				$("#install").snippet("html" , opts);
+				//$("#install ul li:last").remove();
+
 				$(".gap").each(function(){
 					var length = parseInt($(this).attr("data-length"));
 					var content = "";
@@ -249,6 +278,22 @@ var Singleton = classing.Class({
 						content += "&nbsp";
 					}
 					$(this).html(content);
+				});
+
+				$("#_node").click(function(e){
+					e.preventDefault();
+					$("#env-browser").css({'display' : 'none'});
+					$("#env-node").css({'display' : 'block'});
+					$("#_browser_wrap").removeClass("env-mode-selected");
+					$("#_node_wrap").addClass("env-mode-selected");
+				});
+
+				$("#_browser").click(function(e){
+					e.preventDefault();
+					$("#env-node").css({'display' : 'none'});
+					$("#env-browser").css({'display' : 'block'});
+					$("#_browser_wrap").addClass("env-mode-selected");
+					$("#_node_wrap").removeClass("env-mode-selected");
 				});
 
 				$("#examples").css({
@@ -263,7 +308,7 @@ var Singleton = classing.Class({
 				$("#compitability").popover({
 					title : "Compitability",
 					html : true,
-					content : "Chrome 7+<br/>Firefox 4+<br/>IE 9+<br/>Safari 6+<br/>Opera 11.60+",
+					content : "Chrome 7+<br/>Firefox 4+<br/>IE 9+<br/>Safari 6+<br/>Opera 11.60+<br/>Node.js 0.10.29+",
 					placement: "bottom"
 				});
 
