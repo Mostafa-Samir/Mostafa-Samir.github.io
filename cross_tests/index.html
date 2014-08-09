@@ -14,16 +14,31 @@
 
 			.accordion .item {
 				border-bottom: 1px #ccc solid;
+				position: relative;
 			}
 
 			.accordion .item .item-title {
 				border-bottom: 1px #ccc solid;
 				padding: 1px;
+				cursor: pointer;
+				width:auto;
+			}
+
+			.accordion .item .item-title-selected {
+				background: #87cefa;
+				border-bottom: 1px #ccc solid;
+				padding: 1px;
+				cursor: pointer;
+				width: auto;
+			}
+
+			.accordion .item .item-title-selected .min-max {
+				float:right;
+				cursor: pointer;
 			}
 
 			.accordion .item .item-title:hover {
 				background: #87cefa;
-				cursor: pointer;
 			}
 
 			.accordion .item .item-title .min-max {
@@ -57,7 +72,8 @@
 					var min_max_indicator;
 					var calling_content = this.nextElementSibling;
 					if(calling_content.style.height === "0px") { //the content is collapesed
-						calling_title.style.background = "#87cefa";
+						calling_title.className = calling_title.className.replace("item-title","");
+						calling_title.className += " item-title-selected";
 						calling_title.firstElementChild.innerHTML = "-";
 						calling_content.style.padding = "1px";
 
@@ -96,7 +112,8 @@
 								setTimeout(smooth_collapse, 10);
 							}
 							else {
-								calling_title.style.background = "white";
+								calling_title.className = calling_title.className.replace(" item-title-selected","");
+								calling_title.className += "item-title";
 								calling_title.firstElementChild.innerHTML = "+";
 								calling_content.style.padding = "0px";
 							}
@@ -116,7 +133,8 @@
 					if(aTitles[itr].parentElement.className.search("start-expanded") !== -1) {
 						//if the item is specifed to be intially expanded
 						aTitles[itr].innerHTML += "<span class='min-max'>-</span>";
-						aTitles[itr].style.background = "#87cefa";
+						aTitles[itr].className = aTitles[itr].className.replace("item-title","");
+						aTitles[itr].className += " item-title-selected";
 						aContents[itr].style.height = aContents[itr].clientHeight + "px";
 					}
 					else { //if the item is at the default state (intially collapesd)
