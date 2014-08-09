@@ -113,7 +113,7 @@
 					aContents[itr]._original = { 
 						height : aContents[itr].clientHeight 
 					}; //save original auto height
-					if(aTitles[itr].parentElement.classList.contains("start-expanded")) {
+					if(aTitles[itr].parentElement.className.search("start-expanded")) {
 						//if the item is specifed to be intially expanded
 						aTitles[itr].innerHTML += "<span class='min-max'>-</span>";
 						aTitles[itr].style.background = "#87cefa";
