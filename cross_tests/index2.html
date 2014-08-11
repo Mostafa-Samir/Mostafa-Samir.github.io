@@ -1,0 +1,231 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Cross-Browser Accordion</title>
+		<style type="text/css">
+
+			.accordion {
+				border: 1px #ccc solid;
+				width: 99%;
+				margin: 1% 0.5% 1% 0.5%;
+				font-family: sans-serif;
+				font-size:20px;
+			}
+
+			.accordion .item {
+				border-bottom: 1px #ccc solid;
+				position: relative;
+			}
+
+			.accordion .item .item-title {
+				min-height: 40px;
+				font: 1.8em/2.2em Georgia,serif;
+				background-color: #aaa;
+				margin-bottom: 1px;
+				list-style: none;
+				padding: .5% 0 .5% 1%;
+			}
+
+			.accordion .item .item-title-selected .min-max {
+				float:right;
+				cursor: pointer;
+			}
+
+			.accordion .item .item-title .min-max {
+				float:right;
+			}
+
+			.accordion .item .item-content {
+				width: 100%;
+				background-color: #ccc;
+				margin-top: -1px;
+				font-size: 1.2em;
+				line-height: 1.5em;
+				overflow: hidden;
+			}
+
+		</style>
+
+		<script type="text/javascript">
+			/**
+			* renders the whole accordion view
+			**/
+			function render_accordion() {
+				var aTitles = document.querySelectorAll('.accordion .item .item-title');
+				var aContents = document.querySelectorAll('.accordion .item .item-content');
+
+				/**
+				* the event handler of the click event on each item title
+				**/
+				var expand_collapse = function(event) {
+					var calling_title = event ? event.target : window.event.srcElement;
+					var min_max_indicator;
+					var calling_content = calling_title.nextElementSibling || calling_title.nextSibling;
+					if(calling_content.style.height === "0px") { //the content is collapesed
+						var child = calling_title.firstElementChild || calling_title.firstChild;
+						if(child.nodeName.toLowerCase() !== "span")
+							child = child.nextSibling;
+						child.innerHTML = "-";
+						calling_content.style.padding = "1px";
+
+						/**
+						* animates the height of the item content by increasing it on close
+						* time intervals
+						**/
+						function smooth_epxand() {
+							var current_height = parseInt(calling_content.style.height);
+							var original_height = calling_content._original.height;
+							if(current_height !== original_height) {
+								if(current_height + 10 <= original_height)
+									calling_content.style.height = (current_height + 10) + "px";
+								else
+									calling_content.style.height = original_height + "px";
+								setTimeout(smooth_epxand, 10);
+							}
+						}
+
+						smooth_epxand(); //Beign the smooth expand
+					}
+					else { //the content is expanded
+
+						/**
+						* animates the height of the item content by decreasing it on close
+						* time intervals
+						**/
+						function smooth_collapse() {
+							var current_height = parseInt(calling_content.style.height);
+							var original_height = calling_content._original.height;
+							if(current_height !== 0) {
+								if(current_height - 10 >= 0)
+									calling_content.style.height = (current_height - 10) + "px";
+								else
+									calling_content.style.height = "0px";
+								setTimeout(smooth_collapse, 10);
+							}
+							else {
+								var child = calling_title.firstElementChild || calling_title.firstChild;
+								if(child.nodeName.toLowerCase() !== "span")
+									child = child.nextSibling;
+
+								child.innerHTML = "+";
+								calling_content.style.padding = "0px";
+							}
+						}
+
+						smooth_collapse(); //Begin the smooth collapse
+
+					}
+				}
+
+				//initializing accordion elements 
+				for(var itr = 0; itr < aTitles.length; itr++) {
+					aTitles[itr].onclick = expand_collapse; //bind the click event to the handler
+					aContents[itr]._original = { 
+						height : aContents[itr].clientHeight 
+					}; //save original auto height
+					if(aTitles[itr].parentElement.className.search("start-expanded") !== -1) {
+						//if the item is specifed to be intially expanded
+						aTitles[itr].innerHTML += "<span class='min-max'>-</span>";
+						aContents[itr].style.height = aContents[itr].clientHeight + "px";
+					}
+					else { //if the item is at the default state (intially collapesd)
+						aTitles[itr].innerHTML += "<span class='min-max'>+</span>";
+						aContents[itr].style.height = "0px";
+						aContents[itr].style.padding = "0px";
+					}
+				}
+
+			}
+
+			window.onload = render_accordion;
+		</script>
+
+	</head>
+
+	<body>
+		<div class="accordion">
+			<div class="item">
+				<div class="item-title">Item One</div>
+				<div class="item-content">
+					<div class="item-header">Lorem ipsum dolor</div>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur gravida, felis sit amet lacinia tristique, augue eros dictum lorem, id fringilla nulla dui non arcu. Quisque at aliquam urna. Ut nec tincidunt justo. Aenean tincidunt vel est eget eleifend. Donec non pretium lectus, ac aliquet erat. Aenean nec hendrerit lacus, ac tincidunt lacus. Aliquam lobortis malesuada vulputate. Cras cursus, magna eget consequat pretium, ligula nisi posuere eros, sed venenatis odio erat in mi. Cras faucibus neque velit, vitae imperdiet dui mattis eget. Curabitur at tristique tellus. Nulla molestie velit quis nibh porta, sollicitudin molestie libero viverra.</p>
+
+					<p>Etiam in auctor sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nunc diam, suscipit ut laoreet vitae, commodo vitae nibh. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed sagittis magna libero. Ut sit amet sagittis sapien. Sed vulputate laoreet ornare.</p>
+				</div>
+			</div>
+
+			<div class="item start-expanded">
+				<div class="item-title">Item Two</div>
+				<div class="item-content">
+					<div class="item-header">Lorem ipsum dolor</div>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur gravida, felis sit amet lacinia tristique, augue eros dictum lorem, id fringilla nulla dui non arcu. Quisque at aliquam urna. Ut nec tincidunt justo. Aenean tincidunt vel est eget eleifend.</p>
+				</div>
+			</div>
+
+			<div class="item">
+				<div class="item-title">Item Three</div>
+				<div class="item-content">
+					<div class="item-header">Lorem ipsum dolor</div>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur gravida, felis sit amet lacinia tristique, augue eros dictum lorem, id fringilla nulla dui non arcu. Quisque at aliquam urna. Ut nec tincidunt justo. Aenean tincidunt vel est eget eleifend.</p>
+
+					<p>Etiam in auctor sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nunc diam, nascetur ridiculus mus. Sed sagittis magna libero. Ut sit amet sagittis sapien. Sed vulputate laoreet ornare.</p>
+
+					<p>Cras faucibus neque velit, vitae imperdiet dui mattis eget. Curabitur at tristique tellus. Nulla molestie velit quis nibh porta, sollicitudin molestie libero viverra.</p>
+				</div>
+			</div>
+
+			<div class="item">
+				<div class="item-title">Item Four</div>
+				<div class="item-content">
+					<div class="item-header">Lorem ipsum dolor</div>
+
+					<p>Etiam in auctor sapien. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nunc diam, nascetur ridiculus mus. Sed sagittis magna libero. Ut sit amet sagittis sapien. Sed vulputate laoreet ornare.</p>
+
+					<p>Cras faucibus neque velit, vitae imperdiet dui mattis eget. Curabitur at tristique tellus. Nulla molestie velit quis nibh porta, sollicitudin molestie libero viverra.</p>
+				</div>
+			</div>
+
+			<div class="item">
+				<div class="item-title">Item Five</div>
+				<div class="item-content">
+					<div class="item-header">Lorem ipsum dolor</div>
+
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vel feugiat ante. Curabitur semper molestie diam a rhoncus. Aenean nisi nisi, suscipit ut dapibus et, feugiat eu metus. Curabitur ut mauris nibh. In eu elit quam. Maecenas felis mi, fermentum malesuada vulputate id, iaculis ut neque. Proin tempor malesuada neque. Aliquam lobortis lectus vitae ultrices rutrum. Duis ut tellus tortor. Morbi ornare dolor ut tortor interdum, sed varius nisl vulputate. Vestibulum eget lacinia mauris.</p>
+
+					<p>Suspendisse suscipit, nisi a sodales molestie, dolor turpis consectetur lacus, tincidunt semper libero est eu lorem. Aliquam blandit consequat diam, vitae pharetra ipsum faucibus sit amet. Fusce tristique lacus nunc, ut egestas mauris facilisis nec. Donec hendrerit diam vitae sapien condimentum, vitae posuere justo tincidunt. Praesent mi metus, dignissim in massa at, aliquam posuere elit. Sed nec cursus velit. In imperdiet risus vel magna cursus sodales. Aliquam sodales lacus eu justo tempor, ut congue diam pulvinar. Ut et vehicula mauris.</p>
+
+					<p>Mauris eu libero sollicitudin, feugiat mauris at, consectetur turpis. Nullam pulvinar imperdiet sem, eget congue est placerat et. Aliquam hendrerit rhoncus elit, nec faucibus mi convallis ultricies. Mauris venenatis ipsum tempus dapibus dignissim. Donec tempor, mi ultrices tempor hendrerit, mi erat egestas orci, nec pharetra nunc risus non arcu. Etiam molestie orci nec lectus ultricies pulvinar. Nam vitae cursus ipsum. Nunc non dapibus velit, quis auctor orci. Praesent dapibus sollicitudin lectus id fermentum. Curabitur blandit ornare libero vitae porttitor.</p>
+
+					<p>Sed est urna, ullamcorper non pellentesque id, tincidunt id velit. Donec sed libero ultricies, egestas enim ac, euismod nunc. Praesent vulputate viverra convallis. Integer id commodo dolor, ut venenatis nibh. Vivamus fermentum tincidunt posuere. Morbi vitae erat elementum, elementum leo ultrices, porttitor elit. Mauris sagittis libero sit amet rhoncus sodales. Phasellus ullamcorper porttitor posuere. Praesent eget lorem ultricies, viverra ligula in, auctor mi. Praesent a adipiscing risus. Quisque sed ligula non massa convallis dapibus. Sed ut vehicula ante, eu gravida ligula. Nullam rhoncus sapien vel neque pulvinar rhoncus. Fusce vulputate magna vitae lacinia blandit.</p>
+
+					<p>Pellentesque ac diam non ante imperdiet facilisis. Duis molestie, mi quis posuere pharetra, leo mauris porttitor est, sed convallis nulla dolor quis velit. Proin volutpat consequat metus, ut sollicitudin ipsum feugiat non. Etiam a porttitor tellus. Quisque libero eros, rhoncus sed convallis sed, congue sed ipsum. Sed vel sagittis quam, ac mollis nibh. Quisque dictum lectus id lobortis blandit. Suspendisse vitae lorem id metus convallis convallis sed eu magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla dictum justo in cursus sagittis. Sed fermentum augue id magna consequat, sit amet luctus quam consectetur. Donec vitae vulputate lacus.</p>
+				</div>
+			</div>
+
+			<div class="item">
+			<div class="item-title">Item Six</div>
+			<div class="item-content">
+					<div class="item-header">Lorem ipsum dolor</div>
+
+					<p>Praesent vel aliquet diam, a pretium enim. Vivamus ornare nisi et diam lacinia tincidunt. In euismod luctus pharetra. Morbi a rhoncus turpis, eu feugiat dui. Fusce faucibus at est nec viverra. Pellentesque blandit ante sed ipsum vulputate, ac ultrices nulla sagittis. In velit nibh, auctor in mauris ac, vehicula aliquet lacus. Maecenas congue vitae ante nec viverra. Maecenas purus ipsum, scelerisque ullamcorper est et, aliquam semper sapien. Nulla sed erat ultrices, ornare dui in, vehicula urna. Vestibulum non augue sagittis, elementum arcu eu, gravida eros. Aliquam erat volutpat. Sed posuere augue id sem cursus, vitae fringilla massa feugiat. Curabitur ultricies mauris at nulla fermentum, et suscipit metus lobortis. Duis ut orci scelerisque, rhoncus lacus at, tristique erat.</p>
+
+					<p>Pellentesque bibendum vitae diam eget commodo. Suspendisse ultrices, elit a aliquam convallis, sapien leo luctus enim, vel aliquet ligula ipsum ac nibh. Sed eu accumsan dui, sit amet gravida tortor. Maecenas dignissim suscipit tortor eu dapibus. Nulla pharetra lacus ac dui tincidunt, nec euismod mi scelerisque. Aenean eros nisi, tincidunt dignissim mattis eget, adipiscing ac ante. Integer vitae neque auctor, adipiscing velit venenatis, convallis dui. Curabitur dapibus diam a lobortis adipiscing. Morbi id diam risus. Etiam velit ipsum, posuere sit amet nulla non, pulvinar suscipit est. Etiam sem tellus, placerat non ullamcorper quis, consequat at eros. Vivamus euismod accumsan orci in aliquet. Donec sit amet placerat mauris, sed bibendum dolor. Curabitur eget metus tempus, pharetra dolor et, dapibus dui. Duis sed tincidunt arcu. Nunc venenatis nunc ut odio tristique euismod.</p>
+
+					<p>Suspendisse et ultrices purus. Sed lobortis eleifend fringilla. In nec tellus augue. Morbi eu ipsum ut libero sollicitudin iaculis. In hac habitasse platea dictumst. Pellentesque libero felis, fermentum a interdum vel, feugiat ac turpis. Vestibulum commodo sem purus, non pretium erat pretium nec. Nam augue sem, iaculis malesuada lectus vitae, tempus ornare nibh. Praesent convallis sollicitudin nunc, at sodales odio hendrerit a. Vestibulum dignissim leo metus. Donec ultrices vestibulum est nec ullamcorper. Etiam tristique varius magna, nec lacinia turpis lobortis sit amet.</p>
+				</div>
+			</div>
+
+			<div class="item">
+			<div class="item-title">Item Seven</div>
+			<div class="item-content">
+					<div class="item-header">Lorem ipsum dolor</div>
+
+					<p>Praesent vel aliquet diam, a pretium enim. Vivamus ornare nisi et diam lacinia tincidunt. In euismod luctus pharetra. Morbi a rhoncus turpis, eu feugiat dui. Fusce faucibus at est nec viverra. Pellentesque blandit ante sed ipsum vulputate, ac ultrices nulla sagittis. In velit nibh, auctor in mauris ac, vehicula aliquet lacus. Maecenas congue vitae ante nec viverra. Maecenas purus ipsum, scelerisque ullamcorper est et, aliquam semper sapien. Nulla sed erat ultrices, ornare dui in, vehicula urna. Vestibulum non augue sagittis, elementum arcu eu, gravida eros. Aliquam erat volutpat. Sed posuere augue id sem cursus, vitae fringilla massa feugiat. Curabitur ultricies mauris at nulla fermentum, et suscipit metus lobortis. Duis ut orci scelerisque, rhoncus lacus at, tristique erat.</p>
+
+					<p>Suspendisse et ultrices purus. Sed lobortis eleifend fringilla. In nec tellus augue. Morbi eu ipsum ut libero sollicitudin iaculis. In hac habitasse platea dictumst. Pellentesque libero felis, fermentum a interdum vel, feugiat ac turpis. Vestibulum commodo sem purus, non pretium erat pretium nec. Nam augue sem, iaculis malesuada lectus vitae, tempus ornare nibh. Praesent convallis sollicitudin nunc, at sodales odio hendrerit a. Vestibulum dignissim leo metus. Donec ultrices vestibulum est nec ullamcorper. Etiam tristique varius magna, nec lacinia turpis lobortis sit amet.</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
