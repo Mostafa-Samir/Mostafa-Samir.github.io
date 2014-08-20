@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Bab Radio</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!--<link rel="stylesheet" type="text/css" href="simplegrid.css">-->
+		<style type="text/css">
+
+			body {
+				background-color: gray;
+			}
+
+			.empty-header {
+				width : 100%;
+				height: 70px;
+			}
+
+			.disk-container {
+				display: inline-block;
+				float: left;
+				width: 40%;
+				position: relative;
+			}
+
+			.rest-of-content {
+				width: 60%;
+				float: left;
+			}
+
+			#disk {
+				position: relative;
+				left:-30%;
+				max-width: 100%;
+				height: auto;
+			}
+
+			#stick {
+				position: absolute;
+				max-width: 100%;
+				height: auto;
+				z-index: 1;
+				left:37%;
+				top:-5%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="empty-header"></div>
+		<div class="disk-container">
+			<img id = "stick" src = "stick.png" />
+			<img id = "disk" src = "disk.png" />
+		</div>
+
+		<div class="rest-of-content">
+		<h2>Hello</h2>
+		</div>
+
+		<script src="jquery.js"></script>
+		<script src="jQueryRotate.min.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function() {
+			var angle = 0;
+			setInterval(function(){
+				angle += 3;
+				$("#disk").rotate(angle);
+			}, 25);
+		});
+		</script>
+	</body>
+</html>
