@@ -46,8 +46,8 @@
 
 			#control {
 				position: absolute;
-				max-width: 100%;
-				height: auto;
+				height:50%;
+				width: auto;
 				z-index: 2;
 				left:19%;
 				cursor: pointer;
@@ -72,6 +72,9 @@
 		<script src="jQueryRotate.min.js"></script>
 		<script type="text/javascript">
 		$(document).ready(function() {
+
+			$(".header").css("height", $(window).height()*0.1089 + "px");
+
 			var angle = 0;
 			setInterval(function(){
 				angle += 3;
