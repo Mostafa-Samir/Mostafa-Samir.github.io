@@ -1,8 +1,9 @@
-<!DOCTYPE HTML>
+﻿<!DOCTYPE HTML>
 <html>
 	<head>
 		<title>Bab Radio</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<!--<link rel="stylesheet" type="text/css" href="simplegrid.css">-->
 		<style type="text/css">
 
@@ -52,12 +53,28 @@
 				left:19%;
 				cursor: pointer;
 			}
+
+			#now {
+				background-color: #E9811A;
+				width: 20%;
+				height: 40px;
+				overflow: hidden;
+				overflow-x: hidden;
+				position: absolute;
+				left: 23%;
+				padding-left: 20px;
+				padding-right: 5px;
+				top: 10px;
+				border: 3px solid black;
+				border-radius: 5px;
+			}
 		</style>
 	</head>
 
 	<body>
 		<div class="header">
 			<img id="control" src = "pause.png" />
+			<div id="now"> Now : </div>
 		</div>
 		<div class="disk-container">
 			<img id = "stick" src = "stick.png" />
@@ -69,9 +86,37 @@
 		</div>
 
 		<script src="jquery.js"></script>
+		<!--<script src="soundmanager2.js"></script>-->
 		<script src="jQueryRotate.min.js"></script>
+		<script type="text/javascript" src="http://hosted.musesradioplayer.com/mrp.js"></script>
+		<script type="text/javascript">
+			MRP.insert({
+				'url':'http://usa2.fastcast4u.com:3630/stream',
+				'codec':'aac',
+				'volume':100,
+				'autoplay':true,
+				'jsevents':true,
+				'buffering':5,
+				'title':'Bab',
+				'wmode':'transparent',
+				'skin':'mcclean',
+				'width':0,
+				'height':0
+			});
+		</script>
+		<script src="jquery.shoutcast.min.js"></script>
 		<script type="text/javascript">
 		$(document).ready(function() {
+
+			$.SHOUTcast({
+    			host: "usa2.fastcast4u.com",
+    			port: 3630,
+    			interval: 15000,
+				stats: function(){
+					$("#now").text("Now : " + this.get("songtitle")); 
+				}
+			}).startStats();
+
 			var angle = 0;
 			setInterval(function(){
 				angle += 3;
@@ -83,6 +128,7 @@
 			$("#control").click(function() {
 				if(state == "playing") {
 					$(this).attr("src", "play.png");
+					MRP.stop();
 					$("#stick").rotate({
 						center : ["58%", "0%"],
 						animateTo: -22
@@ -94,8 +140,9 @@
 					$(this).attr("src", "pause.png");
 					$("#stick").rotate({
 						center : ["58%", "0%"],
-						animateTo: 0
+						animateTo: 0,
 					});
+					MRP.play();
 
 					state = "playing";
 				}
