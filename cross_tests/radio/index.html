@@ -10,9 +10,10 @@
 				background-color: gray;
 			}
 
-			.empty-header {
+			.header {
 				width : 100%;
 				height: 70px;
+				position: relative;
 			}
 
 			.disk-container {
@@ -42,11 +43,22 @@
 				left:30%;
 				top:-5%;
 			}
+
+			#control {
+				position: absolute;
+				max-width: 100%;
+				height: auto;
+				z-index: 2;
+				left:19%;
+				cursor: pointer;
+			}
 		</style>
 	</head>
 
 	<body>
-		<div class="empty-header"></div>
+		<div class="header">
+			<img id="control" src = "pause.png" />
+		</div>
 		<div class="disk-container">
 			<img id = "stick" src = "stick.png" />
 			<img id = "disk" src = "disk.png" />
@@ -65,6 +77,29 @@
 				angle += 3;
 				$("#disk").rotate(angle);
 			}, 25);
+
+			var state = "playing";
+
+			$("#control").click(function() {
+				if(state == "playing") {
+					$(this).attr("src", "play.png");
+					$("#stick").rotate({
+						center : ["58%", "0%"],
+						animateTo: -22
+					});
+
+					state = "paused";
+				}
+				else {
+					$(this).attr("src", "pause.png");
+					$("#stick").rotate({
+						center : ["58%", "0%"],
+						animateTo: 0
+					});
+
+					state = "playing";
+				}
+			});
 		});
 		</script>
 	</body>
