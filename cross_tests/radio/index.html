@@ -45,36 +45,50 @@
 				top:-5%;
 			}
 
-			#control {
-				position: absolute;
-				max-height: 100%;
-				width: auto;
+			.wrapper {
+				position: relative;
+				max-width: 81%;
+				height: auto;
 				z-index: 2;
 				left:19%;
 				cursor: pointer;
 			}
 
+			#control {
+				max-height: 100%;
+				width: auto;
+				z-index: 2;
+				left:19%;
+				cursor: pointer;
+				float: left;
+			}
+
 			#now {
 				background-color: #E9811A;
-				width: 30%;
-				height: 40px;
+				width: 0px;
+				height: 35px;
 				overflow: hidden;
-				overflow-x: hidden;
-				position: absolute;
-				left: 23%;
+				position: relative;
 				padding-left: 1.5%;
 				padding-right: 5px;
 				top: 10px;
 				border: 3px solid black;
 				border-radius: 5px;
+				border-bottom-left-radius: 20px;
+				border-top-left-radius: 20px;
+				left: -3px;
+				padding-top: 10px;
+				white-space: nowrap;
 			}
 		</style>
 	</head>
 
 	<body>
 		<div class="header">
-			<img id="control" src = "pause.png" />
-			<div id="now"> Now : </div>
+			<div class="wrapper">
+				<img id="control" src = "pause.png" />
+				<div id="now"></div>
+			</div>
 		</div>
 		<div class="disk-container">
 			<img id = "stick" src = "stick.png" />
@@ -100,23 +114,33 @@
 				'title':'Bab',
 				'wmode':'transparent',
 				'skin':'mcclean',
-				'width':1,
-				'height':1
+				'width':0,
+				'height':0
 			});
 		</script>
 		<script src="jquery.shoutcast.min.js"></script>
-		<script src="flash_detect_min.js"></script>
 		<script type="text/javascript">
-		$(document).ready(function() {
+		var app = {};
 
-			console.log("Flash Installed : " + FlashDetect.installed);
+		app.updateCurrentSong = function(title) {
+			var $now = $("#now");
+			var $title = $("<span><b>Now</b> : " + title + "</span>");
+			$now.html($title);
+
+			$now.animate({
+				width : $title.outerWidth() + 10 + "px",
+				done: function() {
+				}
+			});
+		}
+		$(document).ready(function() {
 
 			$.SHOUTcast({
     			host: "usa2.fastcast4u.com",
     			port: 3630,
     			interval: 15000,
 				stats: function(){
-					$("#now").text("Now : " + this.get("songtitle")); 
+					app.updateCurrentSong(this.get("songtitle"));
 				}
 			}).startStats();
 
