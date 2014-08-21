@@ -4,11 +4,13 @@
 		<title>Bab Radio</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
 		<!--<link rel="stylesheet" type="text/css" href="simplegrid.css">-->
 		<style type="text/css">
 
 			body {
 				background-color: gray;
+				font-family: 'Oswald', sans-serif;
 			}
 
 			.header {
@@ -103,20 +105,23 @@
 		<!--<script src="soundmanager2.js"></script>-->
 		<script src="jQueryRotate.min.js"></script>
 		<script type="text/javascript" src="http://hosted.musesradioplayer.com/mrp.js"></script>
+		<script src="flash.detect.min.js"></script>
 		<script type="text/javascript">
-			MRP.insert({
-				'url':'http://usa2.fastcast4u.com:3630/stream',
-				'codec':'aac',
-				'volume':100,
-				'autoplay':true,
-				'jsevents':true,
-				'buffering':5,
-				'title':'Bab',
-				'wmode':'transparent',
-				'skin':'mcclean',
-				'width':1,
-				'height':1
-			});
+			if(FlashDetect.installed) {
+				MRP.insert({
+					'url':'http://usa2.fastcast4u.com:3630/stream',
+					'codec':'aac',
+					'volume':100,
+					'autoplay':true,
+					'jsevents':true,
+					'buffering':5,
+					'title':'Bab',
+					'wmode':'transparent',
+					'skin':'mcclean',
+					'width':1,
+					'height':1
+				});
+			}
 		</script>
 		<script src="jquery.shoutcast.min.js"></script>
 		<script type="text/javascript">
@@ -124,7 +129,7 @@
 
 		app.updateCurrentSong = function(title) {
 			var $now = $("#now");
-			var $title = $("<span><b>Now</b> : " + title + "</span>");
+			var $title = $("<span>Now : " + title + "</span>");
 			$now.html($title);
 
 			$now.animate({
@@ -133,16 +138,60 @@
 				}
 			});
 		}
+
+		app.displayError = function(msg) {
+			var timestamp = Date.now();
+			var $err_div = $("<div id = 'err" + timestamp + "'></div>").css({
+				"background-color" : "#eed3d7",
+				"color": "red",
+				"position": "absolute",
+				"top" : "10px",
+				"right": "10px",
+				"width": "200px",
+				"height": "auto",
+				"border" : "2px red solid",
+				"border-radius": "20px",
+				"z-index": "5",
+				"display": "none"
+			});
+
+			var $close = $("<p>x</p>").css({
+				"text-align": "right",
+				"cursor" : "pointer",
+				"margin-top": "0px",
+				"margin-bottom":"0px",
+				"margin-right": "10px"
+			}).click(function(){
+				$("#err" + timestamp).fadeOut({
+					duration: 'slow',
+					done : function() { $("#err" + timestamp).remove(); }
+				});
+			});
+
+			$err_div.append($close);
+			$err_div.append("<p style='margin-left:10px;'>" + msg + "</p>");
+
+			$(document.body).append($err_div);
+
+			$err_div.fadeIn('slow');
+		}
+
 		$(document).ready(function() {
 
-			$.SHOUTcast({
-    			host: "usa2.fastcast4u.com",
-    			port: 3630,
-    			interval: 15000,
-				stats: function(){
+			if(FlashDetect.installed) {
+
+				$.SHOUTcast({
+    				host: "usa2.fastcast4u.com",
+    				port: 3630,
+    				interval: 15000,
+					stats: function(){
 					app.updateCurrentSong(this.get("songtitle"));
-				}
-			}).startStats();
+					}
+				}).startStats();
+			}
+			else {
+				app.displayError("Oops, It seems that your browser doesn't have Adobe Flash.");
+			}
 
 			var angle = 0;
 			setInterval(function(){
