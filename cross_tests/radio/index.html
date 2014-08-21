@@ -105,8 +105,11 @@
 			});
 		</script>
 		<script src="jquery.shoutcast.min.js"></script>
+		<script src="flash_detect_min.js"></script>
 		<script type="text/javascript">
 		$(document).ready(function() {
+
+			console.log("Flash Installed : " + FlashDetect.installed);
 
 			$.SHOUTcast({
     			host: "usa2.fastcast4u.com",
