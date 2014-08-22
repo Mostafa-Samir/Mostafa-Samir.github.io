@@ -8,32 +8,55 @@
 		<!--<link rel="stylesheet" type="text/css" href="simplegrid.css">-->
 		<style type="text/css">
 
-			body {
-				background-color: gray;
+			html, body {
+				background-color: #AEB0B5;
 				font-family: 'Oswald', sans-serif;
+				overflow: hidden;
+				position: relative;
+				height: 100%;
+				margin: 0px
 			}
 
 			.header {
 				width : 100%;
 				height: 70px;
-				position: relative;
+				position: absolute;
 			}
 
 			.disk-container {
 				display: inline-block;
-				float: left;
 				width: 40%;
-				position: relative;
+				top:70px;
+				position: absolute;
+				z-index: 1;
 			}
 
 			.rest-of-content {
 				width: 60%;
-				float: left;
+				z-index: 1;
+				position: absolute;
+				top:70px;
+				left:40%;
+			}
+
+			.nav {
+				max-width:100%;
+				height: auto;
+				cursor: pointer;
+				opacity: 0.8;
+			}
+
+			.nav-selected {
+				opacity: 1;
+			}
+
+			.nav:hover {
+				opacity: 1;
 			}
 
 			#disk {
 				position: relative;
-				left:-30%;
+				left:-150px;
 				max-width: 100%;
 				height: auto;
 			}
@@ -43,7 +66,7 @@
 				max-height: 100%;
 				width : auto;
 				z-index: 1;
-				left:30%;
+				left:150px;
 				top:-5%;
 			}
 
@@ -52,15 +75,30 @@
 				max-width: 81%;
 				height: auto;
 				z-index: 2;
-				left:19%;
-				cursor: pointer;
+				left:250px;
+			}
+
+			.top-left-corner {
+				position: absolute;
+				top:0px;
+				left:0px;
+				z-index: 0;
+			}
+
+			.bottom-right-corner {
+				position: absolute;
+				bottom:0px;
+				right:0px;
+				z-index: 0;
+			}
+
+			.content-div {
+				display: none;
 			}
 
 			#control {
-				max-height: 100%;
-				width: auto;
+				max-height: 70px;
 				z-index: 2;
-				left:19%;
 				cursor: pointer;
 				float: left;
 			}
@@ -82,6 +120,27 @@
 				padding-top: 10px;
 				white-space: nowrap;
 			}
+
+			#navigation {
+				width: 20%;
+				height: 500px;
+				position: absolute;
+				left: 80%;
+				padding-top: 80px;
+			}
+
+			#content {
+				width: 80%;
+				position: absolute;
+			}
+
+			#content h1 {
+				color: #E9811A;
+				width: auto;
+				height: auto;
+				text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+				background-color: rgba(0,0,0,0);
+			}
 		</style>
 	</head>
 
@@ -98,9 +157,36 @@
 		</div>
 
 		<div class="rest-of-content">
-		<h2>Hello</h2>
-		</div>
+			<div id="content">
+				<div id="nights_div" class="content-div">
+					<h1>Our Musical Nights</h1>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. </p>
 
+					<p>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. </p>
+
+					<p>Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. </p>
+				</div>
+				<div id="shows_div" class="content-div">
+					<h1>Our Shows</h1>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. </p>
+
+					<p>Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. </p>
+				</div>
+				<div id="about_div" class="content-div">
+					<h1>About Us</h1>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. </p>
+
+					<p>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. </p>
+				</div>
+			</div>
+			<div id = "navigation">
+				<p><img src="nights.png" id="nights" class="nav" /></p>
+				<p><img src="shows.png" id="shows" class="nav" /></p>
+				<p><img src="about.png" id="about" class="nav" /></p>
+			</div>
+		</div>
+		<img src="first-corner.png" class="top-left-corner" />
+		<img src="second-corner.png" class="bottom-right-corner" />
 		<script src="jquery.js"></script>
 		<!--<script src="soundmanager2.js"></script>-->
 		<script src="jQueryRotate.min.js"></script>
@@ -223,6 +309,29 @@
 					state = "playing";
 				}
 			});
+
+			var intial
+
+			$(".nav").each(function(){
+				$(this).click(function() {
+					var to_hide = $(".nav-selected").attr("id") + "_div";
+					var to_show = $(this).attr("id") + "_div";
+
+					$(".nav-selected").removeClass("nav-selected");
+					$(this).addClass("nav-selected");
+
+					$("#" + to_hide).fadeOut({
+						duration : 'slow',
+						done: function() {
+							$("#" + to_show).fadeIn('slow');
+						}
+					});
+				});
+			});
+
+			$("#nights").addClass("nav-selected");
+			$("#nights_div").fadeIn('slow');
+
 		});
 		</script>
 	</body>
