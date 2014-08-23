@@ -5,8 +5,165 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
-		<!--<link rel="stylesheet" type="text/css" href="simplegrid.css">-->
+		<!--<link rel="stylesheet" type="text/css" href="perfect.scroll.min.css">-->
 		<style type="text/css">
+
+			@media only screen and (min-width: 1280px) {
+				#stick {
+					left: 150px;
+				}
+
+				.wrapper {
+					left:250px;
+				}
+
+				#disk {
+					left:-150px;
+				}
+
+				#now {
+					padding-top: 10px;
+					height: 35px; 
+				}
+			}
+
+			@media only screen and (min-width: 1024px) and (max-width: 1279px) {
+				#stick {
+					left: 110px;
+				}
+
+				.wrapper {
+					left:190px;
+				}
+
+				#disk {
+					left:-150px;
+				}
+
+				#now {
+					padding-top: 10px;
+					height: 35px; 
+				}
+			}
+
+			@media only screen and (min-width: 960px) and (max-width: 1023px) {
+				#stick {
+					left: 80px;
+				}
+
+				.wrapper {
+					left:150px;
+				}
+
+				#disk {
+					left:-150px;
+				}
+
+				#now {
+					padding-top: 10px;
+					height: 35px; 
+				}
+			}
+
+			@media only screen and (min-width: 800px) and (max-width: 959px) {
+				#stick {
+					left: 75px;
+				}
+
+				.wrapper {
+					left:125px;
+				}
+
+				#disk {
+					left:-120px;
+				}
+
+				#now {
+					padding-top: 10px;
+					height: 35px; 
+				}
+			}
+
+			@media only screen and (min-width: 640px) and (max-width: 799px) {
+				#stick {
+					left: 75px;
+				}
+
+				.wrapper {
+					left:110px;
+				}
+
+				#disk {
+					left:-80px;
+				}
+
+				#now {
+					padding-top: 10px;
+					height: 35px; 
+				}
+
+
+				.top-left-corner {
+					width:250px;
+				}
+
+				.bottom-right-corner {
+					width: 400px;
+				}
+			}
+
+			@media only screen and (min-width: 480px) and (max-width: 639px) {
+				#stick {
+					left: 60px;
+				}
+
+				.wrapper {
+					left:77px;
+				}
+
+				#disk {
+					left:-60px;
+				}
+
+				#now {
+					display: none;
+				}
+
+				.top-left-corner {
+					width:300px;
+				}
+
+				.bottom-right-corner {
+					width: 300px;
+				}
+			}
+
+			@media only screen and (min-width: 320px) and (max-width: 479px) {
+				#stick {
+					left: 40px;
+				}
+
+				.wrapper {
+					left:40px;
+				}
+
+				#disk {
+					left:-40px;
+				}
+
+				#now {
+					display: none;
+				}
+
+				.top-left-corner {
+					width:200px;
+				}
+
+				.bottom-right-corner {
+					width: 200px;
+				}
+			}
+
 
 			html, body {
 				background-color: #AEB0B5;
@@ -56,7 +213,6 @@
 
 			#disk {
 				position: relative;
-				left:-150px;
 				max-width: 100%;
 				height: auto;
 			}
@@ -66,7 +222,6 @@
 				max-height: 100%;
 				width : auto;
 				z-index: 1;
-				left:150px;
 				top:-5%;
 			}
 
@@ -75,7 +230,6 @@
 				max-width: 81%;
 				height: auto;
 				z-index: 2;
-				left:250px;
 			}
 
 			.top-left-corner {
@@ -94,6 +248,8 @@
 
 			.content-div {
 				display: none;
+				overflow:hidden;
+				position: absolute;
 			}
 
 			#control {
@@ -123,7 +279,6 @@
 
 			#navigation {
 				width: 20%;
-				height: 500px;
 				position: absolute;
 				left: 80%;
 				padding-top: 80px;
@@ -190,6 +345,7 @@
 		<script src="jquery.js"></script>
 		<!--<script src="soundmanager2.js"></script>-->
 		<script src="jQueryRotate.min.js"></script>
+		<script src="jquery.slim.scroll.min.js"></script>
 		<script type="text/javascript" src="http://hosted.musesradioplayer.com/mrp.js"></script>
 		<script src="flash.detect.min.js"></script>
 		<script type="text/javascript">
@@ -220,8 +376,6 @@
 
 			$now.animate({
 				width : $title.outerWidth() + 10 + "px",
-				done: function() {
-				}
 			});
 		}
 
@@ -323,14 +477,35 @@
 					$("#" + to_hide).fadeOut({
 						duration : 'slow',
 						done: function() {
-							$("#" + to_show).fadeIn('slow');
+							$("#" + to_hide).slimScroll({destroy: true});
+							$("#" + to_show).fadeIn({
+								duration:'slow',
+								done: function(){
+									$("#" + to_show).slimScroll({
+										color : "#E9811A",
+										height: $(window).height() - 70 + "px",
+										alwaysVisble: true
+									});
+								}
+							});
 						}
 					});
 				});
 			});
 
 			$("#nights").addClass("nav-selected");
-			$("#nights_div").fadeIn('slow');
+			$("#nights_div").fadeIn({
+				duration:'slow',
+				done: function() { 
+					$("#nights_div").slimScroll({
+						color : "#E9811A",
+						height: $(window).height() - 70 + "px",
+						alwaysVisble: true
+					});
+				}
+
+			});
+
 
 		});
 		</script>
