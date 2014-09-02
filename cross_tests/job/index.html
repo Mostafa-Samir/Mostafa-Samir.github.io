@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv='Content-Type' content='Type=text/html; charset=utf-8'>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Template</title>
+        <script src = "utilis.js"></script>
+        <script>
+            if(utilis.badBrowser())
+              utilis.loadStyleSheet("ie-style.css");
+            else
+              utilis.loadStyleSheet("style.css");
+        </script>
+    </head>
+
+    <body>
+        <div class="col-60">
+            <div class="content">
+                <h1> Upgrade </h1>
+                <p> If you don't have the latest version of </p>
+                <p> features </p>
+                <p> There are two ways to download the latest version </p>
+                <h2> The </h2>
+                <ol>
+                    <li> Go to the </li>
+                    <li> Click <b>Download Now</b> and follow the instructions. </li>
+                </ol>
+                <h2> From </h2>
+                <ol>
+                    <li> Select <b>Help | Check for Updates</b> </li>
+                    <li> Select <b>Update Now</b> </li>
+                    <li> Follow the on-screen instructions</li>
+                </ol>
+                <div class="tip">
+                    Learn all about all the leatest fetures. Visit.
+                </div>
+                <br/>
+                <div class='vid'>
+                    <iframe height="315" src="http://www.youtube.com/embed/Rwl6lE2kkxc" frameborder="0" allowfullscreen></iframe>
+                </div>
+
+                <p class='more'>Additional Upgrade Information</p>
+                <p id="qhelpful"><b> Was this article helpful? </b> <span class="btn" id="helpful">Yes</span> <span class="btn" id="nohelpful">No</span></p>
+                <p class="thanks"><img src = "imgs/check.png" /> Thanks for your feedback! </p>
+                <div class = 'no-feedback'>
+                  <p><b> Tell us why this article wasn't helpful?</b></p>
+                  <form method = "POST" action = "">
+                      <p><input type = "radio" name = 'reason' value = "unclear" class="radio-btn" checked/> <label>Unclear or Complicated</label></p>
+                      <p><input type = "radio" name = 'reason' value = "incorrect" class="radio-btn"/> <label>Incorrect Information</label></p>
+                      <p><input type = "radio" name = 'reason' value = "irrelevant" class="radio-btn"/> <label>Article not addressing my issue</label></p>
+                      <p><input type = "radio" name = 'reason' value = "long" class="radio-btn"/> <label>Article is too long</label></p>
+                      <p><input type = "radio" name = 'reason' value = "other" class="radio-btn"/> <label>Other</label> </p>
+                      <p><textarea id = "other_explain" name = 'other' placeholder="Please explain..." disabled></textarea>
+                      <p><span id = "submit" class = "btn">Done</span></p>
+                  </form>
+                </div>
+
+          </div>
+          <p class ="out-links"><a href="#pp">Privacy Policy</a> | <a href = "#tos">Terms of Service</a></p>
+        </div>
+        <div class="col-40">
+          <div class="menu">
+              <div class="header">Header Text</div>
+              <div class="row"><a href="#pwd">Change Passowrd</a></div>
+              <div class="row"><a href="#rec">Recovering a lost</a></div>
+              <div class="row"><a href="#acc">Account</a></div>
+              <div class="row"><a href="#una">Unable to</a></div>
+              <div class="row"><a href="#hac">How to tell if your account was hacked</a></div>
+          </div>
+
+          <div class="menu">
+            <div class="header">Header Text</div>
+            <div class="row">
+              <p><img src="imgs/black_question.png" /> <b>Product Support</b></p>
+              <p class="indent-32"><a href="#sh">Start Here</a></p>
+            </div>
+            <div class="row"><img src="imgs/headphones.png"/> <b>Sign in Support</b></div>
+            <div class="row"><img src="imgs/facebook.png"/> <b>Connect on facebook</b></div>
+            <div class="row"><img src="imgs/twitter.png"/> <b>Tweet your question</b></div>
+            <div class="row"><img src="imgs/green_question.png"/> <b>Get advice on Answers</b></div>
+          </div>
+
+          <div class="menu">
+            <div class="header">Header Text</div>
+            <div class="row">
+              <p><b>Meet the multi-talanted</b><p>
+              <div class="app-showcase">
+                <img src="imgs/smartphone.png"/>
+                <br>
+                <p>Lorm Ipsum Dolor</p>
+                <br><br><br><br><br><br>
+                <p>Lorem Ipsum Dolor</p>
+                <br>
+                <span class="btn" style="width:100px;">Get The App</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script src="main.js"></script>
+    </body>
+</html>
