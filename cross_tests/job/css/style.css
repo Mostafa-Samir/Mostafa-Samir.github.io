@@ -1,0 +1,269 @@
+html, body {
+  background-color: #FBFBFC;
+  width: 100%;
+  font-family: sans-serif;
+  margin-right:0px;
+  margin-left:0px;
+}
+
+ol {
+  counter-reset: li;
+  margin-left: 0px;
+  padding-left:0px;
+}
+
+ol > li {
+  position:relative;
+  margin:0 0 6px 2em;
+  padding:4px 4px;
+  list-style:none;
+}
+
+ol > li:before{
+  content:counter(li);
+  counter-increment:li;
+  position:absolute;
+  display: inline-block;
+  top:-2px;
+  left:-30px;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  box-sizing:border-box;
+  width:30px;
+  margin-right:8px;
+  padding:4px;
+  color: white;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  background: limegreen;
+  font-weight:bold;
+  text-align:center;
+}
+
+.col-60 {
+  width:60%;
+  float: left;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  box-sizing: border-box;
+  border-left:8px solid transparent;
+}
+
+.content {
+  background-color: white;
+  border: 1px solid lightgray;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  padding: 0px 10px 0px 10px;
+}
+
+.tip {
+  background-color: #F1F1F1;
+  background-image: url('imgs/bulb.png');
+  background-repeat: no-repeat;
+  background-position: left;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 30px;
+  font-weight: bold;
+}
+
+.vid {
+  width: 100%;
+}
+
+.vid video {
+  width: 100%;
+}
+
+.vid > iframe {
+  width: 100%;
+}
+
+.more {
+  font-weight: bold;
+  color: blue;
+  cursor: pointer;
+}
+
+.more:before {
+  content: "+";
+  background: blue;
+  color: white;
+  width: 30px;
+  height: 30px;
+  box-sizing: border-box;
+  -webkit-box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  -webkit-border-radius:15px;
+  -moz-border-radius:15px;
+  border-radius: 15px;
+  margin-right: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  text-align:center;
+}
+
+.btn-group {
+  display:inline-block;
+}
+
+.btn {
+  display: inline-block;
+  background: blue;
+  color: white;
+  padding: 5px 0px 5px 0px;
+  margin: 0px 10px 0px 10px;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+  text-decoration:none;
+}
+
+.btn-regular {
+  width: 70px;
+}
+
+.btn-responsive {
+  max-width:100px;
+  width:80%;
+  margin: 1px;
+}
+
+.btn:hover {
+  background-image: -webkit-linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));
+  background-image: -moz-linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));
+  background-image: linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));
+  -pie-background: linear-gradient(rgb(124, 134, 254), rgb(5, 17, 158));
+  behavior: url('./pie/PIE.htc');
+}
+
+.out-links > a {
+  text-decoration: none;
+}
+
+.no-feedback {
+  background-color: #F1F1F1;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 30px;
+}
+
+.radio-btn {
+  opacity : 0;
+  filter: alpha(opacity=0);
+  z-index: 9999;
+  position: relative
+}
+
+.cust-radio-btn {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  position: relative;
+  left: -0.98em;
+  top: -0.129em;
+  z-index: 2;
+  background: white;
+  -webkit-border-radius:6px;
+  -moz-border-radius:6px;
+  border-radius: 6px;
+  border: 1px solid gray;
+  text-align:center;
+}
+
+.cust-radio-btn > .inner-circle {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #5F2BC1;
+  position: relative;
+  top: -5px;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  border-radius: 3px;
+  vertical-align:middle;
+}
+
+.no-feedback {
+  display : none;
+}
+
+.thanks {
+  display: none;
+}
+
+.thanks img {
+  vertical-align : middle;
+}
+
+.no-feedback textarea {
+  width: 100%;
+  height: 100px;
+}
+
+.col-40 {
+  width:35%;
+  float: left;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  box-sizing: border-box;
+  border-left:10px solid transparent;
+}
+
+.menu {
+  width: 100%;
+  background: white;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+  border-radius: 5px;
+  border: 1px solid lightgray;
+  margin-bottom:20px;
+}
+
+.menu .header {
+  background: lightgray;
+  padding: 5px;
+  color: #03A4D2;
+  font-weight:bold;
+}
+
+.menu .row {
+  border-bottom: 1px solid lightgray;
+  padding: 10px;
+}
+
+.menu .row:last-child {
+  border:0px;
+  padding: 10px 0px 10px 10px;
+}
+
+.menu .row img {
+  vertical-align:middle;
+}
+
+.indent-32 {
+  padding-left:34px;
+}
+
+.menu a {
+  text-decoration:none;
+}
+
+.menu .bold {
+  color: black;
+  font-weight:bold;
+}
+
+.app-showcase {
+  margin-top:20px;
+}
+.app-showcase img {
+  float:left;
+  margin-right:15px;
+  max-width:25%;
+  height:auto;
+}

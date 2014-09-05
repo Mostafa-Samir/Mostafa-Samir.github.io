@@ -2,6 +2,8 @@ html, body {
   background-color: #FBFBFC;
   width: 100%;
   font-family: sans-serif;
+  margin-right:0px;
+  margin-left:0px;
 }
 
 ol {
@@ -13,11 +15,11 @@ ol {
 ol > li {
   position:relative;
   margin:0 0 6px 2em;
-  padding:4px 8px;
+  padding:4px 4px;
   list-style:none;
 }
 
-ol > li:before{
+ol > li:before {
   content:counter(li);
   counter-increment:li;
   position:absolute;
@@ -31,10 +33,8 @@ ol > li:before{
   margin-right:8px;
   padding:4px;
   color: white;
-  -webkit-border-radius: 15px;
-  -moz-border-radius: 15px;
-  border-radius: 15px;
-  background: limegreen;
+  background-image: url('imgs/list_fallback.png');
+  background-repeat: no-repeat;
   font-weight:bold;
   text-align:center;
 }
@@ -45,18 +45,19 @@ ol > li:before{
   -moz-box-sizing:border-box;
   -webkit-box-sizing:border-box;
   box-sizing: border-box;
+  border-left:8px solid transparent;
 }
 
 .content {
+  behavior: url('./pie/PIE.htc');
   background-color: white;
   border: 1px solid lightgray;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
   border-radius: 5px;
   padding: 0px 10px 0px 10px;
 }
 
 .tip {
+  behavior: url('./pie/PIE.htc');
   background-color: #F1F1F1;
   background-image: url('imgs/bulb.png');
   background-repeat: no-repeat;
@@ -71,20 +72,23 @@ ol > li:before{
   width: 100%;
 }
 
+.vid video {
+  width: 100%;
+}
+
 .vid > iframe {
   width: 100%;
 }
 
 .more {
   font-weight: bold;
-  font-size: 25px;
   color: blue;
   cursor: pointer;
 }
 
 .more:before {
   content: "+";
-  background: blue;
+  background-image: url("imgs/more_fallback.png");
   color: white;
   width: 30px;
   height: 30px;
@@ -94,6 +98,10 @@ ol > li:before{
   margin-right: 10px;
   display: inline-block;
   vertical-align: middle;
+}
+
+.btn-group {
+  display:inline-block;
 }
 
 .btn {
@@ -108,11 +116,27 @@ ol > li:before{
   cursor: pointer;
 }
 
+.btn-regular {
+  width: 70px;
+}
+
+.btn-responsive {
+  max-width:100px;
+  width:80%;
+  margin: 1px;
+}
+
+.btn:hover {
+  behavior: url('./pie/PIE.htc');
+  -pie-background: linear-gradient(rgb(124, 134, 254), rgb(5, 17, 158));
+}
+
 .out-links > a {
   text-decoration: none;
 }
 
 .no-feedback {
+  behavior: url('./pie/PIE.htc');
   background-color: #F1F1F1;
   border: 1px solid gray;
   border-radius: 5px;
@@ -120,13 +144,13 @@ ol > li:before{
 }
 
 .radio-btn {
-  opacity : 0;
   filter: alpha(opacity=0);
   z-index: 9999;
   position: relative
 }
 
 .cust-radio-btn {
+  behavior: url('./pie/PIE.htc');
   display: inline-block;
   width: 12px;
   height: 12px;
@@ -142,17 +166,15 @@ ol > li:before{
 }
 
 .cust-radio-btn > .inner-circle {
+  behavior: url('./pie/PIE.htc');
   display: inline-block;
   width: 6px;
   height: 6px;
   background: #5F2BC1;
   position: relative;
-  top: -6px;
+  top: -5px;
   border-radius: 3px;
-}
-
-.no-feedback {
-  display : none;
+  vertical-align:middle;
 }
 
 .thanks {
@@ -161,6 +183,10 @@ ol > li:before{
 
 .thanks img {
   vertical-align : middle;
+}
+
+.no-feedback {
+  display : none;
 }
 
 .no-feedback textarea {
@@ -178,6 +204,7 @@ ol > li:before{
 }
 
 .menu {
+  behavior: url('./pie/PIE.htc');
   width: 100%;
   background: white;
   border-radius: 5px;
@@ -194,20 +221,15 @@ ol > li:before{
 
 .menu .row {
   border-bottom: 1px solid lightgray;
-  padding: 10px 0px 10px 10px;
-}
-
-.menu .row:last-child {
-  border:0px;
-  padding: 10px 0px 10px 10px;
+  padding: 10px;
 }
 
 .menu .row img {
   vertical-align:middle;
 }
 
-.menu .row p {
-  margin:0px;
+.menu .ie-last-row {
+  border-bottom:0px solid transparent;
 }
 
 .indent-32 {
@@ -216,6 +238,11 @@ ol > li:before{
 
 .menu a {
   text-decoration:none;
+}
+
+.menu .bold {
+  color: black;
+  font-weight:bold;
 }
 
 .app-showcase {

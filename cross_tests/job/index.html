@@ -4,13 +4,14 @@
         <meta http-equiv='Content-Type' content='Type=text/html; charset=utf-8'>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Template</title>
-        <script src = "utilis.js"></script>
+        <script src = "js/utilis.js"></script>
         <script>
             if(utilis.badBrowser())
-              utilis.loadStyleSheet("ie-style.css");
+              utilis.loadStyleSheet("css/ie-style.css");
             else
-              utilis.loadStyleSheet("style.css");
+              utilis.loadStyleSheet("css/style.css");
         </script>
+      <link type="text/css" rel="stylesheet" href="css/media-queries.css">
     </head>
 
     <body>
@@ -35,12 +36,18 @@
                     Learn all about all the leatest fetures. Visit.
                 </div>
                 <br/>
-                <div class='vid'>
-                    <iframe height="315" src="http://www.youtube.com/embed/Rwl6lE2kkxc" frameborder="0" allowfullscreen></iframe>
+                <div class='vid' data-src = "video/balloon.mp4" data-youtube-fallback = "http://www.youtube.com/watch?v=Gr4mxcIPb_A">
+                    <!--<iframe height="315" src="http://www.youtube.com/embed/Rwl6lE2kkxc" frameborder="0" allowfullscreen></iframe>-->
                 </div>
 
-                <p class='more'>Additional Upgrade Information</p>
-                <p id="qhelpful"><b> Was this article helpful? </b> <span class="btn" id="helpful">Yes</span> <span class="btn" id="nohelpful">No</span></p>
+                <h2 class='more'>Additional Upgrade Information</h2>
+                <p id="qhelpful">
+                  <b> Was this article helpful? </b>
+                  <span class='btn-group'>
+                    <span class="btn btn-regular" id="helpful">Yes</span>
+                    <span class="btn btn-regular" id="nohelpful">No</span>
+                  </span>
+                </p>
                 <p class="thanks"><img src = "imgs/check.png" /> Thanks for your feedback! </p>
                 <div class = 'no-feedback'>
                   <p><b> Tell us why this article wasn't helpful?</b></p>
@@ -51,7 +58,7 @@
                       <p><input type = "radio" name = 'reason' value = "long" class="radio-btn"/> <label>Article is too long</label></p>
                       <p><input type = "radio" name = 'reason' value = "other" class="radio-btn"/> <label>Other</label> </p>
                       <p><textarea id = "other_explain" name = 'other' placeholder="Please explain..." disabled></textarea>
-                      <p><span id = "submit" class = "btn">Done</span></p>
+                      <p><span id = "submit" class = "btn btn-regular">Done</span></p>
                   </form>
                 </div>
 
@@ -65,37 +72,34 @@
               <div class="row"><a href="#rec">Recovering a lost</a></div>
               <div class="row"><a href="#acc">Account</a></div>
               <div class="row"><a href="#una">Unable to</a></div>
-              <div class="row"><a href="#hac">How to tell if your account was hacked</a></div>
+              <div class="row ie-last-row"><a href="#hac">How to tell if your account was hacked</a></div>
           </div>
 
           <div class="menu">
             <div class="header">Header Text</div>
             <div class="row">
-              <p><img src="imgs/black_question.png" /> <b>Product Support</b></p>
+              <p><img src="imgs/black_question.png" /> <a href="#support" class="bold">Product Support</a></p>
               <p class="indent-32"><a href="#sh">Start Here</a></p>
             </div>
-            <div class="row"><img src="imgs/headphones.png"/> <b>Sign in Support</b></div>
-            <div class="row"><img src="imgs/facebook.png"/> <b>Connect on facebook</b></div>
-            <div class="row"><img src="imgs/twitter.png"/> <b>Tweet your question</b></div>
-            <div class="row"><img src="imgs/green_question.png"/> <b>Get advice on Answers</b></div>
+            <div class="row"><img src="imgs/headphones.png"/> <a href="#sign" class="bold">Sign in Support</a></div>
+            <div class="row"><img src="imgs/facebook.png"/> <a href="#connect" class="bold">Connect on facebook</a></div>
+            <div class="row"><img src="imgs/twitter.png"/> <a href="#tweet" class="bold">Tweet your question</a></div>
+            <div class="row ie-last-row"><img src="imgs/green_question.png"/> <a href="#advice" class="bold">Get advice on Answers</a></div>
           </div>
 
           <div class="menu">
             <div class="header">Header Text</div>
-            <div class="row">
+            <div class="row ie-last-row">
               <p><b>Meet the multi-talanted</b><p>
               <div class="app-showcase">
-                <img src="imgs/Smartphone.png"/>
+                <img src="imgs/smartphone.png"/>
                 <br>
-                <p>Lorm Ipsum Dolor</p>
-                <br><br><br><br><br><br>
-                <p>Lorem Ipsum Dolor</p>
-                <br>
-                <span class="btn" style="width:100px;">Get The App</span>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce id.</p>
+                <p><a href="#app" class="btn btn-responsive">Get The App</a>
               </div>
             </div>
           </div>
         </div>
-        <script src="main.js"></script>
+        <script src="js/main.js"></script>
     </body>
 </html>
