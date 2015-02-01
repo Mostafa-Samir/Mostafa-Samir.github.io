@@ -4,12 +4,15 @@ title: About
 permalink: /about/
 ---
 
-Some information about you!
 
-### More Information
+A 21 years old senior computer science student at the faculty of computers and information, Assiut University, Egypt. 
 
-A place to include any other types of information that you'd like to include about yourself. 
+Currently Seeking a post-graduate research oppurtuinities in AI.
 
-### Contact me
+Interested in: Theortitical Computer Science, Artificial Intelligence, Machine Learning, Mathematics, Physics, Biology (Micro- and Neuro-), Philosophy, Economy, and Poilitics.
 
-[email@domain.com](mailto:email@domain.com)
+Follow me on Twitter : [@M0stafa_Samir](https://twitter.com/M0stafa_Samir)
+
+Connect with me on LinkedIn: [in/m0stafasamir](https://www.linkedin.com/in/m0stafasamir)
+
+Email me: [mostafa.3210@gmail.com](mailto:mostafa.3210@gmail.com)
