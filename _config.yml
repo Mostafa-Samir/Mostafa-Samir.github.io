@@ -2,6 +2,15 @@
 # This file contains configuration flags to customize your site
 #
 
+username: Mostafa Samir
+user_description: A developer in a lifelong journey seeking after truth.
+user_title: Web Developer & Beginner AI Researcher
+email: mostafa.3210@gmail.com
+twitter_username: M0stafa_Samir
+github_username:  Mostafa-Samir
+linkedin_username: m0stafasamir
+disqus_username: mostafa-samir-blog
+
 # Name of your site (displayed in the header)
 name: Mostafa Samir
 
@@ -14,20 +23,6 @@ avatar: https://avatars0.githubusercontent.com/u/5209140?v=2&s=460
 #
 # Flags below are optional
 #
-
-# Includes an icon in the footer for each username you enter
-footer-links:
-  dribbble:
-  email:
-  facebook:
-  flickr:
-  github: Mostafa-Samir
-  instagram:
-  linkedin: m0stafasamir
-  pinterest:
-  rss: # just type anything here for a working RSS icon, make sure you set the "url" above!
-  twitter: M0stafa_Samir
-  stackoverflow: # your stackoverflow profile, e.g. "users/50476/bart-kiers"
 
 # Your disqus shortname, entering this will enable commenting on posts
 disqus: mostafa-samir-blog
@@ -53,6 +48,14 @@ baseurl: ""
 markdown: kramdown
 highlighter: pygments
 permalink: /:title/
+
+links:
+  - title: Home
+    url: /
+  - title: Tags
+    url: /tags
+  - title: About Me
+    url: /about
 
 # The release of Jekyll Now that you're using
 version: v1.0.0

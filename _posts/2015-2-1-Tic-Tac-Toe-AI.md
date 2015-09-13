@@ -2,6 +2,7 @@
 layout: post
 categories: [Artificial intelligence, Software Engineering, javascript]
 title: Building a Tic-Tac-Toe AI with Javascript
+tags: AI GameAI Minimax Javascript 
 ---
 
 <p align='center'> <img src = '{{site.baseurl}}/assets/images/ai_tic_tac_toe_header.png' alt = 'Tic-Tac-Toe AI'/> </p>
@@ -699,13 +700,13 @@ We can informally say that becuase the novice player has some understanding of t
 
 Foramlly asserting that statment about the novice and blind levels can be difficult and cumbersome because of the probability and randomness involved in both levels, but we can assert it statistically. A good idea is to have a lot of games (say 1000) played against each of the two levels and count the number of games won (in 3, 4 and 5 moves), and the number of games lost in both cases. We then see what these data tell us. A very bad idea is to play the 1000 games yourself !
 
-This is where the code in tests come in. Without getting into the detailed implementation , the idea is two make two AIs play 1000 games against each other and automatically collect the data we specified above. This is much faster and effcient than playing the 1000 games yourself.
+This is where the code in tests come in. Without getting into the detailed implementation , the idea is two make two AIs play 1000 games against each other and automatically collect the data we sepecided above. This is much faster and effcient than playing the 1000 games yourself.
 
 The following chart represents the data about a novice X player's results in 1000 games against a blind O player, and 1000 games against a novice O player. 
 
 <iframe width="800" height="600" frameborder="0" seamless="seamless" scrolling="no" src="https://plot.ly/~mostafa_samir/17.embed?width=800&height=600"></iframe>
 
-From the chart we can see that when playing with novice, the number of wins in 3 and 4 moves are getting smaller while the number of wins in 5 moves gets higher. This means that it's more difficult for X to win in low number of moves when playing with novice than playing with blind. Moreover, the number of lost and draw games gets higher while playing against novice, which means that it's harder for X to win while playing against novice than playing against blind. All this statistically tell us that novice is indeed harder than blind.
+From the chart we can see that when playing with novice, the number of wins in 3 and 4 moves are getting smaller while the number of wins in 5 moves gets higher. This means that it's more difficult for X to win in low number of moves when playing with novice than playing with blind. Moreover, the number of lost and draw games gets higher while playing against novice, which means that it's harder for X to win while playing against novice than playing against blind. All this statistically tell us the novice is indeed harder than blind.
 
 # Phew !
 
