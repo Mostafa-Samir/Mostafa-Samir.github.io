@@ -1,28 +1,28 @@
 ---
 layout: minimal
-title: "Browse by tags"
-permalink: /tags/index.html
-description: Find posts tagged with something that intrests you ...
+title: "Browse by Categories"
+permalink: /categories/index.html
+description: Find posts in categories that interests you...
 ---
 
 <div class="tags">
-{% assign tags_list = site.tags %}
-  {% if tags_list.first[0] == null %}
-    {% for tag in tags_list %}
-        <a data-scroll href="#{{ tag }}">{{ tag }}</a>
+{% assign cats_list = site.categories %}
+  {% if cats_list.first[0] == null %}
+    {% for cat in cats_list %}
+        <a data-scroll href="#{{ cat }}">{{ cat }}</a>
     {% endfor %}
   {% else %}
-    {% for tag in tags_list %}
-        <a data-scroll href="#{{ tag[0] }}">{{ tag[0] }}</a>
+    {% for cat in cats_list %}
+        <a data-scroll href="#{{ cat[0] }}">{{ cat[0] }}</a>
     {% endfor %}
   {% endif %}
-{% assign tags_list = nil %}
+{% assign cats_list = nil %}
 </div>
 
-{% for tag in site.tags  %}
-    <span class="tag-title" id="{{ tag[0] }}">{{ tag[0] }}</span>
+{% for cat in site.categories  %}
+    <span class="tag-title" id="{{ cat[0] }}">{{ cat[0] }}</span>
     <ul class="post-list">
-        {% assign pages_list = tag[1] %}
+        {% assign pages_list = cat[1] %}
         {% for post in pages_list reversed %}
             {% if post.title != null %}
             {% if group == null or group == post.group %}
