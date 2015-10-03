@@ -1,8 +1,7 @@
 ---
 layout: post
-categories: [Artificial intelligence, Software Engineering, javascript]
+categories: [artificial intelligence, javascript]
 title: Building a Tic-Tac-Toe AI with Javascript
-tags: AI GameAI Minimax Javascript 
 ---
 
 <p align='center'> <img src = '{{site.baseurl}}/assets/images/ai_tic_tac_toe_header.png' alt = 'Tic-Tac-Toe AI'/> </p>
