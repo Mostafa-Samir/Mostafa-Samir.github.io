@@ -24,8 +24,8 @@ layout: default
                     </p>
 
                     <div class="tags">
-                        {% for tag in post.tags %}
-                            <a href="/tags/#{{tag}}">{{ tag }}</a>
+                        {% for cat in post.categories %}
+                            <a href="/categories/#{{cat}}">{{ cat }}</a>
                         {% endfor %}
                     </div>
                 </div>
