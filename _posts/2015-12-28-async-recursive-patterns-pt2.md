@@ -249,7 +249,8 @@ loadMetaOf('moduleA', list)
 Remember in the analogy when we said that the two promises made by your teammate are actually one big promise of not to go back a single step unless all the work is done? Using this idea we can see that the way we handle our promise to the global scope implies as well the idea of the function's promise to itself along the way. The following animation illustrates that point.
 
 <p align='center'> 
-    <img id = "async-recursion" data-state='static' src = '{{site.baseurl}}/assets/images/async-recursion-static.png' style='cursor:pointer;'/> 
+    <img id = "async-recursion" data-state='static' src = '{{site.baseurl}}/assets/images/async-recursion-static.png' style='cursor:pointer;'/>
+    <img src='{{site.baseurl}}/assets/images/async-recursion.gif' style='display:none;'/>
 </p>
 
 We just need now to fill in the code for the http GET request and we'll have our working asynchronous solution!
