@@ -416,11 +416,11 @@ So now we can design a score function that only calculates the score of X at a t
 
 We can reason about such function in the following manner:
 
-- If X wins, we give him a score of 10 (just an arbitrary value), but O (the AI) shouldn't make this easy to happen, it must fight, it shouldn't surrender when it sees that it's going to lose. So the AI should make as much moves as possible to force the X player to make more moves to win. So the total score for X should be : **_10 - oMovesCount_**.
+* If X wins, we give him a score of 10 (just an arbitrary value), but O (the AI) shouldn't make this easy to happen, it must fight, it shouldn't surrender when it sees that it's going to lose. So the AI should make as much moves as possible to force the X player to make more moves to win. So the total score for X should be : **_10 - oMovesCount_**.
 
-- If X loses, we give him a score of -10, and O should get to this state with the least possible number of moves while still making X's score as low as possible. So we penalize any increase in the number of O moves by an increase in X's score. So the total score for X should be : **_-10 + oMovesCount_**
+* If X loses, we give him a score of -10, and O should get to this state with the least possible number of moves while still making X's score as low as possible. So we penalize any increase in the number of O moves by an increase in X's score. So the total score for X should be : **_-10 + oMovesCount_**
 
-- If the game is a draw, X's total score should be : **_0_**
+* If the game is a draw, X's total score should be : **_0_**
 
 We now have our score function (which doesn't need to keep track of X's moves count as we said before):
 
@@ -460,13 +460,13 @@ The algorithm is used to calculate the minimax value of a specific state (or the
 
 <p align='center'><img src = '{{site.baseurl}}/assets/images/tree.png' alt = 'minimax tree'/></p>
 
-- **At Level 0**: O wants to calculate the minimax value of that state, So it asks a question: What are X's moves if I took the action to that state ?! To answer this question, it generates all the states that X can reach through all his possible actions (The states in Level 1).
+* **At Level 0**: O wants to calculate the minimax value of that state, So it asks a question: What are X's moves if I took the action to that state ?! To answer this question, it generates all the states that X can reach through all his possible actions (The states in Level 1).
 
-- **At Level 1**: O Thinks about the moves it can make in response to each of X's moves, so it generates all the states it can reach from there by all possible actions (The states in Level 2).
+* **At Level 1**: O Thinks about the moves it can make in response to each of X's moves, so it generates all the states it can reach from there by all possible actions (The states in Level 2).
 
-- **At Level 2**: Having all the states it can reach, O keeps thinking ahead and considers all of X's moves he can take from there, so it generates all the states that X can reach through all his possible actions (The Terminal States).
+* **At Level 2**: Having all the states it can reach, O keeps thinking ahead and considers all of X's moves he can take from there, so it generates all the states that X can reach through all his possible actions (The Terminal States).
 
-- **At Level 3 (Terminal States)**: O now knows how the game could end, it knows all the possible configurations that the game could end into and have a tree with all the possible paths it could take (the tree in the figure).
+* **At Level 3 (Terminal States)**: O now knows how the game could end, it knows all the possible configurations that the game could end into and have a tree with all the possible paths it could take (the tree in the figure).
 
 O now uses the score function to calculate the score of each terminal state it can reach (the orange numbers above each state in the figure). After that, it starts climbing the tree up to the root state ,which is the state we started off to calculate its minimax value.
 
