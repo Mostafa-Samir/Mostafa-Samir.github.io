@@ -4,10 +4,10 @@ categories: [asynchronous programming, nodejs, javascript]
 title: Asynchronous Iterative & Recursive Patterns for Node.js - Part 2
 ---
 
-##Introduction
+## Introduction
 In [Part 1](http://mostafa-samir.github.io/async-iterative-patterns-pt1/) we talked about the challenges we could face in doing iterative asynchronous work, and we devised two patterns that we could use to overcome these challenges. Now we turn our attention to the challenges that we would encounter in trying to achieve recursion of asynchronous operations and how we could overcome them. As in the last time, we start our discussion with an example problem to work on, then we investigate the possible solutions.
 
-##Problem 2
+## Problem 2
 > You and your team are creating a module system for your little organization (something that's very similar to npm, but private to your organization). The system should be able to load a module on demand from a shared organization server. Each module can have at most one other module as a dependency, and when a module is  fetched, its dependency and its dependency's dependency (and so on...) should be fetched as well to ensure that the module will work correctly.
 Your task now is to write a script that runs before downloading the module that queries the metadata of the module on the server to determine the list of all modules and dependencies that you'll need to download. All modules metadata reside on the route "/meta/{module_name}", and it should be retrieved using a GET request. Each request returns a JSON response with at most two fields: "hasDependency" that is true if the module has a dependency, false otherwise; and "dependency" which contains the name of the dependency module if exists.
 
