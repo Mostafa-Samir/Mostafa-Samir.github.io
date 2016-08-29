@@ -19,7 +19,7 @@ This is a variation of the one we mentioned in the introduction.
 
 ### A Synchronous Solution
 
-{% highlight javascript %}
+```javascript
 var fs = require('fs');
 
 var paths = [
@@ -39,7 +39,7 @@ for(var i = 0; i < paths.length; i++) {
 
 // invoke the callback
 PrintTotalSum();
-{% endhighlight %}
+```
 
 Well, this solves it ! But that's a synchronous (aka, blocking) solution, that's bad ! Imagine that this runs within a server application as a respond to a request, while the server is processing one request all the other requests are blocked, the server will only be able to handle one client at a time. Not cool !
 
@@ -47,9 +47,9 @@ We need an asynchronous solution. Here's a wrong one !
 
 ### A Wrong Asynchronous Solution
 
-{% highlight javascript %}
+```javascript
 for(var i = 0; i < paths.length; i++) {
-    
+
     fs.readFile(paths[i], 'utf8', function(err, data) {
         var num = parseInt(data);
         totalSum += num;
@@ -58,7 +58,7 @@ for(var i = 0; i < paths.length; i++) {
 
 // invoke the callback
 PrintTotalSum();
-{% endhighlight %}
+```
 
 I encourge you to whip up three files with contents like the example here and test that yourself, you're most likely gonna get a 0.
 
@@ -72,48 +72,48 @@ Let's imagine that you're gonna simulate this problem with three of your friends
 
 This is essentially the correct asynchronous solution to the problem. We could implement this in a pattern that we can use with any problem of the same class.
 
-{% highlight javascript %}
+```javascript
 function IterateOver(list, iterator, callback) {
     // this is the function that will start all the jobs
     // list is the collections of item we want to iterate over
     // iterator is a function representing the job when want done on each item
     // callback is the function we want to call when all iterations are over
-    
+
     var doneCount = 0;  // here we'll keep track of how many reports we've got
-    
+
     function report() {
         // this function resembles the phone number in the analogy above
         // given to each call of the iterator so it can report its completion
-        
+
         doneCount++;
-        
+
         // if doneCount equals the number of items in list, then we're done
         if(doneCount === list.length)
             callback();
     }
-    
+
     // here we give each iteration its job
     for(var i = 0; i < list.length; i++) {
         // iterator takes 2 arguments, an item to work on and report function
         iterator(list[i], report)
     }
 }
-{% endhighlight %}
+```
 
 Using this, we can simply solve our problem by calling `IterateOver` on our array of paths and define the iterator to be the body of the for-loop we wrote in the wrong solution with the addition of the call to `report` after adding the number to the total to report that the iteartion is over. And we pass the `PrintTotalSum` as the callback. This will asynchronously always get you a 22.
 
-{% highlight javascript %}
+```javascript
 IterateOver(paths, function(path, report) {
     fs.readFile(path, 'utf8', function(err, data) {
-        
+
         var num = parseInt(data);
         totalSum += num;
-        
+
         // we must call report to report back iteration completion
         report();
     });
 }, PrintTotalSum);
-{% endhighlight %}
+```
 
 ## Problem #1.2
 
@@ -125,24 +125,24 @@ Problem #1 didn't impose any order on the processing of the list of paths, it do
 
 We could try the `IterateOver` pattern we created on this problem
 
-{% highlight javascript %}
+```javascript
 var FinalResult = "";
 
 IterateOver(paths, function(path, report) {
     fs.readFile(path, 'utf8', function(err, data) {
-    
+
         // here we wait for random time
         setTimeout(function() {
             FinalResult += data + " ";
-            
+
             report();
         }, Math.floor(Math.random() * 10));
-        
+
     });
 }, function() {
     console.log(FinalResult);
 });
-{% endhighlight %}
+```
 
 If you run this solution you'll sometimes get **"10 7 5"**, and some other times **"7 5 10"** or **"5 10 7"**. The order of number is undetermined and doesn't always match with the order of paths in the list. So What's the problem ?
 
@@ -158,15 +158,15 @@ An simple solution to this is to delegate the order enforcement to your friends.
 
 We can see that the work will proceed in a waterfall manner where each stage will start the next one until the job is done. We could simply implement this waterfall pattern by tweaking a few parts of the `IterateOver` pattern.
 
-{% highlight javascript %}
+```javascript
 function WaterfallOver(list, iterator, callback) {
-    
+
     var nextItemIndex = 0;  //keep track of the index of the next item to be processed
-    
+
     function report() {
-    
+
         nextItemIndex++;
-        
+
         // if nextItemIndex equals the number of items in list, then we're done
         if(nextItemIndex === list.length)
             callback();
@@ -174,32 +174,32 @@ function WaterfallOver(list, iterator, callback) {
             // otherwise, call the iterator on the next item
             iterator(list[nextItemIndex], report);
     }
-    
+
     // instead of starting all the iterations, we only start the 1st one
     iterator(list[0], report);
 }
-{% endhighlight %}
+```
 
 Now we can use the `WaterfallOver` pattern instead of the `IterateOver` pattern and always get **"10 7 5"** as desired.
 
-{% highlight javascript %}
+```javascript
 var FinalResult = "";
 
 WaterfallOver(paths, function(path, report) {
     fs.readFile(path, 'utf8', function(err, data) {
-    
+
         // here we wait for random time
         setTimeout(function() {
             FinalResult += data + " ";
-            
+
             report();
         }, Math.floor(Math.random() * 10));
-        
+
     });
 }, function() {
     console.log(FinalResult);
 });
-{% endhighlight %}
+```
 
 Before we finish here, there might be a bothering quation about Problem #1.2, particulary about the condition of random waitings. I mean, what kind of condition is that ?! It seems completely arbitrary and cannot be found in rael-life problems !
 
