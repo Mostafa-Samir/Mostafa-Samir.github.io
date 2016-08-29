@@ -53,7 +53,7 @@ For the board, it would be simpler to represent it as a 9-elements one-dimension
 
 Now we're ready to write our State class:
 
-{% highlight javascript %}
+```javascript
 /*
  * Represents a state in the game
  * @param old [State]: old state to intialize the new state
@@ -160,7 +160,7 @@ var State = function(old) {
     };
 
 };
-{% endhighlight %}
+```
 
 # The Human Player
 
@@ -174,7 +174,7 @@ We'll postbone the detailed implementation of the AI a little bit. We'll focus n
 
 Our AI class would be something like this:
 
-{% highlight javascript %}
+```javascript
 /*
  * Constructs an AI player with a specific level of intelligence
  * @param level [String]: the desired level of intelligence
@@ -237,7 +237,7 @@ var AI = function(level) {
         }
     };
 };
-{% endhighlight %}
+```
 
 # The AI Actions
 To simplfy the code for the AI decision making and moves, we can take the code that represents the available actions that the AI have and will reson about to another class outisde the AI class. As we just said, it would simpler and better modular design for the project.
@@ -246,7 +246,7 @@ We'll need the AI action to hold two information: the position on the board that
 
 Our AI action class would look like this:
 
-{% highlight javascript %}
+```javascript
 /*
  * Constructs an action that the ai player could make
  * @param pos [Number]: the cell position the ai would make its action in
@@ -279,11 +279,11 @@ var AIAction = function(pos) {
         return next;
     }
 };	
-{% endhighlight %}
+```
 
 We said above that the AI uses the minimax value to choose the best action from a lits of available actions, so it's very reasonable to think that we'd need some way to sort the actions based on their minimax values. For that, we provide two public static functions that we can use as a compare function to pass to the javascript's [Array.prototype.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) function to sort the list of actions in both ascending and descending manners.
 
-{% highlight javascript %}
+```javascript
 /*
  * public static method that defines a rule for sorting AIAction in ascending manner
  * @param firstAction [AIAction] : the first action in a pairwise sort
@@ -313,13 +313,13 @@ AIAction.DESCENDING = function(firstAction, secondAction) {
     else
         return 0; //indicates a tie
 }
-{% endhighlight %}
+```
 
 # The Game
 
 This is the structure that will control the flow of the game and glue everything together in one functioning unit. In such a structure, we'd like to keep and access three kinds of information : the AI player who plays the game with the human,the current state of the game, and the status of the game (wheter it's running or ended), we'll keep those as public attributes for easy access. We'd also need a way to move the game from one state to another as the playing continues, we can implement that with a public function that advances the game to a given state and checks if the game ends at this state and what is the result, if the game doesn't end at this state, the function notifies the player who plays next to continue. Finally, we'd need a public function to start the game.
 
-{% highlight javascript %}
+```javascript
 /*
  * Constructs a game object to be played
  * @param autoPlayer [AIPlayer] : the AI player to be play the game with
@@ -390,7 +390,7 @@ var Game = function(autoPlayer) {
     }
 
 };
-{% endhighlight %}
+```
 
 # Let's Do Some AI
 
@@ -428,7 +428,7 @@ We now have our score function (which doesn't need to keep track of X's moves co
 
 We'll implement this as a public static function of the Game class. We implement it in the Game class because it's a game-related information, and static becuase it doesn't depend on sepcific instances of the game.
 
-{% highlight javascript %}
+```javascript
 /*
  * public static function that calculates the score of the x player in a terminal state
  * @param _state [State]: the state in which the score is calculated
@@ -450,7 +450,7 @@ Game.score = function(_state) {
         }
     }
 }
-{% endhighlight %}
+```
 
 ## **The Minimax Algorithm**
 
@@ -480,7 +480,7 @@ The algorithm now terminates and returns the minimax value of the desired state 
 
 It now obvious that the minimax alogorithm is a recursive algorithm and its base case is reaching a terminal state. We can implement it with a recursive function that recurs down to the terminal states, and backs up the minimax value as the recursion unwinds.
 
-{% highlight javascript %}
+```javascript
 /*
  * private recursive function that computes the minimax value of a game state
  * @param state [State] : the state to calculate its minimax value
@@ -534,7 +534,7 @@ function minimaxValue(state) {
         return stateScore;
     }
 }
-{% endhighlight %}
+```
 
 ## **A Master Move**
 
@@ -548,7 +548,7 @@ Now it's time to take some decisions. Using the minimax algorithm, taking an opt
 
 A player who always plays the optimal move is by no doubt a master player. So we implement our **takeAMasterMove** function to allow the AI to always choose the optimal action. This the most difficult level of the game, as it can be proven that a player that plays optimally all the time cannot lose. Your best chance at this level is leading the game to a draw, otherwsie you'll lose.
 
-{% highlight javascript %}
+```javascript
 /*
  * private function: make the ai player take a master move,
  * that is: choose the optimal minimax decision
@@ -589,7 +589,7 @@ function takeAMasterMove(turn) {
     // take the game to the next state
     game.advanceTo(next);
 }
-{% endhighlight %}
+```
 
 ## **A Novice Move**
 
@@ -597,7 +597,7 @@ A Novice player is a player who sometimes takes the optimal move and some other 
 
 Coding a probablity might seem like a challenging task if you didn't do it before (at least it did to me), but it turns out that it's a very simple task : If you want to execute a statment P percent of the time, just generate a random number between 0 and 100. You only execute that statment if the generated random number is less than or equal to P.
 
-{% highlight javascript %}
+```javascript
 var P = 40; //some probability in percent form
 if(Math.random()*100 <= P) {
     // carry out the probable task with probability P
@@ -605,11 +605,11 @@ if(Math.random()*100 <= P) {
 else {
    // carry out the other probable task with probability 1 - P
 }
-{% endhighlight %}
+```
 
 Probabilities and randomness is the way used in most entertainment games to make the games playable and with some variance in the AI actions during the game. Imagine playing Call of Duty with an AI that manges to always make headshots with no misses at all, such a game wouldn't be playble and unrealistic. This is where probability comes and add some small probablity that the AI headshoots, with a large probability for regular shots and misses. In our game, we'll use probablity to make the AI miss the optimal move for 60% of the time, and make it for 40% of the time.
 
-{% highlight javascript %}
+```javascript
 /*
  * private function: make the ai player take a novice move,
  * that is: mix between choosing the optimal and suboptimal minimax decisions
@@ -664,13 +664,13 @@ function takeANoviceMove(turn) {
 
     game.advanceTo(next);
 };
-{% endhighlight %}
+```
 
 ## **A Blind Move**
 
 We assume that a blind player is a player who doesn't know anything about the game and doesn't have the ability to reason about the which action is the better than the other. A blind player chooses his actions randomly all the time, and this is the easist level of the game.
 
-{% highlight javascript %}
+```javascript
 /*
  * private function: make the ai player take a blind move
  * that is: choose the cell to place its symbol randomly
@@ -687,7 +687,7 @@ function takeABlindMove(turn) {
 
     game.advanceTo(next);
 }
-{% endhighlight %}
+```
 
 # How difficult is each difficulty ?
 

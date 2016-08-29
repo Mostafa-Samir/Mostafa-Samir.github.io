@@ -25,7 +25,7 @@ Continuing with the tradition we started in part 1, we begin first with a synchr
 
 A correct, yet imaginary, implementation of our solution above would go like this:
 
-{% highlight javascript %}
+```javascript
 var http = require('http');
 
 function loadMetaOf(name, list) {
@@ -48,13 +48,13 @@ loadMetaOf('moduleA', list);
 console.log('fetched all metadata for moduleA');
 console.log('all of the following modules need to be loaded');
 console.log(list);
-{% endhighlight %}
+```
 
 Can we now use the real `http.get` asynchronous method instead of the imaginary synchronous version and get a correct asynchronous solution?!
 
 ### A Wrong Asynchronous Solution
 
-{% highlight javascript %}
+```javascript
 var http = require('http');
 
 function loadMetaOf(name, list) {
@@ -88,7 +88,7 @@ loadMetaOf('moduleA', list);
 console.log('fetched all metadata for moduleA');
 console.log('all of the following modules need to be loaded');
 console.log(list);
-{% endhighlight %}
+```
 
 Whenever you run this script you're gonna get an empty list of modules instead of a populated list of three modules. So what's the problem?!
 
@@ -116,7 +116,7 @@ Promises are a new feature introduced to javascript in ES6, they represent a way
 
 A `Promise` is essentially a representation of a value that is not available yet but will be resolved in the future. A promise is created using a function that takes two arguments: a **resolve** handler, and a **reject** handler. In this function you write your asynchronous call, and when the value you get from that call is available, you resolve the promise with that value using the resolve handler. And if any error occurs in the process, you reject the promise with that error using the reject handler.
 
-{% highlight javascript %}
+```javascript
 var promise = new Promise(function(resolve, reject) {
     try {
         someAsyncCall(function(result) {
@@ -128,18 +128,18 @@ var promise = new Promise(function(resolve, reject) {
         reject(error);
     }
 });
-{% endhighlight %}
+```
 
 Now you have a *promise of a value*, with that you have the ability to wait for that value to be resolved and **then** do some processing on it. This behaviour (called the *thenable* behaviour) is accomplished using the `Promise.then` method that takes two functions: the first which is called if the promise is resolved and it gets passed the resolved value, the other gets called if the promise is rejected and gets passed the rejected value (which is usually an error).
 
-{% highlight javascript %}
+```javascript
 promise
 .then(function(value) {
     console.log("This is the result of someAsyncCall: ", value);
 }, function(error) {
     throw error;  // rethrow the error
 });
-{% endhighlight %}
+```
 
 We see that the promise allowed us to simplify our asynchronous code by limiting the callback to only the report of the value, and all the processing logic of that value is separated to another block (the `then` block) outside the callback in a way that appears to be synchronous. How cool is that!
 
@@ -149,7 +149,7 @@ A **Deferred** is an extended type of promise, created using `Promise.defer()` m
 
 Here's a pseudo-example of how deferreds can be used:
 
-{% highlight javascript %}
+```javascript
 /*
  * this is a function that asynchronously bulk inserts several records into a db
  * @param records [Array]: the records to be bulk inserted
@@ -175,7 +175,7 @@ Here's a pseudo-example of how deferreds can be used:
  
  bulkInsert()
  .then(refrechView);
-{% endhighlight %}
+```
 
 I guess it's obvious by now, from the definition of deferreds and from the way I wrote the comments in the above snippet, that deferreds will be our tool to implement the asynchronous analogy we discussed earlier.
 
@@ -184,7 +184,7 @@ As our analogy started, our solution begins with the function `loadMetaOf` makin
 
 So our solution would start off like this:
 
-{% highlight javascript %}
+```javascript
 var http = require('http');
 
 function loadMetaOf(name, list) {
@@ -204,7 +204,7 @@ loadMetaOf('moduleA', list)
     console.log('all of the following modules need to be loaded');
     console.log(list);
 });
-{% endhighlight %}
+```
 
 Now we can be sure that the logs will not be printed until that promise is fulfilled. But when will that promise be fulfilled?!
 
@@ -212,7 +212,7 @@ In the analogy, the promise is fulfilled when the all the parts are in the bucke
 
 It seems now like a good idea to resolve our promise in these two cases: if there's no dependency, and when the work in the recursive call is done. Notice that the recursive call also returns a promise that will be fulfilled when its work is done, and in its `then` function we should resolve our promise.
 
-{% highlight javascript %}
+```javascript
 var http = require('http');
 
 function loadMetaOf(name, list) {
@@ -244,7 +244,7 @@ loadMetaOf('moduleA', list)
     console.log('all of the following modules need to be loaded');
     console.log(list);
 });
-{% endhighlight %}
+```
 
 Remember in the analogy when we said that the two promises made by your teammate are actually one big promise of not to go back a single step unless all the work is done? Using this idea we can see that the way we handle our promise to the global scope implies as well the idea of the function's promise to itself along the way. The following animation illustrates that point.
 
@@ -255,7 +255,7 @@ Remember in the analogy when we said that the two promises made by your teammate
 
 We just need now to fill in the code for the http GET request and we'll have our working asynchronous solution!
 
-{% highlight javascript %}
+```javascript
 var http = require('http');
 
 function loadMetaOf(name, list) {
@@ -297,7 +297,7 @@ loadMetaOf('moduleA', list)
     console.log('all of the following modules need to be loaded');
     console.log(list);
 });
-{% endhighlight %}
+```
 
 Now compare this solution to the wrong asynchronous solution we worked on earlier. Remember the useless `return` statements there? You can see that every `deferred.resolve()` statement in the correct solution comes in the place of every `return` solution in the wrong solution (and also in the synchronous solution).
 
