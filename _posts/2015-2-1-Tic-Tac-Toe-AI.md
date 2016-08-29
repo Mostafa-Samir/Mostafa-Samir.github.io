@@ -253,10 +253,10 @@ Our AI action class would look like this:
  * made that action
  */
 var AIAction = function(pos) {
-    
+
     // public : the position on the board that the action would put the letter on
     this.movePosition = pos;
-    
+
     //public : the minimax value of the state that the action leads to when applied
     this.minimaxVal = 0;
 
@@ -267,7 +267,7 @@ var AIAction = function(pos) {
      */
     this.applyTo = function(state) {
         var next = new State(state);
-		
+
         //put the letter on the board
         next.board[this.movePosition] = state.turn;
 
@@ -278,7 +278,7 @@ var AIAction = function(pos) {
 
         return next;
     }
-};	
+};
 ```
 
 We said above that the AI uses the minimax value to choose the best action from a lits of available actions, so it's very reasonable to think that we'd need some way to sort the actions based on their minimax values. For that, we provide two public static functions that we can use as a compare function to pass to the javascript's [Array.prototype.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) function to sort the list of actions in both ascending and descending manners.
@@ -365,7 +365,7 @@ var Game = function(autoPlayer) {
         }
         else {
             //the game is still running
-            
+
             if(this.currentState.turn === "X") {
                 ui.switchViewTo("human");
             }
@@ -417,9 +417,7 @@ So now we can design a score function that only calculates the score of X at a t
 We can reason about such function in the following manner:
 
 * If X wins, we give him a score of 10 (just an arbitrary value), but O (the AI) shouldn't make this easy to happen, it must fight, it shouldn't surrender when it sees that it's going to lose. So the AI should make as much moves as possible to force the X player to make more moves to win. So the total score for X should be : **_10 - oMovesCount_**.
-
 * If X loses, we give him a score of -10, and O should get to this state with the least possible number of moves while still making X's score as low as possible. So we penalize any increase in the number of O moves by an increase in X's score. So the total score for X should be : **_-10 + oMovesCount_**
-
 * If the game is a draw, X's total score should be : **_0_**
 
 We now have our score function (which doesn't need to keep track of X's moves count as we said before):
@@ -461,22 +459,17 @@ The algorithm is used to calculate the minimax value of a specific state (or the
 <p align='center'><img src = '{{site.baseurl}}/assets/images/tree.png' alt = 'minimax tree'/></p>
 
 * **At Level 0**: O wants to calculate the minimax value of that state, So it asks a question: What are X's moves if I took the action to that state ?! To answer this question, it generates all the states that X can reach through all his possible actions (The states in Level 1).
-
 * **At Level 1**: O Thinks about the moves it can make in response to each of X's moves, so it generates all the states it can reach from there by all possible actions (The states in Level 2).
-
 * **At Level 2**: Having all the states it can reach, O keeps thinking ahead and considers all of X's moves he can take from there, so it generates all the states that X can reach through all his possible actions (The Terminal States).
-
 * **At Level 3 (Terminal States)**: O now knows how the game could end, it knows all the possible configurations that the game could end into and have a tree with all the possible paths it could take (the tree in the figure).
 
 O now uses the score function to calculate the score of each terminal state it can reach (the orange numbers above each state in the figure). After that, it starts climbing the tree up to the root state ,which is the state we started off to calculate its minimax value.
 
 - **At Level 2**: O knows that X is the one playing next at this level. It also knows that at each possible state at this level, X will choose to go to the child state (at Level 3) with the largest score. So O backs up the minimax value of each state at Level 2 with the maximum score of its child states.
-
 - **At Level 1**: O knows that it's its turn to play at this level. It wants to choose a child state (from Level 2) that makes X's score as low as possible. So O backs up the minimax value of each state at level 1 with the minimumm minimax value of its child states.
-
 - **At Level 0**: O follows the same reasoning it follwed at level 2. It backs up the minmax value of the root state with the maximum minimax value of its child states (the ones at level 1).
 
-The algorithm now terminates and returns the minimax value of the desired state to be **0**. 
+The algorithm now terminates and returns the minimax value of the desired state to be **0**.
 
 It now obvious that the minimax alogorithm is a recursive algorithm and its base case is reaching a terminal state. We can implement it with a recursive function that recurs down to the terminal states, and backs up the minimax value as the recursion unwinds.
 
@@ -515,9 +508,9 @@ function minimaxValue(state) {
         /* calculate the minimax value for all available next states
          * and evaluate the current state's value */
         availableNextStates.forEach(function(nextState) {
-		
+
             var nextScore = minimaxValue(nextState); //recursive call
-			
+
             if(state.turn === "X") {
                 // X wants to maximize --> update stateScore iff nextScore is larger
                 if(nextScore > stateScore)
@@ -560,7 +553,7 @@ function takeAMasterMove(turn) {
     //enumerate and calculate the score for each avaialable actions to the ai player
     var availableActions = available.map(function(pos) {
         var action =  new AIAction(pos); //create the action object
-		
+
         //get next state by applying the action
         var next = action.applyTo(game.currentState);
 
@@ -621,7 +614,7 @@ function takeANoviceMove(turn) {
     //enumerate and calculate the score for each available actions to the ai player
     var availableActions = available.map(function(pos) {
         var action =  new AIAction(pos); //create the action object
-		
+
         //get next state by applying the action
         var nextState = action.applyTo(game.currentState);
 
@@ -639,7 +632,7 @@ function takeANoviceMove(turn) {
         //O minimizes --> ascend sort the actions to have the minimum minimax at first
         availableActions.sort(AIAction.ASCENDING);
 
-    
+
     /*
      * take the optimal action 40% of the time
      * take the 1st suboptimal action 60% of the time
@@ -701,7 +694,7 @@ Foramlly asserting that statment about the novice and blind levels can be diffic
 
 This is where the code in tests come in. Without getting into the detailed implementation , the idea is two make two AIs play 1000 games against each other and automatically collect the data we sepecided above. This is much faster and effcient than playing the 1000 games yourself.
 
-The following chart represents the data about a novice X player's results in 1000 games against a blind O player, and 1000 games against a novice O player. 
+The following chart represents the data about a novice X player's results in 1000 games against a blind O player, and 1000 games against a novice O player.
 
 <iframe width="800" height="600" frameborder="0" seamless="seamless" scrolling="no" src="https://plot.ly/~mostafa_samir/17.embed?width=800&height=600"></iframe>
 
