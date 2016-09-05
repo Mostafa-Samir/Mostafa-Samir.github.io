@@ -76,15 +76,23 @@ With these three points, we can define a [statistical model](https://en.wikipedi
 
 It's now clear from the statistical model we developed that the fundamental task of the machine learning process is to understand the nature of the conditional distribution $P(Y\|X)$. To make our lives easier, we'll avoid the hassle of working directly with the conditional distribution and instead introduce some kind of proxy that will be simpler to work with.
 
-There are two fundamental statistics we can use to decompose a random variable: these are the [mean (or the expected value)](https://en.wikipedia.org/wiki/Expected_value) and the [variance](https://en.wikipedia.org/wiki/variance). The mean is the value around which the random variable is centered, and the variance is the measure of how the random variable is distributed around the mean. Given that, we can write any realization $v$ of a random variable $V$ as:
+There are two fundamental statistics we can use to decompose a random variable: these are the [mean (or the expected value)](https://en.wikipedia.org/wiki/Expected_value) and the [variance](https://en.wikipedia.org/wiki/variance). The mean is the value around which the random variable is centered, and the variance is the measure of how the random variable is distributed around the mean. Given two random variables $V$ and $W$, we can say that:
 
-$$v = \mu_V + \zeta$$
+$$V = \mathbb{E}[V|W] + (V - \mathbb{E}[V|W])$$
 
-where $\mu_V$ is the mean of the random variable $V$ and $\zeta$ is drawn from a distribution similiar to $V$'s with a zero mean and a variance equals to the variance of $V$. We often refer to $\zeta$ as a **noise term**. By applying the same reasoning to our statistical model, we can say that for every observation $(x_i, y_i)$:
+where $\mathbb{E}[V\|W]$ is the conditional mean of the random variable $V$ given $W$. This essentially means that we can decompose the value of $V$ into two parts: the first can be explained in terms of the other variable $W$, and another *noisy* part that cannot be explained by $W$.
 
-$$ y_i = \mu_Y + \zeta = \mathbb{E}[Y|X=x_i] + \zeta $$
+We can denote the unexplained part as an independent random variable $Z = V - \mathbb{E}[V\|W]$. It easy to see (using the [law of total expectation](https://en.wikipedia.org/wiki/Law_of_total_expectation)) that the mean of the $Z$ is zero. Hence $Z$ is a source of pure variance, that is the variance in V that cannot be explained by W.
 
-where $\mathbb{E}[Y\|X=x_i]$ is the the expected value (or the mean) of the conditional probability controlling $Y$. The noise term here summarizes all the factors that affect $Y$ other than $X$. It's easy to notice that there is some function $f:\mathcal{X} \rightarrow \mathcal{Y}$:
+Now we can write the relationship between any two associated realizations $(w_i, v_i)$ of $W$ and $V$ as:
+
+$$v_i = \mathbb{E}[V|W=w_i] + \zeta$$
+
+where $\zeta$ is a realization of the noise variable $Z$, we call that the **noise term**. We can apply the same reasoning on the our statistical model to get the following for any realization $(x_i, y_i)$.
+
+$$ y_i = \mathbb{E}[Y|X=x_i] + \zeta $$
+
+Now It's easy to notice that there is some function $f:\mathcal{X} \rightarrow \mathcal{Y}$ such that:
 
 $$\mathbb{E}[Y|X=x] = f(x)$$
 
