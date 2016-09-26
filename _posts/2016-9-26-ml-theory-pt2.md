@@ -2,7 +2,7 @@
 layout: post
 categories: [machine learning, artificial intelligence, statistics]
 title: "Machine Learning Theory - Part 2: Generalization Bounds"
-image: http://lecun.org/gallery/libpro/20011121-allyourbayes/dsc01228-02-m.jpg
+image: /assets/images/vapnik.jpg
 ---
 
 Last time we concluded by noticing that minimizing the empirical risk (or the training error) is not in itself a solution to the learning problem, it could only be considered a solution if we can guarantee that the difference between the training error and the generalization error (which is also called the **generalization gap**) is small enough. We formalized such requirement using the probability:
@@ -212,7 +212,7 @@ or, by using the bound on growth function in terms of $d_\mathrm{vc}$ as:
 
 $$R(h) \leq R_\mathrm{emp}(h) + \sqrt{\frac{8d_\mathrm{vc}(\ln\frac{2m}{d_\mathrm{vc}} + 1) + 8\ln\frac{4}{\delta}}{m}}$$
 
-![](http://lecun.org/gallery/libpro/20011121-allyourbayes/dsc01228-02-m.jpg)
+![](/assets/images/vapnik.jpg)
 
 > Professor Vapnik standing in front of a white board that has a form of the VC-bound and the phrase "All your bayes are belong to us", which is a play on the broken english phrase found in the classic video game [Zero Wing](https://en.wikipedia.org/wiki/All_your_base_are_belong_to_us) in a claim that the VC framework of inference is superior to that of [Bayesian inference](https://en.wikipedia.org/wiki/Bayesian_inference). [Courtesy of  [Yann LeCunn](http://yann.lecun.com/ex/fun/)].
 
