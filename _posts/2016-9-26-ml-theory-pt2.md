@@ -5,7 +5,7 @@ title: "Machine Learning Theory - Part 2: Generalization Bounds"
 image: /assets/images/vapnik.jpg
 ---
 
-Last time we concluded by noticing that minimizing the empirical risk (or the training error) is not in itself a solution to the learning problem, it could only be considered a solution if we can guarantee that the difference between the training error and the generalization error (which is also called the **generalization gap**) is small enough. We formalized such requirement using the probability:
+[Last time](/ml-theory-pt1) we concluded by noticing that minimizing the empirical risk (or the training error) is not in itself a solution to the learning problem, it could only be considered a solution if we can guarantee that the difference between the training error and the generalization error (which is also called the **generalization gap**) is small enough. We formalized such requirement using the probability:
 
 $$ \mathbb{P}\left[\sup_{h \in \mathcal{H}} |R(h) - R_{\text{emp}(h)}| > \epsilon\right] $$
 
