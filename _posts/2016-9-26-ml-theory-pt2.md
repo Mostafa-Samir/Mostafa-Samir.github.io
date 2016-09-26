@@ -3,6 +3,8 @@ layout: post
 categories: [machine learning, artificial intelligence, statistics]
 title: "Machine Learning Theory - Part 2: Generalization Bounds"
 image: /assets/images/vapnik.jpg
+twitter_text: "Machine Learning Theory - Part 2: Generalization Bounds"
+tags: [MachineLearning, AI, Statistics]
 ---
 
 [Last time](/ml-theory-pt1) we concluded by noticing that minimizing the empirical risk (or the training error) is not in itself a solution to the learning problem, it could only be considered a solution if we can guarantee that the difference between the training error and the generalization error (which is also called the **generalization gap**) is small enough. We formalized such requirement using the probability:
@@ -90,7 +92,7 @@ This is our first generalization bound, it states that the generalization error 
 
 $$R(h_\text{mem}) \leq 0 + \infty \leq \infty$$
 
-But wait a second! For a linear hypothesis of the form $h(x) = wx + b$, we also have $\|\mathcal{H}\| = \infty$ as there is infinitely many lines that can be drawn. So the generalization error of the linear hypothesis space should be unbounded just as the memorization hypothesis! If that's true, why does perceptions, logistic regression, support vector machines and essentially any ML model that uses a linear hypothesis work?
+But wait a second! For a linear hypothesis of the form $h(x) = wx + b$, we also have $\|\mathcal{H}\| = \infty$ as there is infinitely many lines that can be drawn. So the generalization error of the linear hypothesis space should be unbounded just as the memorization hypothesis! If that's true, why does perceptrons, logistic regression, support vector machines and essentially any ML model that uses a linear hypothesis work?
 
 Our theoretical result was able to account for some phenomena (the memorization hypothesis, and any finite hypothesis space) but not for others (the linear hypothesis, or other infinite hypothesis spaces that empirically work). This means that there's still something missing from our theoretical model, and it's time for us to revise our steps. A good starting point is from the source of the problem itself, which is the infinity in $\|\mathcal{H}\|$.
 
@@ -138,7 +140,7 @@ We're not gonna go over the proof here, but using that ghost dataset one can act
 
 $$\mathbb{P}\left[\sup_{h \in \mathcal{H}}\left|R(h) - R_\text{emp}(h)\right| > \epsilon\right] \leq 2\mathbb{P}\left[\sup_{h \in \mathcal{H}}\left|R_\text{emp}(h) - R_\text{emp}'(h)\right| > \frac{\epsilon}{2}\right] \hspace{2em} (1)$$
 
-where $R_\text{emp}'(h)$ is the empirical risk of hypothesis $h$ on the ghost dataset. This means that the probability of the largest generalization gap being bigger than $\epsilon$ is at most twice the probability that the empirical risk difference between $S, S'$ is larger $\epsilon$. Now that the right hand side in expressed only in terms of empirical risks, we can bound it without needing to consider the the whole of $\mathcal{X \times Y}$, and hence we can bound the term with the risk $R(h)$ without considering the whole of input and output spaces!
+where $R_\text{emp}'(h)$ is the empirical risk of hypothesis $h$ on the ghost dataset. This means that the probability of the largest generalization gap being bigger than $\epsilon$ is at most twice the probability that the empirical risk difference between $S, S'$ is larger than $\frac{\epsilon}{2}$. Now that the right hand side in expressed only in terms of empirical risks, we can bound it without needing to consider the the whole of $\mathcal{X \times Y}$, and hence we can bound the term with the risk $R(h)$ without considering the whole of input and output spaces!
 
 This, which is called the **symmetrization lemma**, was one of the two key parts in the work of Vapnik-Chervonenkis (1971).
 
@@ -154,7 +156,7 @@ $$\mathbb{P}\left[\sup_{h \in \mathcal{H}_{|S\cup S'}}\left|R_\text{emp}(h) - R_
 
 Notice that the hypothesis space is restricted by $S \cup S'$ because we using the empirical risk on both the original dataset $S$ and the ghost $S'$. The question now is what is the maximum size of a restricted hypothesis space? The answer is very simple; we consider a hypothesis to be a new effective one if it produces new labels/values on the dataset samples, then the maximum number of distinct hypothesis (a.k.a the maximum number of the restricted space) is the maximum number of distinct labels/values the dataset points can take. A cool feature about that maximum size is that its a combinatorial measure, so we don't need to worry about how the samples are distributed!
 
-For simplicity,  we'll focus now on the case of binary classification, in which $\mathcal{Y}=\{-1, +1\}$. Later we'll show that the same concepts can be extended to both multiclass classification and regression. In that case, for a dataset with $m$ samples, each of which can take one of two labels: either -1 or +1, the maximum number of distinct labellings is $2^m$.
+For simplicity,  we'll focus now on the case of binary classification, in which $\mathcal{Y}=\\{-1, +1\\}$. Later we'll show that the same concepts can be extended to both multiclass classification and regression. In that case, for a dataset with $m$ samples, each of which can take one of two labels: either -1 or +1, the maximum number of distinct labellings is $2^m$.
 
 We'll define the maximum number of distinct labellings/values on a dataset $S$ of size $m$ by a hypothesis space $\mathcal{H}$ as the **growth function** of $\mathcal{H}$ given $m$, and we'll denote that by $\Delta_\mathcal{H}(m)$. It's called the growth function because it's value for a single hypothesis space $\mathcal{H}$ (aka the size of the restricted subspace $\mathcal{H_{\|S}}$) grows as the size of the dataset grows. Now we can say that:
 
@@ -236,7 +238,7 @@ It follows that the larger the margin, the lower the $d_\mathrm{vc}$ of the hypo
 
 Up until this point, all our analysis was for the case of binary classification. And it's indeed true that the form of the vc bound we arrived at here only works for the binary classification case. However, the conceptual framework of VC (that is: shattering, growth function and dimension) generalizes very well to both multi-class classification and regression.
 
-Due to the work of Natarajan (1989), the **Natarajan dimension** is defined as a generalization of the VC-dimension for multiple classes classification, and a bound similar to the VC-Bound is terms of it. Also, through the work of Pollard (1984), the **pseudo-dimension** generalizes the VC-dimension for the regression case with a bound on the generalization error also similar to VC's.
+Due to the work of Natarajan (1989), the **Natarajan dimension** is defined as a generalization of the VC-dimension for multiple classes classification, and a bound similar to the VC-Bound is derived in terms of it. Also, through the work of Pollard (1984), the **pseudo-dimension** generalizes the VC-dimension for the regression case with a bound on the generalization error also similar to VC's.
 
 There is also *Rademacher's complexity*, which is a relatively new tool (devised in the 2000s) that measures the richness of a hypothesis space by measuring how well it can fit to random noise. The cool thing about Rademacher's complexity is that it's flexible enough to be adapted to any learning problem, and it yields very similar generalization bounds to the other methods mentioned.
 

@@ -3,6 +3,8 @@ layout: post
 categories: [machine learning, artificial intelligence, statistics]
 title: "Machine Learning Theory - Part 1: Introduction"
 image: /assets/images/stat_model.png
+twitter_text: "Machine Learning Theory - Part 1: Introduction"
+tags: [MachineLearning, AI, Statistics, DataScience]
 ---
 
 ## Motivation
