@@ -165,4 +165,4 @@ This is the point of investigation in the next part of the series.
 * James, Gareth, et al. An introduction to statistical learning. Vol. 6. New York: springer, 2013.
 * Friedman, Jerome, Trevor Hastie, and Robert Tibshirani. The elements of statistical learning. Vol. 1. Springer, Berlin: Springer series in statistics, 2001.
 * Mohri, Mehryar, Afshin Rostamizadeh, and Ameet Talwalkar. Foundations of machine learning. MIT press, 2012.
-* Abu-Mostafa, Yaser S., Malik Magdon-Ismail, and Hsuan-Tien Lin. Learning from data. Vol. 4. Singapore: AMLBook, 2012.
+* Abu-Mostafa, Y. S., Magdon-Ismail, M., & Lin, H. (2012). Learning from data: a short course.
