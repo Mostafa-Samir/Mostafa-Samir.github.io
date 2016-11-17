@@ -1,0 +1,113 @@
+<script>
+
+    function extend(target, source) {
+        for(var key in source) {
+            if(source.hasOwnProperty(key)) {
+                target[key] = source[key];
+            }
+        }
+    }
+
+    var urlRegex = /[a-zA-Z0-9.\-:_\/]*\/ml-theory-pt([0-9]*)/;
+    var lastPartNumber = 2;
+    var titles = ['Introduction', 'Generalization Bounds'];
+
+    var currentPartNumber = parseInt(document.baseURI.match(urlRegex)[1]);
+    var hasPrev = (currentPartNumber !== 1), hasNext = (currentPartNumber !== lastPartNumber);
+
+    var indexList = document.createElement('ul');
+    for(var k = 1; k <= lastPartNumber; ++k) {
+        var item = document.createElement('li');
+        if(k !== currentPartNumber) {
+            var link = document.createElement('a');
+            link.href = '/ml-theory-pt' + k;
+            link.innerText = "Machine Learning Theory - Part " + k + ": " + titles[k - 1];
+            item.appendChild(link);
+        }
+        else {
+            var title = document.createElement('span');
+            title.innerText = "Machine Learning Theory - Part " + k + ": " + titles[k - 1];
+            item.appendChild(title);
+        }
+
+        indexList.appendChild(item);
+    }
+
+    var heading = document.createElement('h3');
+    heading.innerText = 'Index';
+
+    var indexDiv = document.createElement('div');
+    extend(indexDiv.style, {
+        backgroundColor: 'white',
+        alignSelf: 'center',
+        borderRadius: '20px',
+        border: '5px solid #A61C00',
+        padding: '20px'
+    });
+    indexDiv.appendChild(heading);
+    indexDiv.appendChild(indexList);
+    indexDiv.addEventListener('click', function(e) {
+        e.stopPropagation();
+    })
+
+    var indexContainerDiv = document.createElement('div');
+    extend(indexContainerDiv.style, {
+        display: 'none',
+        position: 'fixed',
+        top: '0px',
+        left: '0px',
+        height: '100%',
+        width: '100%',
+        zIndex: 32,
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        justifyContent: 'center'
+    });
+    indexContainerDiv.appendChild(indexDiv);
+    indexContainerDiv.addEventListener('click', function() {
+        indexContainerDiv.style.display = 'none';
+    });
+
+    var prevLink = document.createElement(hasPrev ? 'a' : 'span');
+    prevLink.innerText = 'Previous';
+    if(hasPrev) {
+        prevLink.href = '/ml-theory-pt' + (currentPartNumber - 1)
+    }
+
+    var indexLink = document.createElement('a');
+    indexLink.href = '#';
+    indexLink.innerText = 'Index';
+    indexLink.className = 'index';
+    var indexClickHandler = function(e) {
+        e.preventDefault();
+        indexContainerDiv.style.display = 'flex';
+    };
+
+    var nextLink = document.createElement(hasNext ? 'a' : 'span');
+    nextLink.innerText = 'Next';
+    if(hasNext) {
+        nextLink.href = '/ml-theory-pt' + (currentPartNumber + 1)
+    }
+
+    var navDiv = document.createElement('div');
+    navDiv.appendChild(prevLink);
+    navDiv.appendChild(indexLink);
+    navDiv.appendChild(nextLink);
+    extend(navDiv.style, {
+        display: "flex",
+        maxWidth: "50rem",
+        margin: "0 auto 20px auto",
+        fontSize: "20px",
+        justifyContent: "space-between"
+    });
+
+    var articleElement = document.querySelector('article');
+    var tailNavDiv = navDiv.cloneNode(true);
+
+    navDiv.querySelector('a.index').addEventListener('click', indexClickHandler);
+    tailNavDiv.querySelector('a.index').addEventListener('click', indexClickHandler);
+
+    articleElement.insertBefore(navDiv, articleElement.firstElementChild);
+    articleElement.appendChild(tailNavDiv);
+    articleElement.appendChild(indexContainerDiv);
+
+</script>

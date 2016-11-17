@@ -257,3 +257,4 @@ This form of the inequality holds to any learning problem no matter the exact fo
 * Abu-Mostafa, Y. S., Magdon-Ismail, M., & Lin, H. (2012). Learning from data: a short course.
 
 {% include minimal-vid.html%}
+{% include ml-theory-nav.html %}
