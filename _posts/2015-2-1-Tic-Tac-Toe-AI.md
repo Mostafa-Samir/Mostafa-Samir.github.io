@@ -35,7 +35,7 @@ Usually, there are some ready definitions we can use and tweak in formally defin
 * <strong>A finite set of actions</strong> that the players can do. Here, there's only one action a player can do which is put his/her letter on an empty cell.
 * <strong>A transition function</strong> that takes the current state and the played action and returns the next state in the game.
 * <strong>A terminal test function</strong> that checks if a state is terminal (that is if the game ends at this state).
-* <strong>A score function</strong> that calculates the scroe of the player at a terminal state.
+* <strong>A score function</strong> that calculates the score of the player at a terminal state.
 
 Using this formal defintion, we can start reasoning about how we're gonna code our description of the game into a working game:
 
