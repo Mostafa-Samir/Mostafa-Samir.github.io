@@ -24,11 +24,11 @@ The first thing we need to do is to describe and understand the game we want to 
 > Two players (player X, and player O) play on 3x3 grid. Player X is a human player, and player O is an AI. A player can put his/her letter (either X or O) in an empty cell in the grid. If a player forms a row, a column or a diagonal with his/her letter, that player wins and the game ends. If the grid is full and there’s no row, column or diagonal of the same letter, the game ends at draw.
 > A player should try to win in the lowest possible number of moves.
 
-# Formal Defintion
+# Formal Definition
 
-In working on an AI problem, one of the most fundemental tasks is to convert a verbal description of the problem into a formal dscription that can be used by a computer. This task is called **Formal Definition**. In formal definition we take something like the verbal description of Tic-Tac-Toe we wrote above, and transform it into something we can code. This step is extremely important bacause the way you formally define your problem will determine whether easy or difficult it will be to implement the AI that solves the problem, and we certainly want that to be easy.
+In working on an AI problem, one of the most fundamental tasks is to convert a verbal description of the problem into a formal description that can be used by a computer. This task is called **Formal Definition**. In formal definition we take something like the verbal description of Tic-Tac-Toe we wrote above, and transform it into something we can code. This step is extremely important bacause the way you formally define your problem will determine whether easy or difficult it will be to implement the AI that solves the problem, and we certainly want that to be easy.
 
-Usually, there are some ready definitions we can use and tweak in formally defining a problem. These defintions have been presented and accepted by computer scientists and engineers to represent some classes of problems. One of these defintions is the game defintion: If we know our problem represents a game, then we can define it with the following elements:
+Usually, there are some ready definitions we can use and tweak in formally defining a problem. These definitions have been presented and accepted by computer scientists and engineers to represent some classes of problems. One of these definitions is the game definition: If we know our problem represents a game, then we can define it with the following elements:
 
 * <strong>A finite set of states</strong> of the game. In our game, each state would represent a certain configuration of the grid.
 * <strong>A finite set of players</strong> which are the agents playing the game. In Tic-Tac-Toe there's only two players: the human player and the AI.
@@ -37,7 +37,7 @@ Usually, there are some ready definitions we can use and tweak in formally defin
 * <strong>A terminal test function</strong> that checks if a state is terminal (that is if the game ends at this state).
 * <strong>A score function</strong> that calculates the score of the player at a terminal state.
 
-Using this formal defintion, we can start reasoning about how we're gonna code our description of the game into a working game:
+Using this formal definition, we can start reasoning about how we're gonna code our description of the game into a working game:
 
 # The State
 
@@ -45,9 +45,9 @@ As we mentioned, one of the elements of our game is a set of states, so we now n
 
 We said earlier that a state would represent a certain configuration of the grid, but this information need to be associated with some other bookkeeping. In a state, beside knowing the board configuration, we'll need to know who's turn is it, what the result of the game at this state is (whether it's still running, somebody won, or it's a draw), and we'll need to know how many moves the O player (AI player) have made till this state (you would think that we'll need to keep track of X player moves too, but no, and we'll see soon why).
 
-The easiest way to represent the state is to make a class named State from which all the specific states will be instantiated. As we'll need to read and modify all the information associated with a state at some points, we'll make all the information public. We can see that modifying X moves count, the result of the state, and the board can be done with a simple assignment operation; while on the other hand, modifying the turn would require a comparision first to determine if it's X or O before updating it's value. So for modifying the turn, we'll use a little public function that would do this whole process for us.
+The easiest way to represent the state is to make a class named State from which all the specific states will be instantiated. As we'll need to read and modify all the information associated with a state at some points, we'll make all the information public. We can see that modifying X moves count, the result of the state, and the board can be done with a simple assignment operation; while on the other hand, modifying the turn would require a comparison first to determine if it's X or O before updating it's value. So for modifying the turn, we'll use a little public function that would do this whole process for us.
 
-There are still two more information we would need to know about a state. The 1st one is the empty cells in the board of this state. This can be easily done with a function that loops over the board, checks if a cell has the value "E" (Empty) and returns the indecies of these cells in an array. The second information we need to know is that if this state is terminal or not (**the terminal test function**). This also can be easily done with a function that checks if there are matching rows, columns, or diagonals. If there is such a configuration, then it updates the result of the state with the winning player and returns true. If there is no shuch thing, it checks if the borad is full. If it's full, then it's a draw and returns true, otherwise it returns false.
+There are still two more information we would need to know about a state. The 1st one is the empty cells in the board of this state. This can be easily done with a function that loops over the board, checks if a cell has the value "E" (Empty) and returns the indices of these cells in an array. The second information we need to know is that if this state is terminal or not (**the terminal test function**). This also can be easily done with a function that checks if there are matching rows, columns, or diagonals. If there is such a configuration, then it updates the result of the state with the winning player and returns true. If there is no such thing, it checks if the board is full. If it's full, then it's a draw and returns true, otherwise it returns false.
 
 For the board, it would be simpler to represent it as a 9-elements one-dimensional array instead of a 3x3 two-dimensional one. The 1st three elements would represent the 1st row, the 2nd three for the 2nd row, and the 3rd three for the 3rd row. One last thing to worry about is how we can construct a state. Instead of at each time we construct a state form scratch and fill its information one by one (think about filling the board array element by element), it would be convenient if we have a copy-constructor ability to construct a new state from an old one and have minimal information to modify.
 
@@ -168,9 +168,9 @@ We move on to the next element of our definition, which is the players. Our firs
 
 # The AI Player
 
-We now turn to the AI player. Usually when we design an AI, we would want it to be able to take the best possible decision on the problem at hand, but as we're designing an AI for an entertainment game, I'd like to take advantage of that and demonstrate something related to entertainment game AI, which is the **multiple difficulty levels**. We'll be designing an AI that can play Tic-Tac-Toe at three difficluty levels: **Blind level** in which the AI understands nothing about the game, **Novice level** in which the AI plays the game as a novice player, and the **Master level** in which the AI plays the game like a master you can never beat no matter how much you tried ([go ahead]({{site.baseurl}}/projects/tic-tac-toe-ai), play with master and see for yourself).
+We now turn to the AI player. Usually when we design an AI, we would want it to be able to take the best possible decision on the problem at hand, but as we're designing an AI for an entertainment game, I'd like to take advantage of that and demonstrate something related to entertainment game AI, which is the **multiple difficulty levels**. We'll be designing an AI that can play Tic-Tac-Toe at three difficulty levels: **Blind level** in which the AI understands nothing about the game, **Novice level** in which the AI plays the game as a novice player, and the **Master level** in which the AI plays the game like a master you can never beat no matter how much you tried ([go ahead]({{site.baseurl}}/projects/tic-tac-toe-ai), play with master and see for yourself).
 
-We'll postbone the detailed implementation of the AI a little bit. We'll focus now on the internal structure of the **AI** class we'll use to create the AI players. An AI player needs to know the following: its intelligence level (which is the game's difficulty level), and the game it plays. We can represent those as private attributes and pass the intelligence level to the constructor and create a little public setter function that attaches the AI player to the game it plays. The AI player will need to be able to reason about the decisions it make which is the core functionality of the AI, we'll implement that with a private function we name **minimaxValue** (don't worry, we'll get to what that means soon. All you need to know now is that it's a function that takes a state and returns a number). The AI will also need to be able take three types moves: a blind move, a novice move, and a master move; we can implement that with a private function for each. The last thing we need is a way to notify the AI when its turn comes up to the action appropriate to its intelligence level, this can be simply done with a public function we call **notify**.
+We'll postpone the detailed implementation of the AI a little bit. We'll focus now on the internal structure of the **AI** class we'll use to create the AI players. An AI player needs to know the following: its intelligence level (which is the game's difficulty level), and the game it plays. We can represent those as private attributes and pass the intelligence level to the constructor and create a little public setter function that attaches the AI player to the game it plays. The AI player will need to be able to reason about the decisions it make which is the core functionality of the AI, we'll implement that with a private function we name **minimaxValue** (don't worry, we'll get to what that means soon. All you need to know now is that it's a function that takes a state and returns a number). The AI will also need to be able take three types moves: a blind move, a novice move, and a master move; we can implement that with a private function for each. The last thing we need is a way to notify the AI when its turn comes up to the action appropriate to its intelligence level, this can be simply done with a public function we call **notify**.
 
 Our AI class would be something like this:
 
@@ -240,7 +240,7 @@ var AI = function(level) {
 ```
 
 # The AI Actions
-To simplfy the code for the AI decision making and moves, we can take the code that represents the available actions that the AI have and will reson about to another class outisde the AI class. As we just said, it would simpler and better modular design for the project.
+To simpilfy the code for the AI decision making and moves, we can take the code that represents the available actions that the AI have and will reason about to another class outside the AI class. As we just said, it would simpler and better modular design for the project.
 
 We'll need the AI action to hold two information: the position on the board that it'll make its move on (remember that it's a one-dimensional array index) and the minimax value of the state that this action will lead to (remember the minimax function ?). This minimax value will be the criteria at which the AI will chose its best available action. It won't do any harm if we implemented the transition function into the action itself by making a public function that takes the current state, apply the action to it, and return the next state.
 
@@ -281,7 +281,7 @@ var AIAction = function(pos) {
 };
 ```
 
-We said above that the AI uses the minimax value to choose the best action from a lits of available actions, so it's very reasonable to think that we'd need some way to sort the actions based on their minimax values. For that, we provide two public static functions that we can use as a compare function to pass to the javascript's [Array.prototype.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) function to sort the list of actions in both ascending and descending manners.
+We said above that the AI uses the minimax value to choose the best action from a list of available actions, so it's very reasonable to think that we'd need some way to sort the actions based on their minimax values. For that, we provide two public static functions that we can use as a compare function to pass to the javascript's [Array.prototype.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) function to sort the list of actions in both ascending and descending manners.
 
 ```javascript
 /*
@@ -317,7 +317,7 @@ AIAction.DESCENDING = function(firstAction, secondAction) {
 
 # The Game
 
-This is the structure that will control the flow of the game and glue everything together in one functioning unit. In such a structure, we'd like to keep and access three kinds of information : the AI player who plays the game with the human,the current state of the game, and the status of the game (wheter it's running or ended), we'll keep those as public attributes for easy access. We'd also need a way to move the game from one state to another as the playing continues, we can implement that with a public function that advances the game to a given state and checks if the game ends at this state and what is the result, if the game doesn't end at this state, the function notifies the player who plays next to continue. Finally, we'd need a public function to start the game.
+This is the structure that will control the flow of the game and glue everything together in one functioning unit. In such a structure, we'd like to keep and access three kinds of information : the AI player who plays the game with the human, the current state of the game, and the status of the game (whether it's running or ended), we'll keep those as public attributes for easy access. We'd also need a way to move the game from one state to another as the playing continues, we can implement that with a public function that advances the game to a given state and checks if the game ends at this state and what is the result, if the game doesn't end at this state, the function notifies the player who plays next to continue. Finally, we'd need a public function to start the game.
 
 ```javascript
 /*
@@ -394,11 +394,11 @@ var Game = function(autoPlayer) {
 
 # Let's Do Some AI
 
-It certainly feels like a long way from the beginning of the post till this point where we start working on the AI. This refelects how important is the formal defintion phase along with planning and designing your modules and how they're gonna talk to each other and work togther. These phases are a lot of work, and some of this work could be boring, but when done right we'll find ourselves at this point only worrying about the good stuff: the reasoning, the math, and the algorithms.
+It certainly feels like a long way from the beginning of the post till this point where we start working on the AI. This reflects how important is the formal definition phase along with planning and designing your modules and how they're gonna talk to each other and work together. These phases are a lot of work, and some of this work could be boring, but when done right we'll find ourselves at this point only worrying about the good stuff: the reasoning, the math, and the algorithms.
 
 ## **The Score Function**
 
-We now take the first step in implementing our AI, which is implementing the score function. The score function is the way the AI can know the benifit of a specific action it can take. Basically, the AI will be asking itself through the minimaxValue function : *"Is this action is getting me a high score or a low score ?"*.
+We now take the first step in implementing our AI, which is implementing the score function. The score function is the way the AI can know the benefit of a specific action it can take. Basically, the AI will be asking itself through the minimaxValue function : *"Is this action is getting me a high score or a low score ?"*.
 
 So how can we calculate the score at a terminal state ?!
 
@@ -408,11 +408,11 @@ You might ask a question here: now the AI's job is to annoy the X player and mak
 
 Actually, the AI will be trying to make itself win by making X's life hell. So it kills two birds with one stone !
 
-The reason behind this is that Tic-Tac-Toe is a game of a special kind, a kind called **zero-sum games**. In this type of games, the scores of all players sum to 0, which means that in a two-players game the score of one player is negative of the score of the other player, so if player 1 gets a score of 5 then player 2 gets a score of -5, making the sum of all scores to be 5 + (-5) = 0, hence : zero-sum game. Zero-sum games are pure competetion games, there's no cooperation of any kind between the players.
+The reason behind this is that Tic-Tac-Toe is a game of a special kind, a kind called **zero-sum games**. In this type of games, the scores of all players sum to 0, which means that in a two-players game the score of one player is negative of the score of the other player, so if player 1 gets a score of 5 then player 2 gets a score of -5, making the sum of all scores to be 5 + (-5) = 0, hence : zero-sum game. Zero-sum games are pure competition games, there's no cooperation of any kind between the players.
 
 Because Tic-Tac-Toe is a zero-sum game, the AI can spend all its life minimizing X's score and at the same time be maximizing its score.
 
-So now we can design a score function that only calculates the score of X at a terminal state. If the AI plays with X (whcih is something that's gonna occur in the tests), it can work on maximizing its value. On the other hand, If the AI plays with O (which is the case here), it works on minimizing its value.
+So now we can design a score function that only calculates the score of X at a terminal state. If the AI plays with X (which is something that's gonna occur in the tests), it can work on maximizing its value. On the other hand, If the AI plays with O (which is the case here), it works on minimizing its value.
 
 We can reason about such function in the following manner:
 
@@ -424,7 +424,7 @@ We now have our score function (which doesn't need to keep track of X's moves co
 
 <p align = 'ceneter'><img src = '{{site.baseurl}}/assets/images/score_func.png' alt = 'Score Function'/></p>
 
-We'll implement this as a public static function of the Game class. We implement it in the Game class because it's a game-related information, and static becuase it doesn't depend on sepcific instances of the game.
+We'll implement this as a public static function of the Game class. We implement it in the Game class because it's a game-related information, and static because it doesn't depend on specific instances of the game.
 
 ```javascript
 /*
@@ -467,11 +467,11 @@ O now uses the score function to calculate the score of each terminal state it c
 
 - **At Level 2**: O knows that X is the one playing next at this level. It also knows that at each possible state at this level, X will choose to go to the child state (at Level 3) with the largest score. So O backs up the minimax value of each state at Level 2 with the maximum score of its child states.
 - **At Level 1**: O knows that it's its turn to play at this level. It wants to choose a child state (from Level 2) that makes X's score as low as possible. So O backs up the minimax value of each state at level 1 with the minimumm minimax value of its child states.
-- **At Level 0**: O follows the same reasoning it follwed at level 2. It backs up the minmax value of the root state with the maximum minimax value of its child states (the ones at level 1).
+- **At Level 0**: O follows the same reasoning it followed at level 2. It backs up the minmax value of the root state with the maximum minimax value of its child states (the ones at level 1).
 
 The algorithm now terminates and returns the minimax value of the desired state to be **0**.
 
-It now obvious that the minimax alogorithm is a recursive algorithm and its base case is reaching a terminal state. We can implement it with a recursive function that recurs down to the terminal states, and backs up the minimax value as the recursion unwinds.
+It now obvious that the minimax algorithm is a recursive algorithm and its base case is reaching a terminal state. We can implement it with a recursive function that recurs down to the terminal states, and backs up the minimax value as the recursion unwinds.
 
 ```javascript
 /*
@@ -539,7 +539,7 @@ Now it's time to take some decisions. Using the minimax algorithm, taking an opt
 4. If O is the one who is taking the decision: choose the action with the minimum minimax value. Go to 5.
 5. Carry out the chosen action.
 
-A player who always plays the optimal move is by no doubt a master player. So we implement our **takeAMasterMove** function to allow the AI to always choose the optimal action. This the most difficult level of the game, as it can be proven that a player that plays optimally all the time cannot lose. Your best chance at this level is leading the game to a draw, otherwsie you'll lose.
+A player who always plays the optimal move is by no doubt a master player. So we implement our **takeAMasterMove** function to allow the AI to always choose the optimal action. This the most difficult level of the game, as it can be proven that a player that plays optimally all the time cannot lose. Your best chance at this level is leading the game to a draw, otherwise you'll lose.
 
 ```javascript
 /*
@@ -586,9 +586,9 @@ function takeAMasterMove(turn) {
 
 ## **A Novice Move**
 
-A Novice player is a player who sometimes takes the optimal move and some other time he takes a sub-optimal move. We could model that with a probablity, like saying that it takes the optimal move 40% of the time and the sub-optimal move 60% of the time.
+A Novice player is a player who sometimes takes the optimal move and some other time he takes a sub-optimal move. We could model that with a probability, like saying that it takes the optimal move 40% of the time and the sub-optimal move 60% of the time.
 
-Coding a probablity might seem like a challenging task if you didn't do it before (at least it did to me), but it turns out that it's a very simple task : If you want to execute a statment P percent of the time, just generate a random number between 0 and 100. You only execute that statment if the generated random number is less than or equal to P.
+Coding a probability might seem like a challenging task if you didn't do it before (at least it did to me), but it turns out that it's a very simple task : If you want to execute a statement P percent of the time, just generate a random number between 0 and 100. You only execute that statement if the generated random number is less than or equal to P.
 
 ```javascript
 var P = 40; //some probability in percent form
@@ -600,7 +600,7 @@ else {
 }
 ```
 
-Probabilities and randomness is the way used in most entertainment games to make the games playable and with some variance in the AI actions during the game. Imagine playing Call of Duty with an AI that manges to always make headshots with no misses at all, such a game wouldn't be playble and unrealistic. This is where probability comes and add some small probablity that the AI headshoots, with a large probability for regular shots and misses. In our game, we'll use probablity to make the AI miss the optimal move for 60% of the time, and make it for 40% of the time.
+Probabilities and randomness is the way used in most entertainment games to make the games playable and with some variance in the AI actions during the game. Imagine playing Call of Duty with an AI that manages to always make headshots with no misses at all, such a game wouldn't be playable and unrealistic. This is where probability comes and add some small probablity that the AI headshots, with a large probability for regular shots and misses. In our game, we'll use probablity to make the AI miss the optimal move for 60% of the time, and make it for 40% of the time.
 
 ```javascript
 /*
@@ -661,7 +661,7 @@ function takeANoviceMove(turn) {
 
 ## **A Blind Move**
 
-We assume that a blind player is a player who doesn't know anything about the game and doesn't have the ability to reason about the which action is the better than the other. A blind player chooses his actions randomly all the time, and this is the easist level of the game.
+We assume that a blind player is a player who doesn't know anything about the game and doesn't have the ability to reason about the which action is the better than the other. A blind player chooses his actions randomly all the time, and this is the easiest level of the game.
 
 ```javascript
 /*
@@ -684,15 +684,15 @@ function takeABlindMove(turn) {
 
 # How difficult is each difficulty ?
 
-We know that the master level is the hardest level in the game. We can easily say that becuase, as we mentioned earlier, it can be formally proven that a player playing optimally all the time cannot lose.
+We know that the master level is the hardest level in the game. We can easily say that because, as we mentioned earlier, it can be formally proven that a player playing optimally all the time cannot lose.
 
-But can we make the same statments about each of the other two levels, can we say that the novice level is harder than the blind level ?!
+But can we make the same statements about each of the other two levels, can we say that the novice level is harder than the blind level ?!
 
 We can informally say that becuase the novice player has some understanding of the game and knows how to reason about the game, it's a better player than a blind one who understands nothing about the game and doesn't know how to reason about it. So, informally, Novice level is harder than blind level.
 
-Foramlly asserting that statment about the novice and blind levels can be difficult and cumbersome because of the probability and randomness involved in both levels, but we can assert it statistically. A good idea is to have a lot of games (say 1000) played against each of the two levels and count the number of games won (in 3, 4 and 5 moves), and the number of games lost in both cases. We then see what these data tell us. A very bad idea is to play the 1000 games yourself !
+Formally asserting that statement about the novice and blind levels can be difficult and cumbersome because of the probability and randomness involved in both levels, but we can assert it statistically. A good idea is to have a lot of games (say 1000) played against each of the two levels and count the number of games won (in 3, 4 and 5 moves), and the number of games lost in both cases. We then see what these data tell us. A very bad idea is to play the 1000 games yourself !
 
-This is where the code in tests come in. Without getting into the detailed implementation , the idea is two make two AIs play 1000 games against each other and automatically collect the data we sepecided above. This is much faster and effcient than playing the 1000 games yourself.
+This is where the code in tests come in. Without getting into the detailed implementation , the idea is two make two AIs play 1000 games against each other and automatically collect the data we specified above. This is much faster and efficient than playing the 1000 games yourself.
 
 The following chart represents the data about a novice X player's results in 1000 games against a blind O player, and 1000 games against a novice O player.
 
