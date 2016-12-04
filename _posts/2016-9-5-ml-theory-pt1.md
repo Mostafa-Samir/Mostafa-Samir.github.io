@@ -106,7 +106,7 @@ Thus abstracting any mention of the conditional distribution $P(Y\|X)$. Now we c
 
 ![](/assets/images/stat_model_simplified.png)
 
-It's called the target function because now it becomes the target of the machine learning process. The machine learning process is now simplified to the task of estimating the function $f$. We'll later see how by this simplification we introduced the first source of error in our eventual solution.
+It's called the target function because now it becomes the target of the machine learning process. The machine learning process is now simplified to the task of estimating the function $f$. We'll later see how by this simplification we revealed the first source of error in our eventual solution.
 
 ###  The Hypothesis
 
