@@ -9,8 +9,8 @@
     }
 
     var urlRegex = /[a-zA-Z0-9.\-:_\/]*\/ml-theory-pt([0-9]*)/;
-    var lastPartNumber = 2;
-    var titles = ['Introduction', 'Generalization Bounds'];
+    var lastPartNumber = 3;
+    var titles = ['Introduction', 'Generalization Bounds', 'Regularization and the Bias-variance Trade-off'];
 
     var currentPartNumber = parseInt(document.baseURI.match(urlRegex)[1]);
     var hasPrev = (currentPartNumber !== 1), hasNext = (currentPartNumber !== lastPartNumber);
