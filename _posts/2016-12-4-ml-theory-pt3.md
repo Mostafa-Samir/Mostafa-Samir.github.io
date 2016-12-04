@@ -2,7 +2,7 @@
 layout: post
 categories: [machine learning, artificial intelligence, statistics]
 title: "Machine Learning Theory - Part 3: Regularization and the Bias-variance Trade-off"
-image: /assets/images/vid-still.png
+image: /assets/images/bias-var.png
 twitter_text: "Machine Learning Theory - Part 3: Regularization - the Bias-variance Trade-off"
 tags: [MachineLearning]
 ---
@@ -179,6 +179,11 @@ With this observation, we can think of the minimization problem:
 $$\mathop{\mathrm{min}}_{\mathbf{w}} \frac{1}{m}\sum_{i=1}^{m}L(h(\mathbf{x}_i;\mathbf{w}), y_i) + \lambda \sum_{j = 1}^{n}w_j^2$$
 
 as a direct translation of the generalization bound $R(h) \leq R_{\mathrm{emp}}(h) + C(\|\mathcal{H}\|)$, with the regularization term as a minimizer for the complexity term. The only piece missing from that translation is the definition of the loss function $L$. Here we used the squared difference, next time we'll be looking into other loss functions and the underlying principle that combines them all.
+
+## References and Additional Readings
+
+* Christopher M. Bishop. 2006. Pattern Recognition and Machine Learning (Information Science and Statistics). Springer-Verlag New York, Inc., Secaucus, NJ, USA.
+* Abu-Mostafa, Y. S., Magdon-Ismail, M., & Lin, H. (2012). Learning from data: a short course.
 
 
 {% include minimal-vid.html %}
