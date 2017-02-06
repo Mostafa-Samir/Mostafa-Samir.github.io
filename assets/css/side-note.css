@@ -17,6 +17,12 @@
     max-width: 400px;
 }
 
+@media (max-width:400px) {
+    .sidenote-container {
+        max-width: 270px;
+    }
+}
+
 .sidenote-container p {
     font-size: medium;
     padding: 5px;

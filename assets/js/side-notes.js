@@ -38,20 +38,29 @@ function processSideNoteElement(note) {
         e.preventDefault();
         e.stopPropagation();
 
-        // hide any other opened side note
-        Array.prototype.slice.call(
-            document.querySelectorAll('.sidenote-container')
-        )
-        .forEach(function(note){ note.style.display = "none"});
+        // mark the note marker as the current viewed note
+        insertedNoteAElement.className = 'sidenote-super sidenote-viewed';
+
+        // hide any other opened side note if any
+        let visibleNote = document.querySelector('.sidenote-visible');
+        if(visibleNote)  {
+            visibleNote.className = "sidenote-container";
+            visibleNote.style.display = "none";
+        }
 
         let pos = {
             x: insertedNoteAElement.offsetLeft,
             y: insertedNoteAElement.offsetTop
         };
 
+        // show the note and bring it to the top-left corner to assume its
+        // full possible width
+        appendedContainerDiv.style.top = "0px";
+        appendedContainerDiv.style.left = "0px";
         appendedContainerDiv.style.display = 'block';
+        appendedContainerDiv.className = "sidenote-container sidenote-visible"
 
-        let screenWidth = window.innerWidth;
+        let screenWidth = screen.width;
         let noteWidth = appendedContainerDiv.clientWidth;
 
         appendedContainerDiv.style.top = (pos.y + 20) + "px";
@@ -66,4 +75,36 @@ function processSideNoteElement(note) {
         }
     });
 
+}
+
+/**
+ * repositions a visible side note to a new screen size
+ * @param {HTMLElement} visibleNote: the note element to position
+ */
+function repositionNote(visibleNote) {
+
+    // hide and bring the node to top left corner and show it again
+    // to assume its full width in the new screen size
+    visibleNote.style.display = "none";
+    visibleNote.style.top = "0px";
+    visibleNote.style.left = "0px";
+    visibleNote.style.display = "block";
+
+    let viewdNoteMark = document.querySelector('.sidenote-viewed');
+    let pos = {
+        x: viewdNoteMark.offsetLeft,
+        y: viewdNoteMark.offsetTop
+    }
+
+    let screenWidth = screen.width;
+    let noteWidth = visibleNote.clientWidth;
+
+    visibleNote.style.top = (pos.y + 20) + "px";
+    if (pos.x + noteWidth < screenWidth - 50) {
+        visibleNote.style.left = pos.x + "px";
+    }
+    else {
+        let diff = (pos.x + noteWidth) - (screenWidth - 50);
+        visibleNote.style.left = (pos.x - diff) + "px";
+    }
 }
