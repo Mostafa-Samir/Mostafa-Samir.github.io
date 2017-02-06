@@ -1,0 +1,21 @@
+<script src="/assets/js/side-notes.js"></script>
+<script>
+
+    function clearNotes() {
+        // hide any other opened side note
+        Array.prototype.slice.call(
+            document.querySelectorAll('.sidenote-container')
+        )
+        .forEach(function(note){ note.style.display = "none"});
+    }
+
+    window.addEventListener('resize', clearNotes);
+    document.body.addEventListener('click', clearNotes);
+
+    Array.prototype.slice.call(
+        document.querySelectorAll('.sidenote')
+    )
+    .forEach(function(note) {
+        processSideNoteElement(note);
+    });
+</script>

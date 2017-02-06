@@ -1,0 +1,24 @@
+.sidenote {
+    display: none;
+}
+
+.sidenote-super {
+    vertical-align: super;
+    font-size: small;
+}
+
+.sidenote-container {
+    border: 2px solid #A61C00;
+    border-radius: 5px;
+    background: rgba(255,255,255, 0.9);
+    position: absolute;
+    z-index: 10;
+    display: none;
+    max-width: 400px;
+}
+
+.sidenote-container p {
+    font-size: medium;
+    padding: 5px;
+    margin: 0;
+}
