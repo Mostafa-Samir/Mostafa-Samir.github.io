@@ -232,5 +232,135 @@ def sin(x):
 
 It simply checks if the argument is dual, if it is then it returns the dual evaluation of the function. Otherwise it just falls back on the real function. This would allow us to use these functions interchangeably between dual and real numbers. [dmath.py](<link to file in the repo>) file contains this method alongside a few other methods for different mathematical functions, the follow the same pattern as the `sin` method we just implemented and their specific math can also be found in the [Dual Algebra.pdf](<link to file in the repo>) file. Both dmath.py and dualnumbers.py are contained in a package called `dualnumbers` and the repository contains a file [dual-math.py](<link to file in repo>) that showcases the different operations implemented in that package.
 
+We're now ready to implement our forward mode of AD: all we need to do is take a function and the value of its variable at which we want to calculate the derivative, we then wrap this value into a dual number with a dual component of 1 and pass it to the function. The dual component of the resulting number is the derivative we want!
+
+```python
+from dualnumbers import DualNumber
+
+def derivative(fx, x):
+    return fx(DualNumber(x, 1)).dual
+```
+
+We implement this method into a module called `forward` within a package we'll call `autodiff`. Let's see how this works with the function we differentiated earlier: $f(x) = (\sin x)^{\sin x}$. At $x = \frac{\pi}{4}$ we can calculate the derivative from the resulting expression and find that it's $0.3616192241$, we'll also find that our `derivative` function returns the same value:
+
+```python
+from autodiff.forward import derivative
+from math import pi
+import dualnumbers.dmath as dmath
+
+
+fx = lambda x: dmath.sin(x) ** dmath.sin(x)
+
+print "%.10f" % (derivative(fx, pi/4))  # prints 0.3616192241
+```
+
+However, we're not going to have the derivative's expression every time to check it's value against the our `derivative` method, actually the point of having an AD system is to elevate the need to do derivations by hand! Instead, to ensure the correctness of our derivatives, we resort to a technique known in the Machine Learning field as **gradient checking**. In this technique we essentially compare the derivate from AD to a numerical derivate calculated using the limit method we saw first thing here. The limit method gives us an approximate value that we're sure of its correctness (because it is the definition of the derivative), so the value of our AD method should be close to the numerical one within an acceptable error defined by both [absolute and relative errors](https://en.wikipedia.org/wiki/Approximation_error).
+
+```python
+def check_derivative(fx, x, suspect):
+    h = 1.e-7
+    rerr = 1.e-5
+    aerr = 1.e-8
+
+    numerical_derivative = (fx(x + h) - fx(x)) / h
+    accept_error = aerr + abs(numerical_derivative) * rerr
+
+    return abs(suspect - numerical_derivative) <= accept_error
+```
+
+We can test that with a new function like $f(x) = x^22^x$ that we don't know its derivative at $x=\frac{1}{2}$ beforehand:
+
+```python
+from autodiff.forward import derivative, check_derivative
+
+fx = lambda x: (x ** 2) * (2 ** x)
+
+ad_derivative = derivative(fx, 0.5)
+
+print "%.10f" % (ad_derivative)  # prints 1.6592780982
+print "%s" % (check_derivative(fx, 0.5, ad_derivative))  # prints True
+```
+
+How about functions with multiple variables then? How can we compute the partial derivative with respect to each variable?
+
+Remember that we treated the dual component of the variable as the variable's derivative with respect to the differentiation variable, which in the single variable case was itself and that made its dual component be set to 1. We can extended the same rational to include multiple variables; to get the partial derivative of a function with respect to a certain variable, we set that variable's dual component to 1 and all the other variables should have a dual component of 0 that represents their derivatives with respect to that variable. We can encourage that method by looking at the math of the simplest multi-variables function, the two variables function <span class='sidenote'>The math for a more general argument can be a little tedious to work with, that's why we suffice with the two variables case. However, a general argument could be made using [Taylor's series generalization in multiple variables](https://en.wikipedia.org/wiki/Taylor_series#Taylor_series_in_several_variables).</span>. For a function $f(x,y)$ evaluated with dual numbers $a+b\epsilon, c+d\epsilon$ for $x,y$ respectively, its Taylor series has the form:
+
+$$f(a+b\epsilon, c+d\epsilon)= f(a, c) + \left(\frac{\partial f(a, c)}{\partial x}b + \frac{\partial f(a, c)}{\partial y}d\right)\epsilon$$
+
+If we'd like to get the derivative with respect to $x$ we just set its dual component to 1 and $y$'s dual component to 0 as we just discussed, that would get us a dual number with just the partial derivative with respect to $x$ as its dual component:
+
+$$f(a+\epsilon, c+0.\epsilon)= f(a, c) + \frac{\partial f(a, c)}{\partial x}\epsilon$$
+
+The other way around would get us the partial derivative with respect to $y$. With that we can implement a more general version of our `derivative` method that could work with any function of any number of variables, we just specify the which variable we want to differentiate with respect to and we provide the list of variables' values instead of a single value.
+
+```python
+def derivative(fx, wrt, args):
+
+    dual_args = []
+    for i, arg in enumerate(args):
+        if i == wrt:
+            dual_args.append(DualNumber(arg, 1))
+        else:
+            dual_args.append(DualNumber(arg, 0))
+
+    return fx(*dual_args).dual
+```
+
+Here `wrt` is the zero-based index of the variable we'd like to differentiate with respect to as it appears in arguments of the function `fx`, and `args` is a list of values representing the point we want to know the derivative at.
+
+We can also generalize our `check_derivative` in the same way by adding $h$ only to the value of the variable we're differentiate with respect to.
+
+```python
+def check_derivative(fx, wrt, args, suspect):
+    h = 1.e-7
+    rerr = 1.e-5
+    aerr = 1.e-8
+
+    shifted_args = args[:]
+    shifted_args[wrt] += h
+
+    numerical_derivative = (fx(*shifted_args) - fx(*args)) / h
+    accept_error = aerr + abs(numerical_derivative) * rerr
+
+    return abs(suspect - numerical_derivative) <= accept_error
+```
+
+For example, let's see how that would work with a function like:
+
+$$f(x,y,z) = \sin(x^{y + z}) - 3z\ln x^2y^3$$
+
+we'd like the partial derivative with respect to $y$ at $(0.5, 4, -2.3)$:
+
+```python
+from autodiff.forward import derivative, check_derivative
+import dualnumbers.dmath as dmath
+
+
+f = lambda x,y,z: dmath.sin(x ** (y + z)) - 3 * z * dmath.log((x ** 2) * (y ** 3))
+ad_derivative = derivative(f, 1, [0.5, 4, -2.3])
+
+print "%.10f" % (ad_derivative)  # prints 4.9716845517
+print "%s" % (check_derivative(f, 1, [0.5, 4, -2.3], ad_derivative))  # prints True
+```
+
+Back now to the original purpose we started this post with, which is computing gradients. The gradient of a function $f(\mathbf{x})$ where $\mathbf{x}$ is a vector of $n$ variables is the vector:
+
+$$\nabla f = \begin{bmatrix}\frac{\partial f}{\partial x_1} & \dots & \frac{\partial f}{\partial x_n}\end{bmatrix}$$
+
+We can easily compute that by calling our `derivative` function $n$ times on the function, each time with a different value for the `wrt` argument.
+
+```python
+def gradient(fx, args):
+
+    grad = []
+    for i,_ in enumerate(args):
+        grad.append(derivative(fx, i, args))
+
+    return grad
+```
+
+If the function itself has a computational complexity $O(K)$, then the gradient would have a complexity of $O(nK)$ which is not that of a trouble when $n$ is small. However, for something like a neural network where there could be hundreds of millions of parameters, hence $n$ is in the order of hundreds of millions, then we're in big trouble! We need another AD method that could handle such a large numbers of parameters more efficiently!
+
+# Computational Graphs
 
 {% include side-notes.html %}
