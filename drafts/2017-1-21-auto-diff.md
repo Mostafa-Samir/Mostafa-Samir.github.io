@@ -9,7 +9,7 @@ tags: [DeepLearning, MachineLearning, Math]
 
 If you have any experience with machine learning or its recently trending sub-discipline of deep learning, you probably know that we usually use gradient descent and its variants in the process of training our models and neural networks. In the early days, and you might have caught a glimpse of that if you ever did [Andrew Ng's MOOC](https://www.coursera.org/learn/machine-learning) or went through [Michael Nielsen's book *Neural Networks and Deep Learning*](http://neuralnetworksanddeeplearning.com/), we used to code the gradients of the models by hand. However, as the models got more complex this became more cumbersome and tedious! This is where the modern computation libraries like [Theano](http://deeplearning.net/software/theano/), [Torch](http://torch.ch/), [Tensorflow](https://www.tensorflow.org/), [CNTK](https://www.microsoft.com/en-us/research/product/cognitive-toolkit/) and others shone! These libraries allow us to just write our math and they automatically provide us with the gradients we want, which allowed the rapid deployment of more and more complex architectures. These libraries are able to "automagically" obtain the gradient via a technique called *Automatic Differentiation*. This post is to demystify the technique of its "magic"!
 
-This post is not a tutorial on how to build a production ready computational library, there so much detail and pitfalls that goes into that, some of which I'm sure I'm not even aware of! The main purpose of this post is to introduce the idea of automatic differentiation and to get a grounded feeling of how it works. For this reason and because it has a wider popularity among practitioners than other languages, we're going to be using python as our programming language instead of a more efficient languages for the task like C or C++. All the code we'll encounter through the post resides in this [GitHub repo](<put-repo-link-here>).
+This post is not a tutorial on how to build a production ready computational library, there so much detail and pitfalls that goes into that, some of which I'm sure I'm not even aware of! The main purpose of this post is to introduce the idea of automatic differentiation and to get a grounded feeling of how it works. For this reason and because it has a wider popularity among practitioners than other languages, we're going to be using python as our programming language instead of a more efficient languages for the task like C or C++. All the code we'll encounter through the post resides in this [GitHub repository](https://github.com/Mostafa-Samir/Hands-on-Intro-to-Auto-Diff).
 
 ## A Tale of Two Methods
 
@@ -215,7 +215,7 @@ class DualNumber:
         return self._sub(other, self_first=False)
 ```
 
-The rest of the class implementation which also includes multiplication, division and powers, can be found in the code repository in the [dualnumbers.py](<link to file in repo>) file. It's fully commented and it follows exactly the same pattern of coding we used in the two operations here, the difference is in the math of each operation. The full derivation of these different math of can be found in [Dual Algebra.pdf](<link to file in the repo>) file, also in the repository.
+The rest of the class implementation which also includes multiplication, division and powers, can be found in the code repository in the [dualnumbers.py](https://github.com/Mostafa-Samir/Hands-on-Intro-to-Auto-Diff/tree/master/dualnumbers/dualnumbers.py) file. It's fully commented and it follows exactly the same pattern of coding we used in the two operations here, the difference is in the math of each operation. The full derivation of these different math of can be found in [Dual-Algebra.pdf](https://github.com/Mostafa-Samir/Hands-on-Intro-to-Auto-Diff/tree/master/Dual-Algebra.pdf) file, also in the repository.
 
 The next step after we defined what a dual number is and how it behaves is to create some mathematical functions that can handle the dual numbers. These can be easily defined as directly implementing similar math like those we got earlier for the $\sin$ and $\ln$ functions using the python's real math library `math`. An implementation for the $\sin$ function would go like this:
 
@@ -230,7 +230,7 @@ def sin(x):
         return rmath.sin(x)
 ```
 
-It simply checks if the argument is dual, if it is then it returns the dual evaluation of the function. Otherwise it just falls back on the real function. This would allow us to use these functions interchangeably between dual and real numbers. [dmath.py](<link to file in the repo>) file contains this method alongside a few other methods for different mathematical functions, the follow the same pattern as the `sin` method we just implemented and their specific math can also be found in the [Dual Algebra.pdf](<link to file in the repo>) file. Both dmath.py and dualnumbers.py are contained in a package called `dualnumbers` and the repository contains a file [dual-math.py](<link to file in repo>) that showcases the different operations implemented in that package.
+It simply checks if the argument is dual, if it is then it returns the dual evaluation of the function. Otherwise it just falls back on the real function. This would allow us to use these functions interchangeably between dual and real numbers. [dmath.py](https://github.com/Mostafa-Samir/Hands-on-Intro-to-Auto-Diff/tree/master/dualnumbers/dmath.py) file contains this method alongside a few other methods for different mathematical functions, the follow the same pattern as the `sin` method we just implemented and their specific math can also be found in the [Dual-Algebra.pdf](https://github.com/Mostafa-Samir/Hands-on-Intro-to-Auto-Diff/tree/master/Dual-Algebra.pdf) file. Both dmath.py and dualnumbers.py are contained in a package called `dualnumbers` and the repository contains a [Dual-Math notebook](https://github.com/Mostafa-Samir/Hands-on-Intro-to-Auto-Diff/tree/master/Dual-Math.ipynb) that showcases the different operations implemented in that package.
 
 We're now ready to implement our forward mode of AD: all we need to do is take a function and the value of its variable at which we want to calculate the derivative, we then wrap this value into a dual number with a dual component of 1 and pass it to the function. The dual component of the resulting number is the derivative we want!
 
@@ -359,8 +359,88 @@ def gradient(fx, args):
     return grad
 ```
 
-If the function itself has a computational complexity $O(K)$, then the gradient would have a complexity of $O(nK)$ which is not that of a trouble when $n$ is small. However, for something like a neural network where there could be hundreds of millions of parameters, hence $n$ is in the order of hundreds of millions, then we're in big trouble! We need another AD method that could handle such a large numbers of parameters more efficiently!
+We could try this `gradient` method out using a [simple linear regression model](https://en.wikipedia.org/wiki/Simple_linear_regression) that we'll train using gradient descent. We'll be using a synthetic dataset of 500 points generated randomly from a noisy target $y = 1.4x - 0.7$. We'll use the mean-squared error as our loss measure in estimating the slope $\theta_1$ and the intercept $\theta_0$:
+
+$$J(\theta_0, \theta_1) = \frac{1}{500}\sum_{i=1}^{500}\left(y - (\theta_1 x + \theta_0)\right)^2$$
+
+and with a learning rate of $\alpha$, our iterative gradient-based update rules would be:
+
+$$\theta_i = \theta_i - \alpha\frac{\partial}{\partial \theta_i}J(\theta_0, \theta_1)$$
+
+```python
+import random
+from autodiff.forward import gradient
+
+target = lambda x: 1.4 * x - 0.7 # synthizing model
+
+# generating a synthetic dataset of 500 datapoints
+Xs = [random.uniform(0, 1) for _ in range(500)]
+ys = [target(x) + random.uniform(-1, 1) for x in Xs]  # target + noise
+
+def loss(slope, intercept, alpha):
+    loss_value = 0
+    for i in range(500):
+        loss_value += (ys[i] - (slope * Xs[i] + intercept)) ** 2
+
+    return 0.002 * loss_value
+
+# initial values of training parameters
+slope = 0.1
+intercept = 0
+learning_rate = 0.1
+
+# training loop
+for _ in range(10000):
+    grad = gradient(loss, [slope, intercept, 1])
+
+    # update the parameters using gradient info
+    slope -= learning_rate * grad[0]
+    intercept -= learning_rate * grad[1]
+
+# print the final values of the parameters
+print "Slope %.2f" % (slope)  # prints "Slope 1.44"
+print "Intercept %.2f" % (intercept)  # prints "Intercept -0.73"
+```
+
+By running this script (which can be found with all the previous ones in the [Forward-AD notebook](https://github.com/Mostafa-Samir/Hands-on-Intro-to-Auto-Diff/tree/master/Forward-AD.ipynb) in the repository), we can see that the final estimations are pretty good! Moreover, we were able to see how our forward AD methods works seamlessly with a programmatic construct like the `loss` function that involves control flow operations like loops, in an exact way with no truncation errors or inefficient symbol manipulations. However, calculating gradients with forward AD has an inefficiency of its own!
+
+For a function $f(\mathbf{x})$ where $\mathbf{x}$ is a vector of $n$ variables; if the function itself has a computational complexity $O(K)$, then the gradient would have a complexity of $O(nK)$ which is not that of a trouble when $n$ is small. However, for something like a neural network where there could be hundreds of millions of parameters, hence $n$ is in the order of hundreds of millions, we'll be in big trouble! We need another AD method that could handle such a large numbers of parameters more efficiently!
+
+# Starting from the End
+
+Let's consider a function like $f(x) = \sin(2\ln x)$. Assume that all the calculators in the world disappeared in bizarre accident and we need to evaluate this function by hand! To evaluate it correctly we need to go through the following order of evaluation:
+
+$$
+f(x) = \underbrace{\sin(\overbrace{2\times\underbrace{\ln x}_{1}}^{2} )}_{3}
+$$
+
+Another way to look at this evaluation order is by decomposing the expression to simpler sequential calculations; so we could say that $w_0=\ln x$, $w_1=2w_0$, and finally $f = \sin w_1$. Using this decomposition we want to calculate the derivative $\frac{\partial f}{\partial x}$ when $x=2$ (we'll use the partial symbol $\partial$ for all derivatives from now on). Let's first go forward from start to finish and evaluate the values of the intermediate steps up to the value of $f$:
+
+$$
+w_0 = \ln 2 \approx 0.693 \rightarrow w_1 = 2w_0\approx 1.386 \rightarrow f=\sin w_1 \approx 0.983
+$$
+
+In our decomposition, we have $f$ as a function of $w_1$, so we start by calculating $\frac{\partial f}{\partial w_1}$ which equals to $\cos w_1 \approx 0.183$. We then have $w_1$ as a function of $w_0$, which makes $f$ implicitly a function of $w_0$ as well. Using the chain rule we can write:
+
+$$\frac{\partial f}{\partial w_0} = \frac{\partial f}{\partial w_1}\frac{\partial w_1}{\partial w_0}$$
+
+We already know $\frac{\partial f}{\partial w_1}$ form the previous step, and we can easily get $\frac{\partial w_1}{\partial w_0}$ from the definition of $w_1$, which is just $2$, giving us $\frac{\partial f}{\partial w_0}\approx 2\times0.183 \approx 0.366$. Taking this derivative and going one last step back to $w_0$, which is a direct function of $x$, we can write by also using the chain rule:
+
+$$
+    \frac{\partial f}{\partial x} = \frac{\partial f}{\partial w_0}\frac{\partial w_0}{\partial x}  = 0.366 \times \frac{1}{x}  \approx 0.366 \times 0.5 \approx 0.183
+$$
+
+A better way to look at this process is visually. Instead of writing down the intermediate steps like that, we visualize the whole operation as a **computational graph**, a [direct graph](https://en.wikipedia.org/wiki/Directed_graph) where the nodes represent variables, constants or simple binary/urinary operations; and the edges represent the flow of the the values from each node to the other. Our function at question here can be represented by the following computational graph:
+
+![comp-graph-1](/assets/images/intro-graph.png)
+
+Throughout the rest of the post, all the computational graphs we'll see will follow the same color code: lightblue for variables, orange for constants, and red for operations. We can see that this computational graph corresponds to the decomposition we made earlier, with the 'ln' node representing $w_0$, 'mul' node for $w_1$, and 'sin' node for $f$. Using the tool of computational graph, we can more visually see the process of propagating the derivative backward and applying the chain rule in th following animation:
+
+<video src='/assets/videos/intro-ad.mp4'></video>
+
+With this step-by-step animation, we can see how by traversing the computational graph in a [breadth-first](https://en.wikipedia.org/wiki/Breadth-first_search) manner starting from the node representing our final function, we can propagate the derivatives backwards until we reach the desired derivative. At each step, the current operation node (the one highlighted in green) propagates $f$'s derivative with respect to itself (the number written on the edge) to one of its operands nodes (the one at the other end of the edge); using the chain rule, $f$'s derivative w.r.t. the current operand node is evaluated and will be used in the next steps. We do not need to carry out this operation when the operand node is a constant, that's why the chain operation doesn't show when we process the edge leading to the constant 2.
 
 # Computational Graphs
 
 {% include side-notes.html %}
+{% include minimal-vid.html %}
