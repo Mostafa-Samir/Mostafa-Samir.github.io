@@ -2,7 +2,7 @@
 layout: post
 categories: [machine learning, deep learning, mathematics]
 title: "A Hands-on Introduction to Automatic Differentiation"
-image: /assets/images/bias-var.png
+image: /assets/images/ad-cover.png
 twitter_text: "A Hands-on Introduction to Automatic Differentiation"
 tags: [DeepLearning, MachineLearning, Math]
 ---
@@ -440,7 +440,29 @@ Throughout the rest of the post, all the computational graphs we'll see will fol
 
 With this step-by-step animation, we can see how by traversing the computational graph in a [breadth-first](https://en.wikipedia.org/wiki/Breadth-first_search) manner starting from the node representing our final function, we can propagate the derivatives backwards until we reach the desired derivative. At each step, the current operation node (the one highlighted in green) propagates $f$'s derivative with respect to itself (the number written on the edge) to one of its operands nodes (the one at the other end of the edge); using the chain rule, $f$'s derivative w.r.t. the current operand node is evaluated and will be used in the next steps. We do not need to carry out this operation when the operand node is a constant, that's why the chain operation doesn't show when we process the edge leading to the constant 2.
 
-# Computational Graphs
+So, following the path down the computational graph till we reach our variable gives us the derivative with respect to that variable. However, the examples we saw had only one path leading to the variable $x$, how about a function like $f(x) = x^2 + 2^x$? Let's see how the computational graph for this function looks like:
+
+![two-paths-cg](/assets/images/two-paths-cg.png)
+
+In such function, we have the variable $x$ contributing to two computational paths, so it will receive two derivatives when we start propagating the derivatives backwards, which poses a question about how the final derivative with respect to $x$ would look like! Maybe we can add the derivatives from the two paths to get the final one? While this sounds as just an answer based on simple intuition, it is actually the correct one! The rigorous base for this answer is what's called the **multivariable chain rule** <span class='sidenote'>[Here](https://www.youtube.com/watch?v=NO3AqAaAE6o)'s a very nice introduction on the multivariable chain rule from KhanAcademy</span>. In it's simplest form, which is the form we're concerned with here, the rule says that for a function $f$ that is a function of two other functions of $x$, that is $f = f(g(x), h(x))$, the derivative of $f$ with respect to $x$ is:
+
+$$
+\frac{\partial f}{\partial x} = \frac{\partial f}{\partial g}\frac{\partial g}{\partial x} + \frac{\partial f}{\partial h}\frac{\partial h}{\partial x}
+$$
+
+By applying this idea to the backward propagation of derivatives in the computational graph of $x^2 + 2^x$ at $x=4$, we can see how the value of $\frac{\partial f}{\partial x}$ gets accumulated on as new propagated derivatives arrive at it:
+
+<video src='/assets/videos/two-paths.mp4'></video>
+
+This justifies why we initially set the derivatives at the variables (and at each other node) to zero. It also explains why we traverse the graph breadth-first; because we want to make sure that all the contributions to a node's $f$ derivative (in AD lingo, this derivative is called the **adjoint**) has arrived before taking its value and propagating it further back through the graph.
+
+A very important question you might have by this point is: **why bother?** Whats the point of going at the derivative from the other way around and keeping up with all that hassle?! The answer to this question becomes clear when we look at the same process applied to a multivariable function; for example, $f(x,y,z) = \sin(x+y) + xy^{z}$ at $(x,y,z) = (1, 2, 3)$.
+
+<video src='/assets/videos/multi-ad.mp4'></video>
+
+See what happened here? We were able to get the derivative with respect to all three variables in just a single run through the graph! So, if we have a function of $n$ variables that takes $O(K)$ time to traverse it's computational graph, it will take $O(K)$ time to obtain all the $n$ derivatives, no matter how big $n$ is! This is why we bother with taking the derivative from the end and backwards! This method gives us a mechanical way to automatically obtain the derivatives of a multivariable function without having to suffer the performance hit that forward mode AD had. It gives a second mode of automatic of automatic differentiation, a *reverse mode*!
+
+# AD: Reverse Mode
 
 {% include side-notes.html %}
 {% include minimal-vid.html %}
