@@ -454,15 +454,114 @@ By applying this idea to the backward propagation of derivatives in the computat
 
 <video src='/assets/videos/two-paths.mp4'></video>
 
-This justifies why we initially set the derivatives at the variables (and at each other node) to zero. It also explains why we traverse the graph breadth-first; because we want to make sure that all the contributions to a node's $f$ derivative (in AD lingo, this derivative is called the **adjoint**) has arrived before taking its value and propagating it further back through the graph.
+This justifies why we initially set the derivatives at the variables (and at each other node) to zero. It also explains why we traverse the graph breadth-first; we want to make sure that all the contributions to a node's $f$ derivative (in AD lingo, this derivative is called the **adjoint**) has arrived before taking its value and propagating it further back through the graph.
 
 A very important question you might have by this point is: **why bother?** Whats the point of going at the derivative from the other way around and keeping up with all that hassle?! The answer to this question becomes clear when we look at the same process applied to a multivariable function; for example, $f(x,y,z) = \sin(x+y) + xy^{z}$ at $(x,y,z) = (1, 2, 3)$.
 
 <video src='/assets/videos/multi-ad.mp4'></video>
 
-See what happened here? We were able to get the derivative with respect to all three variables in just a single run through the graph! So, if we have a function of $n$ variables that takes $O(K)$ time to traverse it's computational graph, it will take $O(K)$ time to obtain all the $n$ derivatives, no matter how big $n$ is! This is why we bother with taking the derivative from the end and backwards! This method gives us a mechanical way to automatically obtain the derivatives of a multivariable function without having to suffer the performance hit that forward mode AD had. It gives a second mode of automatic of automatic differentiation, a *reverse mode*!
+See what happened here? We were able to get the derivative with respect to all three variables in just a single run through the graph! So, if we have a function of $n$ variables that takes $O(K)$ time to traverse it's computational graph, it will take $O(K)$ time to obtain all the $n$ derivatives, no matter how big $n$ is! This is why we bother with going at the derivative from the end and backwards! This method gives us a mechanical way to automatically obtain the derivatives of a multivariable function without having to suffer the performance hit that forward mode AD had. This approach to differentiation is what constitutes the second mode of AD that we'll see now, the *reverse mode*.
 
 # AD: Reverse Mode
+
+The first thing we need to create in order to implement the reverse mode of AD is to create a way that would allow us to build computational graphs that represent the computations we express. There are two design choices when we go about implementing computational graphs; the first is to initially build the graph then run the necessary computations by feeding values to that graph, the other is to build a computational graph representation along with carrying out the calculations. The first choice, which is commonly referred to as static computational graphs, is what frameworks like TensorFlow and Torch use. The advantage of this choice is the ability to optimize the graph before running the calculations; big computational graphs usually could benefit from some optimizations that would allow the computations to be run faster and allow a more efficient usage of resources. A simple example of that could be found in the function $f(x) = (\sin x)^{\sin x}$; an optimizer on a static graph can turn it form the one on the left to the one on the right, with one less computation to worry about.
+
+![static-opt](/assets/images/static-opt.png)
+
+However, statically built graph are kind of hard to debug, and doesn't not play nicely with regular programming constructs like conditional branches and looping. On the other hand, the second choice builds the graph dynamically along with carrying the computations. Many new framework; like [PyTorch](http://pytorch.org/), [MinPy](https://minpy.readthedocs.io/en/latest/), and [Chainer](http://chainer.org/);  adapted this choice as it allows for a workflow that is much easier to understand and to debug, but it loses the ability to optimize the computations. The choice between the two is a trade-off between efficiency and simplicity, and because the goal here is to provide a simple introduction to the topic, we'll go with dynamic graphs as our design choice.
+
+We are going to be using [numpy](http://www.numpy.org/) as our base computational engine off which we'll build the computational graphing tool. The essential element of a graph is a node; we can represent each node as an object and the edges could be specified by attributes in the node object pointing to other nodes. Because we want our nodes to be indifferent from regular numerical values, we'll start be defining a base `Node` class that extends numpy's essential data structure, the `ndarray`. In that way, we can get our nodes to behave exactly the same as ndarrays while having the ability to add the necessary extra functionalities we need to create the graphs. We follow numpy's [official guide](https://docs.scipy.org/doc/numpy-1.10.0/user/basics.subclassing.html) on extending the `ndarray` object.
+
+```python
+class Node(np.ndarray):
+
+    def __new__(subtype, shape,
+                dtype=float,
+                buffer=None,
+                offset=0,
+                strides=None,
+                order=None):
+
+        newobj = np.ndarray.__new__(
+            subtype, shape, dtype,
+            buffer, offset, strides,
+            order
+        )
+
+        return newobj
+```
+
+from this object we extend three other classes that represent the three types of nodes we saw in the earlier graphs; an `OperationalNode`, a `ConstantNode` and a `VariableNode`. These extensions are fairly simple and only has one addition to the base `Node` class, which is a static method called `create_using`. This method allows us to create nodes on the fly using a numpy's `ndarray` or a number without needing to pass the arguments of the base's `__new__` method separately, we let this method take care of that and also add any necessary extra attributes to the object. We can first see this in action with the `VariableNode` class in which the `create_using` method takes a number or an `ndarray` value along with an optional name and returns an `VariableNode` object initialized at that value with a name attribute pointing to the name given or an auto-generated name if none is given.    
+
+```python
+class VariableNode(Node):
+
+     # a static attribute to count the unnamed instances
+     count = 0
+
+     @staticmethod
+     def create_using(val, name=None):
+
+        if not isinstance(val, np.ndarray):
+            val = np.array(val, dtype=float)
+
+        obj = VariableNode(
+            strides=val.strides,
+            shape=val.shape,
+            dtype=val.dtype,
+            buffer=val
+        )
+        if name is not None:
+            obj.name = name
+        else:
+            obj.name = "var_%d" % (VariableNode.count)
+            VariableNode.count += 1
+
+        return obj
+
+```
+
+The `ConstantNode` class looks exactly like the `VariableNode` class except for the fact that we use **"const_"** instead of **"var_"** in the auto generation of the node's name; we created separate classes for them just to be able to distinguish between them in runtime, but in practice the `ConstantNode` would need more additions, like for example, some overloads for the +=, -=, \*=, and /= operators to prevent the modification of the constant's initialized value, but we're dropping that here.
+
+The last type of nodes is the `OperationalNode` class. We want an operational node to know which operation it reflects (addition, subtraction, multiplication, ... etc), what is the result value of that operation, what are the operands nodes, and to have a name just like the other nodes have. Because of these requirements,the `create_using` method of the operational node looks a bit different than in the others.
+
+```python
+class OperationalNode(Node):
+
+    # a static attribute to count for unnamed nodes
+    nodes_counter = {}
+
+    @staticmethod
+    def create_using(opresult, opname, operand_a, operand_b=None, name=None):
+
+        obj = OperationalNode(
+            strides=opresult.strides,
+            shape=opresult.shape,
+            dtype=opresult.dtype,
+            buffer=opresult
+        )
+
+        obj.opname = opname
+        obj.operand_a = operand_a
+        obj.operand_b = operand_b
+
+        if name is not None:
+            obj.name = name
+        else:
+            if opname not in OperationalNode.nodes_counter:
+                OperationalNode.nodes_counter[opname] = 0
+
+            node_id = OperationalNode.nodes_counter[opname]
+            OperationalNode.nodes_counter[opname] += 1
+            obj.name = "%s_%d" % (opname, node_id)
+
+        return obj
+```
+
+Here, instead of having just a single static counter, we have a static dictionary of counters with each item having a key of one of the possible `opname` (add, sub, mul, ... etc) and a value holding the count of such operations in the graph. The `operand_b` argument is made optional to allow for operations that take a single operand such as $\exp$, $\sin$, $\ln$, ... etc.
+
+
+
 
 {% include side-notes.html %}
 {% include minimal-vid.html %}
