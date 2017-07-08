@@ -96,7 +96,7 @@ But wait a second! For a linear hypothesis of the form $h(x) = wx + b$, we also 
 
 Our theoretical result was able to account for some phenomena (the memorization hypothesis, and any finite hypothesis space) but not for others (the linear hypothesis, or other infinite hypothesis spaces that empirically work). This means that there's still something missing from our theoretical model, and it's time for us to revise our steps. A good starting point is from the source of the problem itself, which is the infinity in $\|\mathcal{H}\|$.
 
-Notice that the term $\|\mathcal{H}\|$ resulted from our use of the union bound. The basic idea of the union bound is that it bounds the probability by the worst case possible, which is when all the events under union are independent. This bound gets more tight as the events under consideration get less dependent. In our case, for the bound to be tight and reasonable, we need the following to be true:
+Notice that the term $\|\mathcal{H}\|$ resulted from our use of the union bound. The basic idea of the union bound is that it bounds the probability by the worst case possible, which is when all the events under union are mutually independent. This bound gets more tight as the events under consideration get less dependent. In our case, for the bound to be tight and reasonable, we need the following to be true:
 
 > For every two hypothesis $h_1, h_2 \in \mathcal{H}$ the two events $\|R(h_1) - R_\text{emp}(h_1)\| > \epsilon$ and $\|R(h_2) - R_\text{emp}(h_2)\| > \epsilon$ are likely to be independent. This means that the event that $h_1$ has a generalization gap bigger than $\epsilon$ should be independent of the event that also $h_2$ has a generalization gap bigger than $\epsilon$, no matter how much $h_1$ and $h_2$ are close or related; the events should be coincidental.
 
@@ -246,7 +246,7 @@ However, no matter what the exact form of the bound produced by any of these met
 
 $$R(h) \leq R_\mathrm{emp}(h) + C(|\mathcal{H}|, N, \delta)$$
 
-where $C$ is a function of the hypothesis space complexity (or size, or richness), the size of the dataset, and the confidence $1 - \delta$ about the bound. This inequality basically says the generalization error can be decomposed into two parts: the empirical training error, and the complexity of the learning model.
+where $C$ is a function of the hypothesis space complexity (or size, or richness), $N$ the size of the dataset, and the confidence $1 - \delta$ about the bound. This inequality basically says the generalization error can be decomposed into two parts: the empirical training error, and the complexity of the learning model.
 
 This form of the inequality holds to any learning problem no matter the exact form of the bound, and this is the one we're gonna use throughout the rest of the series to guide us through the process of machine learning.  
 
