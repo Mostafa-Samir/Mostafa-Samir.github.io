@@ -558,10 +558,176 @@ class OperationalNode(Node):
         return obj
 ```
 
-Here, instead of having just a single static counter, we have a static dictionary of counters with each item having a key of one of the possible `opname` (add, sub, mul, ... etc) and a value holding the count of such operations in the graph. The `operand_b` argument is made optional to allow for operations that take a single operand such as $\exp$, $\sin$, $\ln$, ... etc.
+Here, instead of having just a single static counter, we have a static dictionary of counters with each item having a key of one of the possible `opname` (add, sub, mul, ... etc) and a value holding the count of such operations in the graph. The `operand_b` argument is made optional to allow for operations that take a single operand such as $\exp$, $\sin$, $\ln$, ... etc. The `opresult` argument takes the final value of the operation, so our operational node is a just a representation of the operation, its operands and and its result; it doesn't not carry any operation like you would expect in a static computational graph framework. It only serves as a data structure we could run the reverse mode AD on.
+
+The next thing we need to do build our computational graph module is to make sure that carrying out operations that involve the `Node` object (or any of its subclasses) also creates the operational nodes that represent these operations. In order to do that, we need to overload the the basic arithmetic operators of the `Node` class (and subsequently, all its subclasses) in the same way we did with the dual numbers implementation, but this time we need the operations to return instances of `OperationalNode` that correspond to it. To be able to do that while allowing our classes to use the same computational engine used originally by numpy's ndarrays, we create a method called `_nodify` that takes the name of the overloaded operation, say for example **__add__**, calls the original numpy **__add__** method to get the value of the operation then returns an `OperationalNode` reflecting it.
+
+```python
+class Node(np.ndarray):
+
+    def __new__(subtype, shape, ...): ...
+
+    def _nodify(self, method_name, other, opname, self_first=True):
+
+        if not isinstance(other, Node):
+            other = ConstantNode.create_using(other)
+        opvalue = getattr(np.ndarray, method_name)(self, other)
+
+        return OperationalNode.create_using(opvalue, opname,
+            self if self_first else other,
+            other if self_first else self
+        )
+```
+
+The method also takes care of the other operand and transform it into a constant node if it's an instance of the `Node` class, this is to make sure that everything is correctly and fully represented in the graph. The `self_first` serves a similar purpose as in the dual numbers implementation; to put the operands in the correct order for non commutative operations. Now, with this method, we're ready to overload the operators on the `Node` class easily.
+
+```python
+class Node(np.ndarray):
+
+    def __new__(subtype, shape, ...): ...
+
+    def _nodify(self, method_name, other, opname, self_first=True): ...
+
+    def __add__(self, other):
+        return self._nodify('__add__', other, 'add')
+
+    def __radd__(self, other):
+        return self._nodify('__radd__', other, 'add')
+
+    def __sub__(self, other):
+        return self._nodify('__sub__', other, 'sub')
+
+    def __rsub__(self, other):
+        return self._nodify('__rsub__', other, 'sub', False)
+
+        ...
+```
+More operations (including the transpose operations `ndarray.T`) are overloaded in the exact same way in the full implementation in the [nodes.py](https://github.com/Mostafa-Samir/Hands-on-Intro-to-Auto-Diff/blob/master/compgraph/nodes.py) file in the repository.
+
+The last thing we're left to do in order to complete our computational graph framework is to create more operations and primitives that support computational graphs and would allow us to easily define their nodes, much like we did in the [dmath.py](https://github.com/Mostafa-Samir/Hands-on-Intro-to-Auto-Diff/tree/master/dualnumbers/dmath.py) file when we worked with dual numbers. We start with two essential methods that would allow us to create `ConstantNode`s and `VariableNode`s on the fly using some numerical value, without having to directly invoke the `create_using` method and working with the classes themselves.
+
+```python
+def variable(initial_value, name=None):
+    return VariableNode.create_using(initial_value, name)
 
 
+def constant(value, name=None):
+    return ConstantNode.create_using(value, name)
+```
 
+We're now left with creating some interesting operations to support in the computational graph framework. This is fairly simple to do; we just get the inputs, which are supposedly instances of the `Node` class or its subclasses (if not, we create an appropriate `ConstantNode` for the given value), run the desired operation using regular numpy methods, then create and return an `OperationalNode` that with that value and these inputs as operands. The following are examples of that way on the summation operation and the dot product operation.
+
+```python
+def sum(array, axis=None, keepdims=False, name=None):
+    if not isinstance(array, Node):
+        array = ConstantNode.create_using(array)
+    opvalue = np.sum(array, axis=axis, keepdims=keepdims)
+
+    return OperationalNode.create_using(opvalue, 'sum', array, name=name)
+
+
+def dot(array_a, array_b, name=None):
+    if not isinstance(array_a, Node):
+        array_a = ConstantNode.create_using(array_a)
+    if not isinstance(array_b, Node):
+        array_b = ConstantNode.create_using(array_b)
+    opvalue = np.dot(array_a, array_b)
+
+    return OperationalNode.create_using(opvalue, 'dot', array_a, array_b, name)
+```
+More operations are implemented in the exact same way in the [api.py](https://github.com/Mostafa-Samir/Hands-on-Intro-to-Auto-Diff/blob/master/compgraph/api.py). Both the api.py file and the nodes.py file are packaged in the `compgraph` package. An additional visualization module is provided within that package to help visualizing the computational graphs created via a method called `visualize_at` which simply takes a `Node` object and draws the whole graph leading to it. This visualization method, along with all the methods defined in the api.py module are directly accessible from the `compgraph` package. The following snippet demonstrates how it can be used.
+
+```python
+import compgraph as cg
+
+x = cg.variable(0.5, 'x')
+y = cg.variable(4, 'y')
+z = cg.variable(-2.3, 'z')
+
+f = cg.sin(x ** (y + z)) - 3 * cg.log((x ** 2) * (y ** 3))
+
+print "f = %s" % (f)  #prints 'f = -8.01481664426'
+
+cg.visualize_at(f)
+```
+The call to the `visualize_at` method in the end of the snippet generates the following image of the graph nodes starting from the variables up to the `f` node
+
+![](/assets/images/vis_result.png)
+
+This example, among others, can be seen in the [Computational Graphs Notebook](https://github.com/Mostafa-Samir/Hands-on-Intro-to-Auto-Diff/blob/master/Computational%20Graphs.ipynb) in the repository. It's very recommended that you experiment with these examples and even create your own and visualize them to get a better handle on what's going on.
+
+Now that we have a framework that would allow us to build computational graphs as we go on carrying out our operations, all we need now is something to carry out the actual AD operation: that is something applying the chain rule in breadth-first manner starting form the result node back to the variables nodes. Implementing a breadth-first traversal is as simple as starting from the target node and adding its previous nodes in first-in-first-out queue and then applying the same operation on the front node in the queue until the it gets empty, i.e. it reaches variable or constant nodes which have no previous nodes.
+
+But before we go on defining a method applying that breadth-first traversal, we need a way to define the gradients of the diverse set of operations we have in a consistent way that would allow the traversal method to easily get the desired gradients (or adjoint) once it identified the operation's name. We can do this by standardizing the way we define our gradients method for all the operations we have, hence providing a consistent interface for the traversal method to use without change across all possible operation nodes.
+
+![](/assets/images/grads_op.png)
+
+The figure above depicts a way to standardize the gradients method: for each operation we define a method with the name `opname_grad` where *opname* is the operations name as its defined in the `compgraph` package (like *add, div, sum, dot, ...* etc). This method should take two arguments and returns a list of two objects: it should take the node's adjoint and the node object itself, and it should return the adjoints of its operand nodes; if it's a unary operation taking only one operand, then the other adjoint should be `None`. For example, the multiplication operation could be simply defined as:
+
+```python
+def mul_grad(prev_adjoint, node):
+    return [
+        prev_adjoint * node.operand_b,
+        prev_adjoint * node.operand_a
+    ]
+```
+
+Most of the gradient methods are just a simple application of the chain rule along with the basic differentiation operations like we see in `mul_grad`. However, when it comes to dealing with multi-dimensional arrays operations provided by numpy's `ndarray`, things can get a little tricky! For our purposes here, we can distinguish between two types operations that deal with the `ndarray`s: *reduction* and *arithmetic* operations.
+
+#### Reduction Operations
+
+In reduction operations, we take an `ndarray` and reduce it another form, possibly a smaller form, of it. An obvious example of that operations is the `sum` operation, which takes the whole array and reduce it to a single value representing the summation of its elements. Another one is the `max` operation that reduces the array to only the maximum value among the elements. The key point in defining the gradients of such operations is realizing that only the elements that contribute to the value of the operation should have a non-zero derivative of the operation with respect to it; the value of these derivatives is then defined by the arithmetic of the reduction operation itself.
+
+![](/assets/images/sum_grad.png)
+![](/assets/images/max_grad.png)
+
+```python
+from collections import defaultdict
+from compgraph.nodes import *
+import grads
+
+def gradient(node):
+
+    adjoint = defaultdict(int)
+    grad = {}
+    queue = NodesQueue()
+
+    # put the given node in the queue and set its adjoint to one
+    adjoint[node.name] = ConstantNode.create_using(np.ones(node.shape))
+    queue.push(node)
+
+    while len(queue) > 0:
+        current_node = queue.pop()
+
+        if isinstance(current_node, ConstantNode):
+            continue
+        if isinstance(current_node, VariableNode):
+            grad[current_node.name] = adjoint[current_node.name]
+            continue
+
+        current_adjoint = adjoint[current_node.name]
+        current_op = current_node.opname
+
+        op_grad = getattr(grads, '%s_grad' % (current_op))
+        next_adjoints = op_grad(current_adjoint, current_node)
+
+        adjoint[current_node.operand_a.name] = grads.unbroadcast_adjoint(
+            current_node.operand_a,
+            adjoint[current_node.operand_a.name] + next_adjoints[0]
+        )
+        if current_node.operand_a not in queue:
+            queue.push(current_node.operand_a)
+
+        if current_node.operand_b is not None:
+            adjoint[current_node.operand_b.name] = grads.unbroadcast_adjoint(
+                current_node.operand_b,
+                adjoint[current_node.operand_b.name] + next_adjoints[1]
+            )
+            if current_node.operand_b not in queue:
+                queue.push(current_node.operand_b)
+
+    return grad
+```
 
 {% include side-notes.html %}
 {% include minimal-vid.html %}
