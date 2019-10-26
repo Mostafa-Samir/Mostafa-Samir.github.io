@@ -698,13 +698,12 @@ So for example, if we want to find the maximum of `[1, 4, 4]`, we extract the un
 
 $$y = \frac{x_2 + x_3}{2} \Rightarrow \frac{\partial y}{\partial x_1} = 0, \frac{\partial y}{\partial x_2} = \frac{\partial y}{\partial x_2} = \frac{1}{2}$$
 
-From that arithmetic pipeline, we can see that the derivative of the `max` function w.r.t to some element in the input array is $1/\text{max value occurrences count}$ if that element is the same as the max value, and $0$ otherwise.
+From that arithmetic pipeline, we can see that the derivative of the `max` function w.r.t to some element in the input array is $\frac{1}{\text{max value occurrences count}}$ if that element is the same as the max value, and $0$ otherwise.
 
 From these arithmetic representations of the `max` operations, we can write its `compgraph` operation and its gradient methods like the following:
 
 
 ```python
-
 def max(array, axis=None, keepdims=False, name=None):
     if not isinstance(array, Node):
         array = ConstantNode.create_using(array)
@@ -720,6 +719,92 @@ def max_grad(prev_adjoint, node):
 
     return [prev_adjoint * normalized_doperand_a, None]
 ```
+
+We can see by running the following snippet that the our gradient calculation is working correcty for something like the array `[1, 4, 4]` we had earlier (this example and the ones following it can be found in the [Gradient Trials notebook](https://github.com/Mostafa-Samir/Hands-on-Intro-to-Auto-Diff/blob/master/Gradient%20Trials.ipynb)):
+
+```python
+x = cg.variable(np.array([1, 4, 4]))
+max_x = max(x)
+print(max_grad(1., max_x))  # prints [array([0. , 0.5, 0.5]), None]
+```
+
+But when we try it for something like `[[0, 1, 4], [0, 7, 1]]` we find that it doesn't give a correct answer:
+
+```python
+x = cg.variable(np.array([[0, 1, 4], [0, 7, 1]]))
+max_x = max(x, axis=0)
+print(max_x) # prints [0, 7, 4]
+
+"""
+prints
+[array([[0.25, 0.  , 0.25],
+        [0.25, 0.25, 0.  ]]), None]
+while it should print
+[array([[0.5, 0, 1],
+        [0.5, 1, 0]]), None]
+"""
+print(max_grad(1, max_x))
+```
+To see that the result above is incorrect, we can visulaize the gradient of our array along the first axis using the decomposition diagram we used earlier:
+
+![](/assets/images/max_axis_0_grad.png)
+
+As we can see from the diagram above, the unique opertor is applied along the sepecified axis (which is the first in this case), this change should reflect on how we calculate the `normalizers` in the gradient method; instead of summing over the whole `doperand_a` array, we should sum along the speciefied axis only. This requires the gardient method to know the axis along which the original `max` operation was performed. We can acheive that by saving this info as an attribute in the node itself while we create it. So we modify our `max` function and its gradient accordingly:
+
+```python
+def max(array, axis=None, keepdims=False, name=None):
+    if not isinstance(array, Node):
+        array = ConstantNode.create_using(array)
+    opvalue = np.max(array, axis=axis, keepdims=keepdims)
+    opnode = OperationalNode.create_using(opvalue, 'max', array, name=name)
+
+    # save info for gradient computation
+    opnode.axis = axis
+
+    return opnode
+
+def max_grad(prev_adjoint, node):
+    doperand_a = np.where(node.operand_a == node, 1, 0)
+    normalizers = np.sum(doperand_a, axis=node.axis, keepdims=True)
+    normalized_doperand_a = doperand_a / normalizers
+
+    return [prev_adjoint * normalized_doperand_a, None]
+```
+ With this modification, we can see that the previoulsy incorrect gradient is now calculated correctly. Now, let's change our `max` axis to 1 to make sure that everything works smoothly and as expected:
+
+```python
+max_x_1 = max(x, axis=1)
+print(max_x_1)  # prints [4, 7]
+
+# throws a warning that elementwise comparision failed then raises an error
+print(max_grad(1., max_x_1))
+```
+Unfortunately, everything is not wotking smoothly yet. when we shit the axis to 1, we get a warning and an error. The warning says that the elementwise comparison failed, and then an an `AxisError` is raised at the second line of `max_grad` where we sum the `doperand_a`, so the warning must have occured at the first line of the function, the one with the `np.where` statment. If we looked closely, our operand `x` has a shape `(2,3)`, while the max value (the node itself) has a shape `(2,)`. Comparing these two would fail due to incompatible shapes, so the `np.where` would just return a `0`, a scalar with no dimensions at all, which in turn would raise an error at the `np.sum` statment because we're trying to sum along the second axis of a scalar that has no axes at all. This can be solved by comparing the operand with a version of the node's value where the dimensions are kept intanct using `keepdims=True` argument; this would make the node's value to be of shape `(2,1)` which can be broadcasted along the operand's shape. We impelment this the same way we did with the `axis` information, by saving a value of the max operation with the dimensions kept intact as an attribute in the node.
+
+```python
+def max(array, axis=None, keepdims=False, name=None):
+    if not isinstance(array, Node):
+        array = ConstantNode.create_using(array)
+    opvalue = np.max(array, axis=axis, keepdims=keepdims)
+    opnode = OperationalNode.create_using(opvalue, 'max', array, name=name)
+
+    # save info for gradient computation
+    opnode.axis = axis
+    opnode.with_keepdims = np.max(array, axis=axis, keepdims=True)
+
+    return opnode
+
+def max_grad(prev_adjoint, node):
+    doperand_a = np.where(node.operand_a == node.with_keepdims, 1, 0)
+    normalizers = np.sum(doperand_a, axis=node.axis, keepdims=True)
+    normalized_doperand_a = doperand_a / normalizers
+
+    return [prev_adjoint * normalized_doperand_a, None]
+```
+
+After that change, we can verify that our gradient works correctly on the second axis and every other possible combinations of parameters. 
+
+Implementing gradients for other reduction operations goes the same way we went with the `sum` and `max` operations: you just need to understand how these operations are working internally, and pay attention to the shapes. It's recomended that you take a look at the [`gards.py`](https://github.com/Mostafa-Samir/Hands-on-Intro-to-Auto-Diff/blob/master/autodiff/grads.py) file where all the gardient methods are implemeted and check how other reduction operations gradients are impelemented.
 
 ```python
 from collections import defaultdict
