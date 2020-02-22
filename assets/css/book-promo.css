@@ -1,0 +1,145 @@
+.book-promo {
+    display: none;
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    height: 270px;
+    width: 270px;
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 5px;
+    box-shadow: 0px 2px 24px 0px rgba(161, 160, 160, 0.32);
+    align-items: center;
+    text-align: center;
+
+    -webkit-animation: fadein 2s;
+    -moz-animation: fadein 2s;
+    -ms-animation: fadein 2s;
+    -o-animation: fadein 2s;
+    animation: fadein 2s;
+
+}
+
+.book-promo p {
+    color: black;
+    font-size: initial;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.book-promo > .close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    height: 16px;
+    width: 16px;
+    cursor: pointer;
+}
+
+.close > img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.book-promo > .promo-content {
+    width: 210px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.announce-icon {
+    height: 53px;
+    width: 51px;
+}
+
+.book-promo-link {
+    text-decoration: none;
+    background: #AB1F15;
+    color: white;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.book-promo-link:hover {
+    background: #7f1710;
+}
+
+.extra-top-margin {
+    margin-top: 18px !important;
+}
+
+.super-extra-top-margin {
+    margin-top: 30.5px !important;
+}
+
+.book-promo-mobile {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background: #A61C00;
+    border-top: 2px solid black;
+    z-index: 1000;
+    height: 54px;
+    display: none;
+    
+    -webkit-animation: fadein 2s;
+    -moz-animation: fadein 2s;
+    -ms-animation: fadein 2s;
+    -o-animation: fadein 2s;
+    animation: fadein 2s;
+}
+
+.book-promo-mobile p {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.book-promo-mobile a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+.book-promo-mobile > .mobile-close {
+    position: absolute;
+    top: 19px;
+    right:19px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.book-promo-mobile > .mobile-close > img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@-o-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}

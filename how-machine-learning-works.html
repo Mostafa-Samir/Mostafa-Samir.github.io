@@ -1,0 +1,98 @@
+---
+layout: minimal
+title: "How Machine Learning Works"
+permalink: /how-machine-learning-works/index.html
+description: "A book written for software engineers by a software engineer who later turned into the world of machine learning. 
+              The primary focus is the practice; but it doesn't just use programmatic recipes that you can find online, it also helps you 
+              develop the intuition behind these recipes and the foundations upon which it's built. That way your ML experience would be robust 
+              enough to tackle new and challenging problems in your career."
+---
+
+<a href="/manning-redirect" target="_blank">
+    <img src="/assets/images/book-cover.png" />
+</a>
+
+<p>
+    Machine learning is one of the hottest topics out there. From autonomous cars to intelligent personal assistants,smart business analysis, and decision making, you can find machine learning almost anywhere. With that abundance, it makes perfect sense that there is a lot of resources out there teaching machine learning and making it easier by the day for anyone to get up and running with a functional machine learning product. However, machine learning is quite different from other kinds of programming; it's an intersection of multiple fields that include programming, mathematics, statistics and computer science. Unfortunately, for an average software engineer like me,  when I started learning ML by myself  I had a lot of difficulty finding a resource that presented ML form all these different aspects, showing how all these fields work together coherently and in a principled manner to give us all these ML magic. What I was able to find is either how to use the off-the-shelf libraries with neat programmatic recipes that hides all the meat of the algorithms, or a harsh academia with the mathematical foundations being seemingly distant from what one would use on their day-to-day work. That challenging link from understanding the mathematical theory to the internals of how the various ML algorithms work and how they are implemented; that link seemed missing to me. This book takes on the challenge and attempts to provide that missing link; an introduction to machine learning in which both practice and theory collaborate into giving you a deeper and working understanding of the field.
+</p>
+
+<h1>Why I Wrote This Book</h1>
+<p>
+    Well, we said earlier that we're writing this book to try and provide a picture of machine learning where we can use the programmatic tools while understanding their foundations and how they work on the inside, but a question remains: why?! Why is understanding the internals of machine learning so important? Why do we need to write a book about it? Why can't we simply use libraries where we specify a model, train it and use its predictions without worrying about what the library is doing under the hood? The answer to that question is that these tools and libraries are <strong>leaky abstractions</strong>. Leaky abstractions are abstractions that leak aspects of its hidden details, usually when something goes wrong with them.
+</p>
+<p>
+    Think about the brakes system in a car; to slow down a car or bring it to stop, all you have to do on your end is simply step on the pedals. Under the  hood, that pedal is abstracting a complex network of pistons, pipes, hoses, hydraulic fluids and discs that all work together to bring your car to stop. The pedal is shielding you from all these intricate inner working by simply requiring you to step on it. Unfortunately, this is not the case when something goes wrong with underlying mechanism; if a pipe got pinched or the hydraulic fluid leaked out, then the system is going to stop working and the pedal can't do anything for you at this moment. The brakes pedal is an example of a leaky abstraction.
+</p>
+<p>
+    In a 2002 <a href="https://www.joelonsoftware.com/2002/11/11/the-law-of-leaky-abstractions/">article</a>, Joel Spolsky, the co-founder of Stack Overflow and Trello, coined the law of leaky abstractions, which states that:
+</p>
+<blockquote>
+    “All non-trivial abstractions, to some degree, are leaky” 
+</blockquote>
+<p>
+    This law states that the more complexity an abstraction is hiding, the more probable that it is leaky. In software development, abstractions are inevitable: if we want to efficiently manage   the ever growing complexity of a software system, then there is no escape from using abstractions. In the same time, we still don't want to drown in the leakage of our abstractions (pardon the pun); hence, we need to have some understanding about how that abstraction is working under the hood. Think back to the car brakes system: if you are the one who is making the car or maintaining it, you can't afford not knowing how a brakes system works and just treat it as a black-box. If the slightest mistake happened during the installation or operation, you're probably going to be in trouble.
+</p>
+<p>
+    Machine learning libraries are no exception from that law. If you use a library to write something like <code>some_complex_model.train</code> and get a trained model and <code>some_complex_model.predict</code> to get a prediction on new data, then this library is an extremely non-trivial abstraction; it's hiding a lot of number crunching and data manipulation through cleverly designed data structures in order to get your results. By the law of leaky abstractions, these machine learning libraries are leaky. So, just like the case with car brakes, if you're the one creating or maintaining the system that uses these libraries,  you can't afford not knowing how they work. This is why this book is being written.
+</p>
+
+<h1>Who is this Book for</h1>
+<p>
+    This book is for software engineers who are working, going to work, or wishing to work on machine learning software and want to learn about it.  Although the book involves some math, you are not expected to have a strong mathematical background. You're only required to have three things:
+</p>
+<ol>
+    <li>Working knowledge of Python</li>
+    <li>Some of the very basic algebra you learned in high school, and</li>
+    <li>A computer, a pencil, and some paper to play around with the math</li>
+</ol>
+<p>
+All the extra python libraries and the more advanced math will be covered gradually as we move through the book.
+</p>
+
+<h1>How this Book is Written</h1>
+<p>
+    Because this book is written for software engineers, we adopt a practice-first approach. We start each chapter with an example of a real	-world problem woven around one of the publicly available data sets online. We then start to gradually build up a working solution using python. In parallel, we explore and motivate parts of the theory behind what we do until we reach a well-rounded understanding of the theoretical aspects of our solution. The only exception to that rule is the first three chapters, where all of these chapters work on the same problem introduced in chapter one. These first three chapters were designed to showcase how a deeper understanding of theoretical aspects yields a better solution than black-box approaches, and show with a working example why this book is written.
+</p>
+<p>
+    When we discuss how to implement a machine learning solution in practice, you may find sometimes that we start by implementing versions of that solution from scratch before we resort to using an off-the-shelf library. This is sometimes important for the same reason we believe that knowing the mathematical foundations are important; these libraries abstract a lot of programmatic ideas and algorithms as they abstract the mathematical parts, and that abstraction is also leaky. So we believe, that in some cases, working by hand on a solution  is very beneficial in understanding how the libraries we're eventually going to use work.
+</p>
+
+<h1>What to Expect from this Book</h1>
+<p>
+    This book will not make you a master of machine learning. We don't believe that any one book can do such thing. You become a master of machine learning by reading a lot more than one book, by working on a lot of machine learning problems and growing your experience, by experimenting a solution once and failing, and then again and maybe still failing, and trying for one more time and getting it right. The road of becoming a machine learning master is long. What this book does is put you on the beginning of the road, and maybe walk a few miles with you to guide you through the way. After that, it's all up to you. But fear not, the road is full of other companions that can continue the journey with you; whether they are other books<span class='sidenote'>The Manning library is full of other very good companion books, you should check them out</span>, courses, or even fellow travelers who walked that path before you. You'll always find help.
+</p>
+<p>
+    By the end of our journey together, you can expect that:
+</p>
+<ul>
+    <li>You have developed a working experience of Python's ML stack, which includes: scikit-learn, numpy, pandas, matplotlib, and others.</li>
+    <li>You have acquired a diverse tool set of machine learning models and algorithms</li>
+    <li>You'd be able to apply, debug and evaluate a machine learning system for a real-world problem (like the ones found in kaggle competitions) using the tools you have  through the above mentioned stack.</li>
+</ul>
+<p>
+And we hope that by our discussion of the mathematical foundations, you'd develop a working sense of mathematical maturity that would expand your problem-solving skills and make it easier for you tackle more advanced methods and ideas in the field.
+</p>
+
+
+<p>
+    <a href="/manning-redirect" target="_blank">
+        <strong> 
+            Create an account at Manning now, and get 500 free tokens that would allow you to read up to two chapters for free! 
+        </strong>
+    </a>
+</p>
+
+<p><img src="/assets/images/book-quote.png" /></p>
+
+<p><strong>
+    <font color="#A61C00">
+    Use <code>slsmair</code> at checkout to get 42% off the book's price!
+    </font>
+</strong></p>
+
+<p>
+    The book still in Manning's early access program (a.k.a MEAP), which means that it's still in progress and chapters are being published as they are written.  <a href="https://twitter.com/M0stafa_Samir" target="_blank">Follow me on twitter</a> to get updates about new chapters and offers on the book. Visit the dedicated <a href="/discussion-forum-redirect" target="_blank">book's forum</a> to share your feedback about the book, whether it was a question, errata, or a suggestion.
+</p>
+
+{% include side-notes.html %}
+{% include share.html %}
