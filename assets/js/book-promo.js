@@ -39,11 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
         promoIsClosed = true;
     });
 
-    document.querySelector("#mobile-promo-close").addEventListener('click', function() {
-        mobilePromo.style.display = "none";
-        promoIsClosed = true;
-    });
-
     promoView(mediaMatcher, pageUrl, promoIsClosed);
 });
 
