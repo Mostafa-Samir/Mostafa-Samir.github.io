@@ -1,0 +1,13 @@
+#mc_embed_signup {
+    font-family: 'Open Sans',sans-serif !important;
+}
+
+#mc-embedded-subscribe.button {
+    background: #A61C00;
+    font-weight: bold;
+}
+
+#mc-embedded-subscribe.button:hover {
+    background: #7f1710;
+    font-weight: bold;
+}

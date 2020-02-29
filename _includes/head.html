@@ -12,6 +12,10 @@
     <!-- fontawesome library -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
+    <!-- mailchimp subscribe-->
+    <link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{{ "/assets/css/subscribe.css" | prepend: site.baseurl }}">
+
     <!-- Social: Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@{{site.twitter_username}}">
@@ -63,6 +67,7 @@
 
     <link rel="stylesheet" href="{{ "/assets/css/main.css" | prepend: site.baseurl }}">
     <link rel="stylesheet" href="{{ "/assets/css/side-note.css" | prepend: site.baseurl }}">
+    <link rel="stylesheet" href="{{ "/assets/css/book-promo.css" | prepend: site.baseurl }}">
     <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
     <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}" />
 
@@ -76,5 +81,7 @@
         TeX: {extensions: ["color.js"]}
     });
     </script>
+    
+    {% include analytics.html %}
 
 </head>

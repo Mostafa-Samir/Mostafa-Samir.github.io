@@ -57,6 +57,8 @@ links:
     url: /categories
   - title: About Me
     url: /about
+  - title: How Machine Learning Works
+    url: /how-machine-learning-works
 
 # The release of Jekyll Now that you're using
 version: v1.0.0
