@@ -70,7 +70,7 @@ If you noticed, all our analysis up till now was focusing on a **single** hypoth
 
  In order for the entire hypothesis space to have a generalization gap bigger than $\epsilon$, at least one of its hypothesis: $h_1$ **or** $h_2$ **or** $h_3$ **or** ... etc should have. This can be expressed formally by stating that:
 
- $$\mathbb{P}\left[\sup_{h \in \mathcal{H}}|R(h) - R_\text{emp}(h)| > \epsilon\right] = \mathbb{P}\left[\bigcup_{h \in \mathcal{H}} |R(h) - R_\text{emp}(h)| > \epsilon\right]$$
+ $$\mathbb{P}\left[\sup_{h \in \mathcal{H}}|R(h) - R_\text{emp}(h)| > \epsilon\right] \leq \mathbb{P}\left[\bigcup_{h \in \mathcal{H}} |R(h) - R_\text{emp}(h)| > \epsilon\right]$$
 
  Where $\bigcup$ denotes the union of the events, which [also corresponds](https://en.wikipedia.org/wiki/Logical_disjunction#Union) to the logical **OR** operator. Using the [union bound inequality](https://en.wikipedia.org/wiki/Boole%27s_inequality), we get:
 
