@@ -80,7 +80,7 @@ If we went ahead and set $b = 1$, we get that $f(a + \epsilon) = f(a) + f'(a)\ep
 
 Like any other number system, we can define a set of operations on its members. Like addition and multiplication for example:
 
-$$(a + b\epsilon) + (c + d\epsilon) = (a + b) + (c + d)\epsilon$$
+$$(a + b\epsilon) + (c + d\epsilon) = (a + c) + (b + d)\epsilon$$
 
 $$(a + b\epsilon)(c + d\epsilon) = ac + ad\epsilon + bc\epsilon + bd\epsilon^2 = ac + (bc + ad)\epsilon$$
 
