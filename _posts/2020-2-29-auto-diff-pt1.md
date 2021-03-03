@@ -23,7 +23,7 @@ $$f'(x) = \lim_{h \rightarrow 0} \frac{f(x + h) - f(x)}{h}$$
 
 However, because we can't divide by zero without the computer rightfully yelling at us, we settle to having $h$ to be a very small value that is close to but not zero. We *truncate* the zero to an approximate value and this results in an error in the derivative's value that we call **the truncation error**. Dealing with real numbers inside a digital computer almost always suffers from an error and loss in precision due to the fact that the limited binary representation of the number in memory cannot accommodate for the exact real value of the number, so the number gets rounded off after some point to be stored in a binary format. We call such error **a roundoff error**.
 
-Even with the roundoff error, the truncation error in the derivative calculation is not that big of a deal if our sole purpose is to just compute the derivative, but that's rarely the case! Usually we want to compute a derivative to use it in other operations, like in machine learning when the derivative is used to update the values of our model's weights, in this case the existence of an error becomes a concern. When the it starts to *propagate* through other operations that suffer their own truncation and roundoff errors, the original error starts to expand and results in the final operation being thrown off its exact value. This phenomenon is called **error propagation** and its one of the major problem that face such a way to compute derivatives. It's possible to reformulate the limit rule a bit to result in lass truncation error, but with every decrease in error we make we get an increase in the computational complexity needed to carry out the operation.
+Even with the roundoff error, the truncation error in the derivative calculation is not that big of a deal if our sole purpose is to just compute the derivative, but that's rarely the case! Usually we want to compute a derivative to use it in other operations, like in machine learning when the derivative is used to update the values of our model's weights, in this case the existence of an error becomes a concern. When the it starts to *propagate* through other operations that suffer their own truncation and roundoff errors, the original error starts to expand and results in the final operation being thrown off its exact value. This phenomenon is called **error propagation** and its one of the major problem that face such a way to compute derivatives. It's possible to reformulate the limit rule a bit to result in less truncation error, but with every decrease in error we make we get an increase in the computational complexity needed to carry out the operation.
 
 One other approach to compute the derivative of a function is by exploiting the fact that taking the derivative of a function is a purely mechanical process. Let's for example examine how we can take the derivative of the function:
 
@@ -80,7 +80,7 @@ If we went ahead and set $b = 1$, we get that $f(a + \epsilon) = f(a) + f'(a)\ep
 
 Like any other number system, we can define a set of operations on its members. Like addition and multiplication for example:
 
-$$(a + b\epsilon) + (c + d\epsilon) = (a + b) + (c + d)\epsilon$$
+$$(a + b\epsilon) + (c + d\epsilon) = (a + c) + (b + d)\epsilon$$
 
 $$(a + b\epsilon)(c + d\epsilon) = ac + ad\epsilon + bc\epsilon + bd\epsilon^2 = ac + (bc + ad)\epsilon$$
 
@@ -110,7 +110,7 @@ The fact that we can derive such operations and that these operations "automatic
 
 # AD: Forward Mode
 
-The first thing we need to make in order to implement the forward mode of AD is start by implementing the dual numbers themselves. We can simply implement them via a class that contains to real attributes, one for the real component and the other for the dual component.
+The first thing we need to make in order to implement the forward mode of AD is start by implementing the dual numbers themselves. We can simply implement them via a class that contains two real attributes, one for the real component and the other for the dual component.
 
 ```python
 class DualNumber:

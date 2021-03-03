@@ -82,7 +82,7 @@ If you noticed, all our analysis up till now was focusing on a **single** hypoth
 
  Where $\|\mathcal{H}\|$ is the size of the hypothesis space. By denoting the right hand side of the above inequality by $\delta$, we can say that with a confidence $1 - \delta$:
 
- $$|R(h) - R_\text{emp}| \leq \epsilon \Rightarrow R(h) \leq R_\text{emp}(h) + \epsilon$$
+ $$|R(h) - R_\text{emp}(h)| \leq \epsilon \Rightarrow R(h) \leq R_\text{emp}(h) + \epsilon$$
 
  And with some basic algebra, we can express $\epsilon$ in terms of $\delta$ and get:
 
