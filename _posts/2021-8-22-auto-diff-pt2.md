@@ -269,7 +269,7 @@ z = cg.variable(-2.3, 'z')
 
 f = cg.sin(x ** (y + z)) - 3 * cg.log((x ** 2) * (y ** 3))
 
-print "f = %s" % (f)  #prints 'f = -8.01481664426'
+print("f = {}}".format(f))  #prints 'f = -8.01481664426'
 
 cg.visualize_at(f)
 ```
@@ -682,6 +682,10 @@ $$
 $$
 
 ```python
+from tqdm import trange
+
+from autodiff.reverse import gradient
+
 LEARNING_RATE = 0.01
 BATCH_SIZE = 32
 ITERATIONS = 50000
@@ -753,7 +757,7 @@ $$
 \frac{\partial L}{\partial l_i} = \frac{\partial L}{\partial s_i}\frac{\partial s_i}{\partial l_i}
 $$
 
-The framework would calculate ecah of the derivatives on the right hand sand seperatly and then simply multiply them. So first, the framework would calculate the derivative of the loss w.r.t $s_i$ to be:
+The framework would calculate ecah of the derivatives on the right hand side seperatly and then simply multiply them. So first, the framework would calculate the derivative of the loss w.r.t $s_i$ to be:
 
 $$
 \frac{\partial L}{\partial s_i} = -\frac{y_i}{s_i}
