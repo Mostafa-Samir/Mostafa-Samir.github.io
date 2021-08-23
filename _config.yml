@@ -20,7 +20,7 @@ name: Mostafa Samir
 description: Wandering in a lifelong journey seeking after truth
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
-avatar: https://avatars0.githubusercontent.com/u/5209140?v=2&s=460
+avatar: https://avatars.githubusercontent.com/u/5209140?v=4
 
 #
 # Flags below are optional
@@ -57,8 +57,6 @@ links:
     url: /categories
   - title: About Me
     url: /about
-  - title: How Machine Learning Works
-    url: /how-machine-learning-works
 
 # The release of Jekyll Now that you're using
 version: v1.0.0
