@@ -38,6 +38,7 @@
      controlBtn.style.color = "black";
      controlBtn.style.alignSelf = 'center';
      controlBtn.style.fontSize = '11em';
+     controlBtn.style.opacity = 0.3
 
      controlDiv.appendChild(controlBtn);
      container.appendChild(controlDiv);
