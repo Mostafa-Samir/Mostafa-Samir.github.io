@@ -11,7 +11,7 @@ In the [previous part](/auto-diff-pt1) of this series, we learned about forward 
 
 In this part of the series, we'll learn together how reverse AD works and well make our learnings concrete by getting our hands dirty and building a mini deep learning framework of our own and train a small neural network with it. While we're not expected to implement deep learning frameworks on our own in, doing so here would give us a much deeper understanding of how the existing frameworks operate and much deeper appreciation for the mathematical and engineering efforts that has been put into these frameworks.
 
-I'm not going to lie to you, this journey is a bit long. But trust me, it'll be very rewarding when we successfully train our neural network using a framework that you have built with your own hands. However, to make pausing and breaking possible, I have structured the article into sections that you could read separately through consecutive settings. Here's a summary of what we'll work on in each section:
+I'm not going to lie to you, this journey is a bit long. But trust me, it'll be very rewarding when you successfully train your neural network using a framework that you have built with your own hands. However, to make pausing and breaking possible, I have structured the article into sections that you could read separately through consecutive settings. Here's a summary of what we'll work on in each section:
 
 - [**Starting from the End**](#starting-from-the-end) in which we'll learn the mathematical basis of reverse mode AD and visualize it in action
 - [**Implementing Reverse Mode AD**](#implementing-reverse-mode-ad)
