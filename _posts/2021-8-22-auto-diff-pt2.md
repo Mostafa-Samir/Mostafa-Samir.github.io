@@ -515,7 +515,7 @@ $$
 \frac{\partial f}{\partial X} = \frac{\partial f}{\partial Y}W^{T}
 $$
 
-Seems magical, isn't it? Well, it's not, it's just math. A proof of these equations can be found here. It's a really simple proof but it will make dealing with matrix derivatives less scary, so I suggest that you give it a read. If you're not interested in the details behind these equations and you trust me on this, I invite you to convince yourself that these equations are true by checking the shapes of all the matrices involved and verify that everything matches. Once you're convinced, we easily implement the `dot_grad` method as follows:
+Seems magical, isn't it? Well, it's not, it's just math. [A proof of these equations can be found in the project's Github repository](https://github.com/Mostafa-Samir/Hands-on-Intro-to-Auto-Diff/blob/master/Chain-Rule-on-Matrix-Multiplication.pdf). It's a really simple proof but it will make dealing with matrix derivatives less scary, so I suggest that you give it a read. If you're not interested in the details behind these equations and you trust me on this, I invite you to convince yourself that these equations are true by checking the shapes of all the matrices involved and verify that everything matches. Once you're convinced, we easily implement the `dot_grad` method as follows:
 
 ```python
 def dot_grad(prev_adjoint, node):
@@ -783,6 +783,10 @@ Because this operation is numerically stable, `softmax_cross_entropy` is treated
 Congratulations! You have finished your own deep learning framwork and succefully trained a neural network with it! It's been a long journey, but we made it through. I hope that now you know how the magic behind these famous frameworks really works, and now you can fully harnness these magical powers to your service.
 
 Thanks a lot fot reading!
+
+# References
+- [Backpropagation for a Linear Layer, by Justin Johnson. A Stanford's CS231n Handout](http://cs231n.stanford.edu/handouts/linear-backprop.pdf)
+- [HIPS/autoghrad Sourcecode](https://github.com/HIPS/autograd) 
 
 
 {% include side-notes.html %}
