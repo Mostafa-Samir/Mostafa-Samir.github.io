@@ -78,7 +78,7 @@ By applying this idea to the backward propagation of derivatives in the computat
 
 This justifies why we initially set the derivatives at the variables (and at each other node) to zero. It also explains why we traverse the graph breadth-first; we want to make sure that all the contributions to a node's $f$ derivative (in AD lingo, this derivative is called the **adjoint**) has arrived before taking its value and propagating it further back through the graph.
 
-A very important question you might have by this point is: **why bother?** Whats the point of going at the derivative from the other way around and keeping up with all that hassle?! The answer to this question becomes clear when we look at the same process applied to a multivariable function; for example, $f(x,y,z) = \sin(x+y) + xy^{z}$ at $(x,y,z) = (1, 2, 3)$.
+A very important question you might have by this point is: **why bother?** Whats the point of going at the derivative from the other way around and keeping up with all that hassle?! The answer to this question becomes clear when we look at the same process applied to a multivariable function; for example, $f(x,y,z) = \sin(x+y) + (xy)^{z}$ at $(x,y,z) = (1, 2, 3)$.
 
 <video src='/assets/videos/multi-ad.mp4'></video>
 
